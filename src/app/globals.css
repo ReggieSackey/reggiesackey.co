@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
+/*
+  Restrained editorial baseline.
+  - Warm off-white background, near-black type
+  - No gradients, glass, blur, or large shadows anywhere on the site
+  - Flat surfaces, hairline rules, small radii
+*/
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fdfcfa;
+  --foreground: #1a1a1a;
 }
 
 @theme inline {
@@ -12,15 +19,21 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* The dominant textarea on the homepage gets a flat, editorial treatment. */
+textarea.job-input {
+  resize: vertical;
+}
+
+textarea.job-input::placeholder {
+  color: #a3a3a3;
+}
+
+textarea.job-input:focus {
+  outline: 2px solid #1a1a1a;
+  outline-offset: -1px;
 }
