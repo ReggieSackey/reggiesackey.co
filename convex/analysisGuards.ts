@@ -186,6 +186,18 @@ export const release = mutation({
     requireAnalysisServer(args.secret);
     const lease = await ctx.db.get(args.lease);
     if (!lease) return null;
+    // Keep failure cleanup in the same transaction as lease release. If the
+    // route's best-effort markAnalysisFailed call is interrupted, releasing
+    // the lease must still make an identical request immediately retryable.
+    if (args.failed && lease.analysisId) {
+      const analysis = await ctx.db.get(lease.analysisId);
+      if (analysis?.status === "processing")
+        await ctx.db.patch(analysis._id, {
+          status: "failed",
+          errorMessage: "analysis_failed",
+          updatedAt: Date.now(),
+        });
+    }
     await ctx.db.delete(lease._id);
     const day = new Date(Date.now()).toISOString().slice(0, 10);
     const budget = await ctx.db

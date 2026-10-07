@@ -61,9 +61,15 @@ export function JobInput() {
       </div>
 
       {error ? (
-        <p role="alert" className="text-sm text-neutral-700">
-          {error}
-        </p>
+        <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-700">
+          <p role="alert">{error}</p>
+          <button
+            type="submit"
+            className="font-medium text-neutral-900 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900"
+          >
+            Try again
+          </button>
+        </div>
       ) : null}
 
       <div className="flex flex-col gap-3 sm:flex-row">

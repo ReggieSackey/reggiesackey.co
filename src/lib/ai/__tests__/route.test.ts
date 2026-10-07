@@ -114,6 +114,38 @@ test("provider failure releases lease and persists only a fixed safe error", asy
     ),
   ).toBe(true);
 });
+test("concurrent identical analysis returns a pollable ID and retry interval", async () => {
+  calls.mutation.mockImplementation(async (ref) =>
+    getFunctionName(ref) === "analysisGuards:admitRequest"
+      ? { ok: true, retryAfter: 0 }
+      : {
+          status: "processing",
+          id: "existing-analysis",
+          retryAfter: 5000,
+        },
+  );
+
+  const response = await POST(validRequest());
+  expect(response.status).toBe(202);
+  expect(response.headers.get("Retry-After")).toBe("5");
+  expect(await response.json()).toEqual({ id: "existing-analysis" });
+  expect(calls.pipeline).not.toHaveBeenCalled();
+});
+test("empty capability registry is a recoverable service error, not processing", async () => {
+  calls.query.mockImplementation(async (ref) =>
+    getFunctionName(ref) === "capabilities:getSnapshot"
+      ? { version: "v1", capabilities: [] }
+      : null,
+  );
+
+  const response = await POST(validRequest());
+  expect(response.status).toBe(503);
+  expect(await response.json()).toEqual({
+    error:
+      "Analysis is temporarily unavailable while its source material is prepared. Please try again shortly.",
+  });
+  expect(calls.pipeline).not.toHaveBeenCalled();
+});
 test("evidence changing during generation prevents publication", async () => {
   let snapshots = 0;
   calls.query.mockImplementation(async (ref) =>

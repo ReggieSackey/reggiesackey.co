@@ -73,7 +73,7 @@ export async function POST(request: Request) {
       if (!snapshot.capabilities.length)
         throw new RequestError(
           503,
-          "Analysis is being prepared. Please check back soon.",
+          "Analysis is temporarily unavailable while its source material is prepared. Please try again shortly.",
         );
       const reservation = await timing.measure("createReserve", () =>
         fetchMutation(api.analysisGuards.reserve, {
@@ -89,7 +89,17 @@ export async function POST(request: Request) {
         outcome = reservation.status;
         return Response.json(
           { id: reservation.id },
-          { status: reservation.status === "processing" ? 202 : 200 },
+          {
+            status: reservation.status === "processing" ? 202 : 200,
+            headers:
+              reservation.status === "processing"
+                ? {
+                    "Retry-After": String(
+                      Math.max(1, Math.ceil(reservation.retryAfter / 1000)),
+                    ),
+                  }
+                : undefined,
+          },
         );
       }
       if (

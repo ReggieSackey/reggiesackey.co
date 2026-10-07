@@ -226,6 +226,28 @@ test("atomic reservations cap concurrency and daily calls, never refund failures
       .status,
   ).toBe("budget");
 });
+test("a failed analysis is immediately retryable after atomic lease cleanup", async () => {
+  vi.stubEnv("ANALYSIS_FAILURE_LIMIT", "5");
+  const t = setup();
+  const first = await t.mutation(api.analysisGuards.reserve, {
+    secret,
+    cacheKey: "retry-after-failure",
+  });
+  expect(first.status).toBe("reserved");
+
+  await t.mutation(api.analysisGuards.release, {
+    secret,
+    lease: first.lease!,
+    failed: true,
+  });
+
+  const retry = await t.mutation(api.analysisGuards.reserve, {
+    secret,
+    cacheKey: "retry-after-failure",
+  });
+  expect(retry.status).toBe("reserved");
+  expect(retry.id).not.toBe(first.id);
+});
 test("concurrency and failure circuit reject before spend", async () => {
   vi.stubEnv("ANALYSIS_CONCURRENCY", "1");
   vi.stubEnv("ANALYSIS_FAILURE_LIMIT", "1");
