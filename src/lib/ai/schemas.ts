@@ -96,7 +96,7 @@ export const candidateFitSchema = z
       .strict(),
     themes: z.array(themeSchema).min(3).max(10),
     materialGaps: z.array(materialGapSchema).max(5),
-    interviewQuestions: z.array(z.string().min(1).max(500)).max(3),
+    interviewQuestions: z.array(z.string().min(1).max(500)).max(1),
   })
   .strict();
 

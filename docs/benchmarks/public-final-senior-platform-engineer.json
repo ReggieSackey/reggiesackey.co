@@ -1,0 +1,280 @@
+{
+  "job": "senior-platform-engineer",
+  "successProfile": {
+    "mission": "Own and operate large-scale Kubernetes and AWS infrastructure so internal platforms are reliable, secure, and capacity-planned, with fast incident response and resilient delivery.",
+    "work": [
+      {
+        "id": "work_1",
+        "activity": "Own and operate large-scale Kubernetes and AWS infrastructure",
+        "importance": "core"
+      },
+      {
+        "id": "work_2",
+        "activity": "Create and maintain Terraform modules for infrastructure provisioning",
+        "importance": "core"
+      },
+      {
+        "id": "work_3",
+        "activity": "Operate Kafka for production messaging workloads",
+        "importance": "important"
+      },
+      {
+        "id": "work_4",
+        "activity": "Define SLOs, capacity plans, and lead on-call incident response",
+        "importance": "core"
+      },
+      {
+        "id": "work_5",
+        "activity": "Debug Linux networking issues in production",
+        "importance": "important"
+      },
+      {
+        "id": "work_6",
+        "activity": "Build secure internal platforms",
+        "importance": "important"
+      }
+    ],
+    "successDrivers": [
+      {
+        "id": "driver_1",
+        "driver": "Reliable, scalable infrastructure with minimal downtime",
+        "importance": "core"
+      },
+      {
+        "id": "driver_2",
+        "driver": "Fast, competent diagnosis and resolution of production incidents",
+        "importance": "core"
+      },
+      {
+        "id": "driver_3",
+        "driver": "Reproducible, secure, well-abstracted infrastructure provisioning",
+        "importance": "important"
+      },
+      {
+        "id": "driver_4",
+        "driver": "Deep infrastructure specialization (Kubernetes, AWS, Kafka, Linux networking)",
+        "importance": "core"
+      }
+    ],
+    "hardConstraints": [
+      {
+        "id": "constraint_1",
+        "constraint": "Five years of direct platform or SRE ownership experience",
+        "severity": "blocking"
+      }
+    ]
+  },
+  "extractedJob": {
+    "jobTitle": "Senior Platform Engineer",
+    "company": null,
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Own large-scale Kubernetes infrastructure",
+        "importance": "core",
+        "category": "Infrastructure"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Own large-scale AWS infrastructure",
+        "importance": "core",
+        "category": "Infrastructure"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Create Terraform modules",
+        "importance": "core",
+        "category": "Infrastructure as Code"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Operate Kafka",
+        "importance": "important",
+        "category": "Data Infrastructure"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Define SLOs and capacity plans",
+        "importance": "core",
+        "category": "Reliability"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Lead on-call incident response",
+        "importance": "core",
+        "category": "Operations"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Debug Linux networking",
+        "importance": "important",
+        "category": "Systems"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Build secure internal platforms",
+        "importance": "important",
+        "category": "Security/Platform"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Five years of direct platform or SRE ownership",
+        "importance": "core",
+        "category": "Experience"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "gap",
+      "narrative": "This role is mostly about owning and operating large-scale Kubernetes and AWS infrastructure, and that is not what I've spent my time doing. I'm an application and product engineer. I've built and run production systems that served real customers, and I've debugged failures across APIs, payments, background jobs, and third-party services. But the infrastructure layer underneath those systems isn't where my strongest evidence is. I haven't operated Kubernetes at scale, I haven't run Kafka, and I don't have five years of platform or SRE ownership. The parts of this job that touch building systems under ambiguity and working through production problems are things I do well. The parts that require deep infrastructure specialization are the parts I'd be learning on the job."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Working across a whole system",
+        "fit": "gap",
+        "narrative": "I do think about whole systems, but my experience is at the application level. At CModel and MusicBreakr I worked across product behavior, data, APIs, integrations, permissions, and background processing rather than treating each as a separate concern. I also moved CModel from Bubble prototypes to a conventional TypeScript and Supabase stack, which meant deciding what belonged where and redrawing implementation boundaries. What I haven't done is own large-scale Kubernetes or AWS infrastructure. The breadth is real, but it's breadth across application concerns, not across the infrastructure layer this job centers on.",
+        "requirementIds": [
+          "req_1",
+          "req_2"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Working through ambiguity",
+        "fit": "relevant",
+        "narrative": "Most of my work has been turning vague requirements into working systems. At CModel I owned an email-to-decision workflow end to end, including figuring out which information in a noisy inbox was actually useful. At MusicBreakr I designed recurring ingestion around third-party API quotas, scheduling limits, and compute cost, and worked out delegated access for managers and labels. Building secure platforms maps partly onto this: I've implemented OAuth, token lifecycle, and authorization in production. But that's application-level security, not designing secure internal infrastructure.",
+        "requirementIds": [
+          "req_3",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Learning unfamiliar systems",
+        "fit": "gap",
+        "narrative": "I've become productive in unfamiliar systems several times. I moved from Bubble into TypeScript, React, Next.js, and Node, and more recently picked up C++ and JUCE for audio work, which I treat as evidence of range rather than deep specialization. The problem is that this job asks for deep infrastructure specialization, not quick adaptation. I haven't operated Kafka or run event infrastructure at scale, and I don't have five years of platform or SRE ownership. Learning fast helps, but it doesn't substitute for that experience.",
+        "requirementIds": [
+          "req_4",
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "learning-velocity"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Solving production problems",
+        "fit": "gap",
+        "narrative": "I've solved plenty of production problems, but mostly application problems. At MusicBreakr I debugged failures that crossed application state, backend workflows, payments, and third-party APIs, while the system was serving active customers. At CModel I worked through integration failures at system boundaries: expired tokens, external state that didn't match documentation, data disagreements between systems. What I haven't done is define SLOs, do capacity planning, or debug Linux networking in production. That's a real difference in discipline, not just a different title.",
+        "requirementIds": [
+          "req_5",
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Operations work",
+        "fit": "relevant",
+        "narrative": "I've done operational work, though not as a dedicated platform or SRE role. At MusicBreakr I ran systems in production with real users and had to keep marketplace payments, ingestion jobs, and integrations working when they broke. That meant diagnosing problems live and making changes without breaking existing behavior. It's genuine production ownership, just of application systems rather than underlying infrastructure.",
+        "requirementIds": [
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "responsibilities"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Working across a whole system",
+        "narrative": "I do think about whole systems, but my experience is at the application level. At CModel and MusicBreakr I worked across product behavior, data, APIs, integrations, permissions, and background processing rather than treating each as a separate concern. I also moved CModel from Bubble prototypes to a conventional TypeScript and Supabase stack, which meant deciding what belonged where and redrawing implementation boundaries. What I haven't done is own large-scale Kubernetes or AWS infrastructure. The breadth is real, but it's breadth across application concerns, not across the infrastructure layer this job centers on.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      },
+      {
+        "title": "Learning unfamiliar systems",
+        "narrative": "I've become productive in unfamiliar systems several times. I moved from Bubble into TypeScript, React, Next.js, and Node, and more recently picked up C++ and JUCE for audio work, which I treat as evidence of range rather than deep specialization. The problem is that this job asks for deep infrastructure specialization, not quick adaptation. I haven't operated Kafka or run event infrastructure at scale, and I don't have five years of platform or SRE ownership. Learning fast helps, but it doesn't substitute for that experience.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "learning-velocity"
+          }
+        ]
+      },
+      {
+        "title": "Solving production problems",
+        "narrative": "I've solved plenty of production problems, but mostly application problems. At MusicBreakr I debugged failures that crossed application state, backend workflows, payments, and third-party APIs, while the system was serving active customers. At CModel I worked through integration failures at system boundaries: expired tokens, external state that didn't match documentation, data disagreements between systems. What I haven't done is define SLOs, do capacity planning, or debug Linux networking in production. That's a real difference in discipline, not just a different title.",
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "How much of this role could be learned on the job, and how much do you need someone who can own the Kubernetes and Kafka infrastructure from day one?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "production-problem-solving",
+      "whole-system-reasoning",
+      "ambiguous-problem-to-working-system",
+      "rapid-technical-adaptation",
+      "cross-boundary-execution"
+    ],
+    "evidenceSections": 16,
+    "evidenceCharacters": 12399,
+    "unmatchedRequirementIds": []
+  }
+}

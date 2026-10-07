@@ -15,15 +15,9 @@ export const metadata: Metadata = {
   title: "Fit analysis",
 };
 
-const FIT_LABEL_TEXT: Record<FitLabel, string> = {
-  strong: "Strong",
-  relevant: "Relevant experience",
-  gap: "Gap",
-};
-
 const OVERALL_TEXT: Record<string, string> = {
   strong: "Strong fit",
-  relevant: "Relevant fit",
+  relevant: "Promising, but unproven",
   gap: "Significant gap",
 };
 
@@ -183,16 +177,14 @@ async function AnalysisBody({
     ...analysis.themes.flatMap((t) => t.citations),
     ...analysis.materialGaps.flatMap((g) => g.citations),
   ]);
+  const positiveThemes = analysis.themes.filter((theme) => theme.fit !== "gap").slice(0, 5);
 
   return (
     <Shell>
-      <p className="text-[13px] text-neutral-500">
+      <h1 className="text-3xl font-semibold tracking-tight text-neutral-900">
         {analysis.jobTitle ?? "Role"}
-        {analysis.company ? ` · ${analysis.company}` : ""}
-      </p>
-      <h1 className="mt-2 text-3xl font-semibold tracking-tight text-neutral-900">
-        Fit analysis
       </h1>
+      {analysis.company ? <p className="mt-2 text-[13px] text-neutral-500">{analysis.company}</p> : null}
       {isFixture ? (
         <p className="mt-2 text-[12px] text-neutral-400">
           Development fixture — not model output.
@@ -213,27 +205,21 @@ async function AnalysisBody({
         ) : null}
       </section>
 
-      {analysis.themes.length > 0 ? (
+      {positiveThemes.length > 0 ? (
         <div className="mt-12 border-t border-neutral-200">
           <h2 className="pt-6 text-[13px] font-semibold uppercase tracking-wide text-neutral-500">
-            Why the experience translates
+            Where I fit
           </h2>
-          <ol className="divide-y divide-neutral-200">
-            {analysis.themes.map((theme, index) => (
-              <li key={theme.id} className="py-10">
-                <div className="flex items-baseline gap-4">
-                  <span className="text-[13px] font-medium tabular-nums text-neutral-400">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="flex-1 text-[17px] font-semibold tracking-tight text-neutral-900">
+          <div className="divide-y divide-neutral-200">
+            {positiveThemes.map((theme) => (
+              <article key={theme.id} className="py-10">
+                <div>
+                  <h3 className="text-[17px] font-semibold tracking-tight text-neutral-900">
                     {theme.title}
                   </h3>
-                  <span className="text-[12px] font-medium text-neutral-500">
-                    {FIT_LABEL_TEXT[theme.fit]}
-                  </span>
                 </div>
 
-                <div className="mt-3 max-w-[65ch] pl-0 sm:pl-10">
+                <div className="mt-3 max-w-[65ch]">
                   <p className="text-[15px] leading-7 text-neutral-700">
                     {theme.narrative}
                   </p>
@@ -250,16 +236,16 @@ async function AnalysisBody({
                     </div>
                   ) : null}
                 </div>
-              </li>
+              </article>
             ))}
-          </ol>
+          </div>
         </div>
       ) : null}
 
       {analysis.materialGaps.length > 0 ? (
         <section className="mt-12 border-t border-neutral-200 pt-6">
           <h2 className="text-[13px] font-semibold uppercase tracking-wide text-neutral-500">
-            Material differences
+            Where I&rsquo;m less proven
           </h2>
           <div className="mt-4 space-y-8">
             {analysis.materialGaps.map((gap, i) => (
@@ -290,19 +276,11 @@ async function AnalysisBody({
       {analysis.interviewQuestions.length > 0 ? (
         <section className="mt-12 border-t border-neutral-200 pt-6">
           <h2 className="text-[13px] font-semibold uppercase tracking-wide text-neutral-500">
-            What I&rsquo;d explore in an interview
+            One thing I&rsquo;d want to discuss
           </h2>
-          <ul className="mt-3 space-y-2">
-            {analysis.interviewQuestions.map((item, i) => (
-              <li
-                key={i}
-                className="flex gap-3 text-[15px] leading-7 text-neutral-700"
-              >
-                <span aria-hidden="true" className="text-neutral-400">—</span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
+          <p className="mt-3 max-w-[65ch] text-[15px] leading-7 text-neutral-700">
+            {analysis.interviewQuestions[0]}
+          </p>
         </section>
       ) : null}
     </Shell>

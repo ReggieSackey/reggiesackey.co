@@ -1,0 +1,256 @@
+{
+  "job": "business-systems-inventor",
+  "successProfile": {
+    "mission": "Identify ambiguous operational problems, understand how information flows through the business, and convert experiments into dependable internal tools and workflows the team relies on.",
+    "work": [
+      {
+        "id": "work_1",
+        "activity": "Discover and define loosely specified operational problems worth solving",
+        "importance": "core"
+      },
+      {
+        "id": "work_2",
+        "activity": "Map how information and processes move through the business",
+        "importance": "core"
+      },
+      {
+        "id": "work_3",
+        "activity": "Build prototypes and internal tools quickly",
+        "importance": "core"
+      },
+      {
+        "id": "work_4",
+        "activity": "Connect APIs and third-party systems into working workflows",
+        "importance": "core"
+      },
+      {
+        "id": "work_5",
+        "activity": "Apply AI usefully inside workflows",
+        "importance": "important"
+      },
+      {
+        "id": "work_6",
+        "activity": "Harden successful experiments into dependable, team-adopted workflows",
+        "importance": "core"
+      }
+    ],
+    "successDrivers": [
+      {
+        "id": "driver_1",
+        "driver": "Turning undefined problems into structured, working solutions without a spec",
+        "importance": "core"
+      },
+      {
+        "id": "driver_2",
+        "driver": "Connecting disparate systems so data flows correctly and reliably",
+        "importance": "core"
+      },
+      {
+        "id": "driver_3",
+        "driver": "Speed of delivering useful prototypes that get real use",
+        "importance": "important"
+      },
+      {
+        "id": "driver_4",
+        "driver": "Reliability and adoption of tools after initial experimentation",
+        "importance": "important"
+      },
+      {
+        "id": "driver_5",
+        "driver": "Practical AI leverage in day-to-day operations",
+        "importance": "important"
+      }
+    ],
+    "hardConstraints": []
+  },
+  "extractedJob": {
+    "jobTitle": "Business Systems Inventor",
+    "company": null,
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Find and define ambiguous operational problems",
+        "importance": "core",
+        "category": "problem-solving"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Understand how information moves through the business",
+        "importance": "core",
+        "category": "systems-thinking"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Build prototypes and internal tools",
+        "importance": "core",
+        "category": "building"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Connect APIs and third-party systems",
+        "importance": "core",
+        "category": "integration"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Use AI where it is useful",
+        "importance": "important",
+        "category": "ai"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Turn successful experiments into dependable team workflows",
+        "importance": "core",
+        "category": "delivery"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Work without a complete specification",
+        "importance": "core",
+        "category": "autonomy"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Design tools and workflows people actually adopt",
+        "importance": "important",
+        "category": "product"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "This role looks like a good use of what I know how to do. The core of the job is taking vague operational problems, figuring out how information actually moves through a business, building tools quickly, and making them reliable enough that people depend on them. That is essentially what I've done at CModel and MusicBreakr. I've owned an email-to-decision-intelligence workflow from product definition through production, maintained integrations across many business systems, and worked without complete specifications in 0-to-1 environments. The main difference is setting: I've done this inside products I helped build rather than as an internal business systems role. I think that transfers, but the day-to-day would involve getting close to a team's operations rather than product users, which is somewhat new territory for me."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Working through ambiguity",
+        "fit": "strong",
+        "narrative": "At CModel, I owned an email workflow from problem definition through production. The hard part wasn't the implementation, it was deciding what in a noisy inbox actually counted as a useful signal. Most of my work has been like that: no complete spec, so determining what should be built was part of the job, not just how to build it.",
+        "requirementIds": [
+          "req_1",
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Connecting systems",
+        "fit": "strong",
+        "narrative": "Most of my work has been at system boundaries. At CModel I've maintained integrations with Microsoft 365, SharePoint, Teams, DocuSign, HubSpot, Monday, Harvest, Freshdesk, and Google services, which means OAuth, token lifecycle, pagination, and mapping external state into our application model. At MusicBreakr I built ingestion from four social platforms with different identifiers, schemas, and rate limits, and mapped that onto our internal creator and campaign data. Failures at these boundaries usually need reasoning across both systems, and I've debugged a lot of them in production.",
+        "requirementIds": [
+          "req_2",
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Building from scratch",
+        "fit": "relevant",
+        "narrative": "I've built products from nothing more than once. Reaccord is my own consumer application, designed and built end to end, and I use it daily, which has taught me a specific lesson: features can work correctly and still not survive real repeated use. I've changed information hierarchy and removed friction many times based on actually living with the product. At CModel I built the strategic assistant as a standalone Next.js app and moved functionality across architectures as the product matured, choosing the implementation boundary based on what the problem needed.",
+        "requirementIds": [
+          "req_3",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "overview"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Working across a whole system",
+        "fit": "strong",
+        "narrative": "I don't treat the API call as the unit of work. I think about the whole system: what the user is trying to do, where data moves, which system owns which responsibility, and what can fail. At MusicBreakr, attribution required recurring server-side workflows because campaign metrics changed after publication, plus a normalization layer between four platforms and our internal model. At CModel, moving from Bubble prototypes to a TypeScript/Supabase stack required deciding what behavior to preserve and what to redesign.",
+        "requirementIds": [
+          "req_4"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Building AI into real workflows",
+        "fit": "strong",
+        "narrative": "AI is where a lot of my recent work sits. At CModel I built tool calling, runtime context design, schema-constrained generation, and validation around model output so it could become application state rather than just text. At Reaccord I made model choice a configuration concern, not an architectural one, so workflows survive model changes. I also initiated an agentic development process at CModel where people across the company build with coding agents under engineer review, testing, and CI/CD controls.",
+        "requirementIds": [
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "strategic-assistant"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "structured-generation"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [],
+    "interviewQuestions": [
+      "How much of this role is working directly with the team's day-to-day operations, versus building tools from product requirements?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "ambiguous-problem-to-working-system",
+      "zero-to-one-product-building",
+      "integration-workflow-engineering",
+      "whole-system-reasoning",
+      "applied-ai-systems",
+      "ai-enabled-process-design",
+      "product-interaction-judgment",
+      "production-problem-solving"
+    ],
+    "evidenceSections": 25,
+    "evidenceCharacters": 19623,
+    "unmatchedRequirementIds": []
+  }
+}

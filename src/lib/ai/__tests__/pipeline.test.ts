@@ -335,7 +335,7 @@ describe("requirement synthesis into themes", () => {
     expect(() => parseStructuredJson(json, candidateFitSchema)).not.toThrow();
   });
 
-  it("interview questions max at 3", () => {
+  it("interview questions max at 1", () => {
     const four = evaluationJsonWithThemes(3).replace(
       '"interviewQuestions":["Question one?"]',
       '"interviewQuestions":["Q1?","Q2?","Q3?","Q4?"]',
@@ -346,13 +346,19 @@ describe("requirement synthesis into themes", () => {
     );
   });
 
-  it("accepts exactly 3 interview questions", () => {
+  it("rejects more than one interview question", () => {
     const three = evaluationJsonWithThemes(3).replace(
       '"interviewQuestions":["Question one?"]',
       '"interviewQuestions":["Q1?","Q2?","Q3?"]',
     );
-    const out = parseStructuredJson(three, candidateFitSchema);
-    expect(out.interviewQuestions).toHaveLength(3);
+    expectStructuredFailure(
+      () => parseStructuredJson(three, candidateFitSchema),
+      "schema_validation",
+    );
+  });
+
+  it("accepts one interview question", () => {
+    expect(parseStructuredJson(evaluationJsonWithThemes(3), candidateFitSchema).interviewQuestions).toHaveLength(1);
   });
 
   it("accepts zero interview questions", () => {
@@ -918,7 +924,7 @@ describe("evaluator prompt calibration", () => {
 
   it("caps interview questions and bans prosecution checklists", async () => {
     const system = await captureEvaluateSystem();
-    expect(system).toContain("INTERVIEW QUESTIONS (at most 3)");
+    expect(system).toContain("INTERVIEW QUESTION (zero or one)");
     expect(system).toContain("prosecution checklist");
   });
 

@@ -1,0 +1,240 @@
+{
+  "job": "senior-technical-product-manager-ai-workflows",
+  "successProfile": {
+    "mission": "Ship AI-enabled workflow products that solve real customer problems — from discovery through definition, model/API-aware design, prototype evaluation, and coordinated launch.",
+    "work": [
+      {
+        "id": "work_1",
+        "activity": "Investigate customer needs and translate ambiguous goals into concrete AI workflow product definitions",
+        "importance": "core"
+      },
+      {
+        "id": "work_2",
+        "activity": "Shape product behavior with reasoning about model context, APIs, data, and system interactions",
+        "importance": "core"
+      },
+      {
+        "id": "work_3",
+        "activity": "Evaluate prototypes and AI outputs, defining what good behavior looks like",
+        "importance": "core"
+      },
+      {
+        "id": "work_4",
+        "activity": "Coordinate engineering and design and carry decisions through launch",
+        "importance": "important"
+      },
+      {
+        "id": "work_5",
+        "activity": "Design human-AI workflows with appropriate review, verification, and trust boundaries",
+        "importance": "core"
+      }
+    ],
+    "successDrivers": [
+      {
+        "id": "driver_1",
+        "driver": "Ability to define the right product from incomplete information and drive it to launch without needing full specification",
+        "importance": "core"
+      },
+      {
+        "id": "driver_2",
+        "driver": "Deep working understanding of AI application behavior — context, retrieval, validation, failure modes — sufficient to make credible product decisions",
+        "importance": "core"
+      },
+      {
+        "id": "driver_3",
+        "driver": "Judgment about how systems fit together (APIs, data, workflows) so defined behavior is actually implementable",
+        "importance": "core"
+      },
+      {
+        "id": "driver_4",
+        "driver": "Effective coordination across engineering, design, and customers as an individual contributor",
+        "importance": "important"
+      }
+    ],
+    "hardConstraints": []
+  },
+  "extractedJob": {
+    "jobTitle": "Senior Technical Product Manager, AI Workflows",
+    "company": null,
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Define AI-enabled workflow products from ambiguous customer needs",
+        "importance": "core",
+        "category": "product definition"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Investigate and synthesize customer needs",
+        "importance": "core",
+        "category": "discovery"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Shape product behavior and interaction design",
+        "importance": "core",
+        "category": "product design"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Reason about model context and LLM application behavior",
+        "importance": "core",
+        "category": "technical AI"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Reason about APIs and data as inputs to product decisions",
+        "importance": "core",
+        "category": "technical"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Evaluate prototypes and AI outputs",
+        "importance": "core",
+        "category": "evaluation"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Coordinate engineering and design",
+        "importance": "important",
+        "category": "cross-functional"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Carry decisions through launch",
+        "importance": "important",
+        "category": "delivery"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Equivalent product-building experience accepted in lieu of title-specific PM tenure",
+        "importance": "important",
+        "category": "experience"
+      },
+      {
+        "id": "req_10",
+        "requirement": "Operate as an individual contributor",
+        "importance": "important",
+        "category": "role structure"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "This role is mostly about turning vague customer problems into AI workflow products and making real decisions about context, APIs, data, and what good model behavior looks like. That is close to how I already spend my time. At CModel I owned an email-to-decision-intelligence workflow from definition through production, including the AI behavior, integrations, and failure handling. The main difference is that I've done this largely as a builder with product ownership rather than as a titled PM doing formal discovery with customers. The daily work still looks like a good use of what I know how to do, and the parts I'm less proven in are things I've done adjacent to, not never done."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Working through ambiguity",
+        "fit": "strong",
+        "narrative": "I've repeatedly taken problems that weren't fully specified and driven them to a working product. At CModel I owned an email-to-decision workflow where the hard part was deciding what counted as a useful signal, not implementing it. At Reaccord I designed the product end to end from an idea, including what the product should do day to day. The difference here is that I arrived at product decisions by building and using things, not through structured discovery with customers. I've helped determine what to build, but I haven't run a formal customer research process.",
+        "requirementIds": [
+          "req_1",
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Building AI into real workflows",
+        "fit": "strong",
+        "narrative": "This is the part of the job I know best. I've built production LLM features: tool calling against application data, schema-constrained generation, validation and failure handling, and runtime context design. At CModel the design question was how to give a model organizational context without dumping the whole application state into every prompt, so I split context into provided state and selective retrieval. At Reaccord I made model choice a configuration concern so workflows survive provider changes. I also work with APIs and data constantly, from Microsoft 365 OAuth integrations to social platform ingestion under quota and cost constraints.",
+        "requirementIds": [
+          "req_3",
+          "req_4",
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Designing work with AI",
+        "fit": "strong",
+        "narrative": "I've had to define what good model output looks like and enforce it. Schema-constrained generation at CModel is the clearest example: define the structure, generate against it, validate, then accept, retry, repair, or reject. I also built evals for AI behavior where deterministic tests weren't enough, as part of an agentic development process I helped establish. Most of this judgment came from building the systems myself and fixing what broke, rather than from a formal evaluation discipline.",
+        "requirementIds": [
+          "req_2",
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "strategic-assistant"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "structured-generation"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Working across technical areas",
+        "fit": "relevant",
+        "narrative": "I've carried work across engineering, product, and launch without a title for it. At CModel I worked across the product from prototypes to production, including a transition between architectures where I had to decide what behavior to preserve. At MusicBreakr I owned payments, permissions, and integrations in a live two-sided marketplace. The honest limit is coordination at a distance: I've worked closely with engineers and contributed to review and release practices, but I haven't been responsible for coordinating a dedicated design and engineering organization as an IC PM.",
+        "requirementIds": [
+          "req_7",
+          "req_8",
+          "req_10"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "overview"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [],
+    "interviewQuestions": [
+      "How much of the discovery work in this role is direct customer interviews versus inferring needs from usage and prototypes?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "ambiguous-problem-to-working-system",
+      "applied-ai-systems",
+      "ai-enabled-process-design",
+      "whole-system-reasoning",
+      "integration-workflow-engineering",
+      "product-interaction-judgment",
+      "cross-boundary-execution",
+      "zero-to-one-product-building"
+    ],
+    "evidenceSections": 24,
+    "evidenceCharacters": 19272,
+    "unmatchedRequirementIds": []
+  }
+}

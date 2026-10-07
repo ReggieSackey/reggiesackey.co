@@ -1,0 +1,261 @@
+{
+  "job": "emerging-technology-researcher",
+  "successProfile": {
+    "mission": "Reduce uncertainty for the organization by investigating unfamiliar technical areas, testing assumptions through prototypes and controlled experiments, and converting findings into clear, executive-ready recommendations that shape decisions.",
+    "work": [
+      {
+        "id": "work_1",
+        "activity": "Investigate unfamiliar technical areas and identify the important questions worth answering",
+        "importance": "core"
+      },
+      {
+        "id": "work_2",
+        "activity": "Build prototypes to test assumptions and validate or refute hypotheses",
+        "importance": "core"
+      },
+      {
+        "id": "work_3",
+        "activity": "Design and run rigorous controlled research experiments",
+        "importance": "core"
+      },
+      {
+        "id": "work_4",
+        "activity": "Write formal research reports and present recommendations to senior executives",
+        "importance": "core"
+      },
+      {
+        "id": "work_5",
+        "activity": "Set and pursue an independent research agenda aligned to organizational needs",
+        "importance": "important"
+      }
+    ],
+    "successDrivers": [
+      {
+        "id": "driver_1",
+        "driver": "Ability to make progress in domains with no existing specification or playbook",
+        "importance": "core"
+      },
+      {
+        "id": "driver_2",
+        "driver": "Rigor: assumptions are actually tested through prototypes and controlled experiments rather than asserted",
+        "importance": "core"
+      },
+      {
+        "id": "driver_3",
+        "driver": "Findings are communicated with enough clarity and credibility to influence senior-executive decisions",
+        "importance": "core"
+      },
+      {
+        "id": "driver_4",
+        "driver": "Self-directed productivity: a research agenda advances without close supervision",
+        "importance": "important"
+      }
+    ],
+    "hardConstraints": []
+  },
+  "extractedJob": {
+    "jobTitle": "Emerging Technology Researcher",
+    "company": null,
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Investigate unfamiliar technical areas and surface important questions",
+        "importance": "core",
+        "category": "research"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Build prototypes to test assumptions",
+        "importance": "core",
+        "category": "prototyping"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Turn findings into actionable recommendations",
+        "importance": "core",
+        "category": "research"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Design rigorous controlled research experiments",
+        "importance": "core",
+        "category": "research-methodology"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Write formal research reports",
+        "importance": "core",
+        "category": "communication"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Set an independent research agenda",
+        "importance": "core",
+        "category": "autonomy"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Present recommendations to senior executives",
+        "importance": "core",
+        "category": "communication"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Work productively with incomplete specifications and ambiguous goals",
+        "importance": "core",
+        "category": "ambiguity"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Rapidly build working technical understanding of new domains and tools",
+        "importance": "important",
+        "category": "learning"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "This job is mostly about investigating unfamiliar technical areas, building prototypes to test assumptions, and turning what I learn into recommendations people can act on. The strongest part of my fit is the building. I've repeatedly taken ambiguous problems and turned them into working systems, including products I designed end to end on my own. The research framing is different from what I've done. I've built prototypes to answer product and technical questions, but I haven't worked as a researcher, and I don't have much in my portfolio that shows controlled experiments, formal research reports, or presenting findings to senior executives. I've also never had to set a research agenda in that formal sense. So the label feels right: much of the day-to-day work resembles things I know how to do, and the parts that don't are skills I'd need to develop rather than things I've proven."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Working through ambiguity",
+        "fit": "relevant",
+        "narrative": "A lot of my work has started with an unclear problem and no specification. At CModel, I owned an email-to-decision-intelligence workflow from definition through production. The hard part was figuring out which signals in a noisy inbox were actually useful for a strategic decision and which should be ignored. I've also had to learn unfamiliar technical areas quickly, like when I picked up C++ and JUCE for audio work recently. That's evidence I can get productive in a new domain, not that I'm a C++ specialist.",
+        "requirementIds": [
+          "req_1",
+          "req_3",
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Building from scratch",
+        "fit": "strong",
+        "narrative": "This is the part I'm most confident in. I built Reaccord end to end as an independent product: architecture, backend, web and mobile clients, AI-assisted planning workflows, and the interaction design. At CModel I built the strategic assistant as a standalone Next.js application and took it through to production. I've done this several times, and in each case the prototypes were how I tested whether an idea actually worked.",
+        "requirementIds": [
+          "req_2"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "overview"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Working across technical areas",
+        "fit": "relevant",
+        "narrative": "I've worked across whatever boundary a problem required rather than staying in one layer. At MusicBreakr that meant social attribution across four platforms, Stripe Connect payments, permissions, and backend workflows under real API constraints. At CModel it meant AI features, OAuth integrations, data modeling, and moving the product from Bubble prototypes to a conventional TypeScript stack. Setting my own direction within that has been normal for me, especially on products where I was the only engineer.",
+        "requirementIds": [
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "overview"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Communication work",
+        "fit": "relevant",
+        "narrative": "Much of my work has involved turning messy, ambiguous inputs into something clear enough to build on. The email signals work at CModel is a good example: the whole design problem was deciding what information mattered and representing it so models and users could act on it. I've also had to explain technical tradeoffs to non-engineers as part of owning features end to end. What I haven't done is present research findings to senior executives as a formal part of my job.",
+        "requirementIds": [
+          "req_7",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Research-methodology experience",
+        "fit": "gap",
+        "narrative": "I haven't worked as a professional researcher. My portfolio doesn't show controlled experiments, formal research writing, or an independently set research agenda. I've built prototypes to answer questions and made judgment calls under ambiguity, which is related, but it isn't the same discipline as designing rigorous experiments and writing them up for decision makers.",
+        "requirementIds": [
+          "req_4",
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Research-methodology experience",
+        "narrative": "I haven't worked as a professional researcher. My portfolio doesn't show controlled experiments, formal research writing, or an independently set research agenda. I've built prototypes to answer questions and made judgment calls under ambiguity, which is related, but it isn't the same discipline as designing rigorous experiments and writing them up for decision makers.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "How much of this role would be formal research methodology versus prototype-driven investigation, and is there room to grow into the more rigorous research side?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "ambiguous-problem-to-working-system",
+      "zero-to-one-product-building",
+      "rapid-technical-adaptation",
+      "whole-system-reasoning",
+      "product-interaction-judgment",
+      "cross-boundary-execution"
+    ],
+    "evidenceSections": 18,
+    "evidenceCharacters": 13883,
+    "unmatchedRequirementIds": [
+      "req_4",
+      "req_5"
+    ]
+  }
+}

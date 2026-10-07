@@ -26,8 +26,8 @@ export const synthesisPlanSchema = z.object({
   overallFit: z.enum(["strong", "relevant", "gap"]),
   roleContext: z.object({
     mission: z.string(),
-    work: z.array(z.object({ id: z.string(), activity: z.string() }).strict()),
-    successDrivers: z.array(z.object({ id: z.string(), driver: z.string() }).strict()),
+    work: z.array(z.object({ id: z.string(), activity: z.string(), importance: z.enum(["core", "important", "secondary"]) }).strict()),
+    successDrivers: z.array(z.object({ id: z.string(), driver: z.string(), importance: z.enum(["core", "important", "secondary"]) }).strict()),
     hardConstraints: z.array(z.object({ id: z.string(), constraint: z.string(), severity: z.enum(["blocking", "material"]) }).strict()),
   }).strict(),
   themes: z.array(plannedThemeSchema).min(3).max(8),
@@ -35,15 +35,75 @@ export const synthesisPlanSchema = z.object({
 }).strict();
 export type SynthesisPlan = z.infer<typeof synthesisPlanSchema>;
 
-const proseSchema = z.object({
+const proseShape = z.object({
   overallNarrative: z.string().min(1).max(2000),
   themeNarratives: z.record(z.string(), z.string().min(1).max(2000)),
-  interviewQuestions: z.array(z.string().min(1).max(500)).max(3),
+  interviewQuestions: z.array(z.string().min(1).max(500)).max(1),
 }).strict();
+const forbiddenPublicProse = /\bReg(?: Sackey(?:-Addo)?)?(?:'s)?\b|\bthe (?:candidate|applicant)\b|\b(?:he|him|his)\b|—|https?:\/\/|www\.|\b(?:req|theme|ev|work|driver|constraint)_\d+\b/i;
+function validatePublicProse(
+  value: z.infer<typeof proseShape>,
+  ctx: z.RefinementCtx,
+  capabilityIds: string[] = [],
+) {
+  const entries = [
+    ["overallNarrative", value.overallNarrative] as const,
+    ...Object.entries(value.themeNarratives),
+    ...value.interviewQuestions.map((question, index) => [`interviewQuestions.${index}`, question] as const),
+  ];
+  const narratives = [value.overallNarrative, ...Object.values(value.themeNarratives)].map((text) => text.trim());
+  if (new Set(narratives).size !== narratives.length)
+    ctx.addIssue({ code: "custom", message: "Duplicate public narrative" });
+  for (const [key, text] of entries) {
+    if (forbiddenPublicProse.test(text) || capabilityIds.some((id) => id && text.includes(id)))
+      ctx.addIssue({ code: "custom", path: [key], message: "Public prose contains forbidden third-person language, punctuation, URL, or internal ID" });
+    if (!key.startsWith("interviewQuestions.") && !/\b(?:I|me|my|I've|I'm)\b/i.test(text))
+      ctx.addIssue({ code: "custom", path: [key], message: "Public prose must use first person" });
+  }
+}
+const proseSchema = proseShape.superRefine((value, ctx) => validatePublicProse(value, ctx));
+export const proseSchemaForPlan = (plan: SynthesisPlan) =>
+  proseShape.superRefine((value, ctx) =>
+    validatePublicProse(value, ctx, plan.themes.flatMap((theme) => theme.capabilityIds)),
+  );
 export type SynthesisProse = z.infer<typeof proseSchema>;
 export { proseSchema };
 
 const sourceKey = (value: { sourceType: string; sourceId: string; sectionId: string }) => `${value.sourceType}:${value.sourceId}:${value.sectionId}`;
+
+const CAPABILITY_TITLES: Record<string, string> = {
+  "ambiguous-problem-to-working-system": "Working through ambiguity",
+  "zero-to-one-product-building": "Building from scratch",
+  "whole-system-reasoning": "Working across a whole system",
+  "integration-workflow-engineering": "Connecting systems",
+  "applied-ai-systems": "Building AI into real workflows",
+  "rapid-technical-adaptation": "Learning unfamiliar systems",
+  "product-interaction-judgment": "Shaping how products work",
+  "platform-extension-abstraction-escape": "Extending platforms",
+  "production-problem-solving": "Solving production problems",
+  "data-state-modeling": "Modeling data and state",
+  "ai-enabled-process-design": "Designing work with AI",
+  "cross-boundary-execution": "Working across technical areas",
+};
+function requiresSpecializedDirectExperience(text: string) {
+  return /controlled experiment|statistical research|formal research method|set (?:an |the )?research agenda|manage(?:d|ment)? (?:managers|an organization|a team)|direct reports|SRE|Kubernetes|Terraform|Kafka|Linux networking|active .{0,30}(?:license|certification)|CPA/i.test(text);
+}
+function titleForGroup(
+  group: { capabilityIds: string[]; requirementIds: string[]; hardConstraintIds: string[] },
+  capabilityMap: Map<string, Capability>,
+  reqById: Map<string, Decision["extractedJob"]["requirements"][number]>,
+) {
+  const capability = group.capabilityIds.map((id) => capabilityMap.get(id)).find(Boolean);
+  if (capability && !group.hardConstraintIds.length)
+    return CAPABILITY_TITLES[capability.slug] ?? capability.title.slice(0, 60);
+  const text = group.requirementIds.map((id) => reqById.get(id)?.requirement ?? "").join(" ");
+  if (/controlled experiment|statistical|research method|research agenda/i.test(text)) return "Formal research methods";
+  if (/manage|management|manager|organization of|direct reports/i.test(text)) return "People management at scale";
+  if (/SRE|Kubernetes|Terraform|Kafka|infrastructure|Linux networking/i.test(text)) return "Infrastructure specialization";
+  if (/license|certification|credential|CPA/i.test(text)) return "Required credentials";
+  const category = reqById.get(group.requirementIds[0])?.category;
+  return category ? `${category[0].toUpperCase()}${category.slice(1)} experience`.slice(0, 60) : "A less proven area";
+}
 
 export function buildSynthesisPlan(decision: Decision, capabilities: Capability[], sources: SourceSection[]): SynthesisPlan {
   if (!decision.successProfile || !decision.capabilityRelevance) throw new Error("Incomplete success profile decision");
@@ -71,15 +131,15 @@ export function buildSynthesisPlan(decision: Decision, capabilities: Capability[
       workIds: [], successDriverIds: [], hardConstraintIds: constraints.map((item) => item.id), capabilityIds: [], requirementIds: [],
     });
   }
-  const softGapRequirements = decision.extractedJob.requirements.filter((requirement) =>
+  const unsupportedGapRequirements = decision.extractedJob.requirements.filter((requirement) =>
     assessedFit.get(requirement.id) === "gap" &&
-    requirement.importance !== "core" &&
-    !decision.matches.some((match) => match.requirementIds.includes(requirement.id)),
+    (!decision.matches.some((match) => match.requirementIds.includes(requirement.id)) ||
+      requiresSpecializedDirectExperience(requirement.requirement)),
   );
-  if (softGapRequirements.length && groups.length < 6) {
+  if (unsupportedGapRequirements.length && groups.length < 6) {
     groups.push({
-      title: softGapRequirements.map((item) => item.requirement).join("; ").slice(0, 120),
-      workIds: [], successDriverIds: [], hardConstraintIds: [], capabilityIds: [], requirementIds: softGapRequirements.map((item) => item.id),
+      title: "A less proven area",
+      workIds: [], successDriverIds: [], hardConstraintIds: [], capabilityIds: [], requirementIds: unsupportedGapRequirements.map((item) => item.id),
     });
   }
   for (const requirement of decision.extractedJob.requirements) {
@@ -103,13 +163,25 @@ export function buildSynthesisPlan(decision: Decision, capabilities: Capability[
   }
   const sourceMap = new Map(sources.map((source) => [sourceKey(source), source]));
   const capabilityMap = new Map(capabilities.map((capability) => [capability.id, capability]));
+  const usedTitles = new Set<string>();
   const themes = groups.slice(0, 6).map((group, index) => {
     const matches = decision.matches.filter((m) => m.requirementIds.some((id) => group.requirementIds.includes(id)));
     const capabilityIds = [...new Set([...group.capabilityIds, ...matches.map((m) => m.capabilityId)])].filter((id) => relevance.some((item) => item.capabilityId === id));
     const strongest = matches.reduce((value, match) => Math.max(value, match.score), 0);
     const requirementFits = group.requirementIds.map((id) => assessedFit.get(id));
-    const fit: Fit = group.hardConstraintIds.length || requirementFits.includes("gap") ? "gap" : requirementFits.includes("transferable") ? "relevant" : requirementFits.every((value) => value === "direct") && capabilityIds.length > 0 ? "strong" : matches.length === 0 ? "gap" : strongest >= 0.75 ? "strong" : "relevant";
-    const title = group.title;
+    const specializedGap = group.requirementIds.some((id) => assessedFit.get(id) === "gap" && requiresSpecializedDirectExperience(reqById.get(id)?.requirement ?? ""));
+    const unsupportedGap = requirementFits.includes("gap") && capabilityIds.length === 0;
+    const fit: Fit = group.hardConstraintIds.length || specializedGap || unsupportedGap ? "gap" : requirementFits.includes("gap") || requirementFits.includes("transferable") ? "relevant" : requirementFits.every((value) => value === "direct") && capabilityIds.length > 0 ? "strong" : matches.length === 0 ? "gap" : strongest >= 0.75 ? "strong" : "relevant";
+    let title = titleForGroup(group, capabilityMap, reqById);
+    if (usedTitles.has(title)) {
+      const alternative = group.capabilityIds
+        .map((id) => capabilityMap.get(id))
+        .map((capability) => capability && (CAPABILITY_TITLES[capability.slug] ?? capability.title.slice(0, 60)))
+        .find((candidate): candidate is string => Boolean(candidate && !usedTitles.has(candidate)));
+      title = alternative ?? `${reqById.get(group.requirementIds[0])?.category ?? "Related"} work`;
+      title = `${title[0].toUpperCase()}${title.slice(1)}`.slice(0, 60);
+    }
+    usedTitles.add(title);
     const refs = capabilityIds.flatMap((id) => capabilityMap.get(id)?.evidence ?? []);
     const allowed = refs.map((ref) => sourceMap.get(sourceKey(ref))).filter((x): x is SourceSection => Boolean(x));
     const gapContext = fit === "gap" ? sources.filter((s) => s.sourceType === "profile" && /limitation|limited-experience|career|chronolog/.test(s.sectionId)) : [];
@@ -127,17 +199,18 @@ export function buildSynthesisPlan(decision: Decision, capabilities: Capability[
     };
   });
   if (themes.length < 3) throw new Error("Synthesis plan requires at least three themes");
-  const core = decision.extractedJob.requirements.filter((r) => r.importance === "core");
-  const gapIds = new Set(themes.filter((t) => t.fit === "gap").flatMap((t) => t.requirementIds));
-  const coreGapRatio = core.length ? core.filter((r) => gapIds.has(r.id)).length / core.length : 0;
   const blocking = decision.successProfile.hardConstraints.some((item) => item.severity === "blocking");
-  const overallFit: Fit = blocking || coreGapRatio >= 0.5 ? "gap" : themes.every((t) => t.fit === "strong") ? "strong" : "relevant";
+  const coreWorkIds = new Set(decision.successProfile.work.filter((item) => item.importance === "core").map((item) => item.id));
+  const coreDriverIds = new Set(decision.successProfile.successDrivers.filter((item) => item.importance === "core").map((item) => item.id));
+  const centralThemes = themes.filter((theme) => theme.workIds.some((id) => coreWorkIds.has(id)) || theme.successDriverIds.some((id) => coreDriverIds.has(id)));
+  const centralGapRatio = centralThemes.length ? centralThemes.filter((theme) => theme.fit === "gap").length / centralThemes.length : 0;
+  const overallFit: Fit = blocking || centralGapRatio >= 0.5 ? "gap" : centralThemes.length > 0 && centralThemes.every((theme) => theme.fit === "strong") && !themes.some((theme) => theme.fit === "gap") ? "strong" : "relevant";
   return synthesisPlanSchema.parse({
     overallFit,
     roleContext: {
       mission: decision.successProfile.mission,
-      work: decision.successProfile.work.map(({ id, activity }) => ({ id, activity })),
-      successDrivers: decision.successProfile.successDrivers.map(({ id, driver }) => ({ id, driver })),
+      work: decision.successProfile.work,
+      successDrivers: decision.successProfile.successDrivers,
       hardConstraints: decision.successProfile.hardConstraints,
     },
     themes,
@@ -163,6 +236,6 @@ export function mergeSynthesis(plan: SynthesisPlan, prose: SynthesisProse): Cand
       const theme = plan.themes.find((item) => item.id === id)!;
       return { title: theme.title, narrative: prose.themeNarratives[id], citations: citation(theme) };
     }),
-    interviewQuestions: prose.interviewQuestions,
+    interviewQuestions: prose.interviewQuestions.slice(0, 1),
   };
 }

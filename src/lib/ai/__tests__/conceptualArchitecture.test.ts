@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { CANONICAL_CAPABILITIES } from "../../../../convex/canonicalCapabilities";
 import { CASE_STUDIES, PROFILE_DOCUMENTS } from "../../../../convex/seedData";
-import { buildSynthesisPlan, mergeSynthesis } from "../synthesisPlan";
+import { buildSynthesisPlan, mergeSynthesis, proseSchema } from "../synthesisPlan";
 import type { Decision, Capability } from "../capabilitySchemas";
 import type { SourceSection } from "../corpus";
 import { createZaiMatcher } from "../matcher";
@@ -67,7 +67,7 @@ describe("profession-neutral planning", () => {
     const plan = buildSynthesisPlan(decision(), capabilities, sources);
     expect(plan.overallFit).toBe("strong");
     expect(plan.themes.some((theme) => theme.capabilityIds.length > 1)).toBe(true);
-    expect(plan.themes[0].title).toContain("customer systems");
+    expect(plan.themes[0].title).toBe("Working through ambiguity");
   });
 
   it("does not let the title drive capability selection", () => {
@@ -113,6 +113,57 @@ describe("profession-neutral planning", () => {
     expect(buildSynthesisPlan(management, capabilities, sources).overallFit).toBe("gap");
   });
 
+  it("treats product prototypes used to test assumptions as transferable in research work", () => {
+    const base = decision();
+    const requirements = base.extractedJob.requirements.map((item) =>
+      item.id === "req_1" ? { ...item, requirement: "Build prototypes to test assumptions" } : item,
+    );
+    const plan = buildSynthesisPlan(
+      decision({
+        extractedJob: { ...base.extractedJob, jobTitle: "Emerging Technology Researcher", requirements },
+        requirementFits: requirements.map((item) => ({ requirementId: item.id, fit: item.id === "req_1" ? "gap" as const : "direct" as const })),
+        matches: [{ capabilityId: capabilityIds["zero-to-one-product-building"], requirementIds: ["req_1"], score: 0.9 }, ...base.matches.slice(1)],
+        capabilityRelevance: [{ capabilityId: capabilityIds["zero-to-one-product-building"], relevance: "central", workIds: ["work_1"], successDriverIds: ["driver_1"] }, ...base.capabilityRelevance!.slice(1)],
+      }), capabilities, sources,
+    );
+    expect(plan.themes.find((theme) => theme.requirementIds.includes("req_1"))?.fit).toBe("relevant");
+  });
+
+  it("keeps controlled experimental design as a gap without direct support", () => {
+    const base = decision();
+    const requirements = base.extractedJob.requirements.map((item) =>
+      item.id === "req_1" ? { ...item, requirement: "Design rigorous controlled experiments and statistical research" } : item,
+    );
+    const plan = buildSynthesisPlan(
+      decision({
+        extractedJob: { ...base.extractedJob, requirements },
+        requirementFits: requirements.map((item) => ({ requirementId: item.id, fit: item.id === "req_1" ? "gap" as const : "direct" as const })),
+        matches: [{ capabilityId: capabilityIds["zero-to-one-product-building"], requirementIds: ["req_1"], score: 0.9 }, ...base.matches.slice(1)],
+      }), capabilities, sources,
+    );
+    expect(plan.themes.find((theme) => theme.requirementIds.includes("req_1"))?.fit).toBe("gap");
+  });
+
+  it("keeps senior platform engineering and substantial PM management as gaps", () => {
+    const base = decision();
+    for (const constraint of [
+      "Required direct ownership of Kubernetes, Terraform, Kafka, and Linux networking",
+      "Required history managing a substantial organization of product managers",
+    ]) {
+      const plan = buildSynthesisPlan(decision({
+        successProfile: { ...base.successProfile!, hardConstraints: [{ id: "constraint_1", constraint, severity: "blocking" }] },
+      }), capabilities, sources);
+      expect(plan.overallFit).toBe("gap");
+    }
+  });
+
+  it("uses short application-owned titles rather than full requirements", () => {
+    const base = decision();
+    const plan = buildSynthesisPlan(base, capabilities, sources);
+    expect(plan.themes.every((theme) => !base.extractedJob.requirements.some((requirement) => requirement.requirement === theme.title))).toBe(true);
+    expect(new Set(plan.themes.map((theme) => theme.title)).size).toBe(plan.themes.length);
+  });
+
   it("excludes well-supported capabilities when the decision marks them irrelevant", () => {
     const plan = buildSynthesisPlan(decision(), [...capabilities, { id: "irrelevant", slug: "irrelevant", title: "Impressive but irrelevant", description: "Well supported elsewhere", tags: [], evidence: CANONICAL_CAPABILITIES[0].evidence }], sources);
     expect(plan.themes.flatMap((theme) => theme.capabilityIds)).not.toContain("irrelevant");
@@ -125,6 +176,24 @@ describe("profession-neutral planning", () => {
     expect(fit.themes.map((theme) => theme.id)).toEqual(plan.themes.map((theme) => theme.id));
     expect(fit.themes.every((theme) => theme.fit === "gap" || theme.citations.length > 0)).toBe(true);
     expect(() => mergeSynthesis(plan, { ...prose, themeNarratives: { invented: "Invented" } })).toThrow("Synthesis theme contract mismatch");
+  });
+});
+
+describe("public prose contract", () => {
+  const valid = {
+    overallNarrative: "I've done much of this work in product settings.",
+    themeNarratives: { theme_1: "I built a working version to test what mattered." },
+    interviewQuestions: [] as string[],
+  };
+  it("accepts first person prose with zero or one question", () => {
+    expect(proseSchema.safeParse(valid).success).toBe(true);
+    expect(proseSchema.safeParse({ ...valid, interviewQuestions: ["Can I use my product-building approach in this setting?"] }).success).toBe(true);
+  });
+  it("rejects third person, em dashes, URLs, internal IDs, duplicates, and multiple questions", () => {
+    for (const text of ["Reg built this.", "He built this.", "I built this — quickly.", "I used https://example.test.", "I handled req_1."])
+      expect(proseSchema.safeParse({ ...valid, overallNarrative: text }).success).toBe(false);
+    expect(proseSchema.safeParse({ ...valid, themeNarratives: { theme_1: valid.overallNarrative } }).success).toBe(false);
+    expect(proseSchema.safeParse({ ...valid, interviewQuestions: ["Can I do this?", "Can I do that?"] }).success).toBe(false);
   });
 });
 

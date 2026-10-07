@@ -11,6 +11,7 @@ import { modelRun, newMetrics, Timings } from "../telemetry";
 import { extractedJobSchema, type CandidateFit } from "../schemas";
 import { assertGroundedFit } from "../validateCitations";
 import { resolveCitationUrl } from "@/lib/citations";
+import { CitationRow } from "@/components/CitationRow";
 
 const caps = [
   {
@@ -206,8 +207,8 @@ test("raw JD and unexpected output fields do not flow to synthesis", async () =>
       materialGapThemeIds: string[];
     };
     return JSON.stringify({
-      overallNarrative: "A grounded overall assessment.",
-      themeNarratives: Object.fromEntries(planned.themes.map((theme) => [theme.id, "A grounded theme assessment."])),
+      overallNarrative: "I have relevant experience for this work.",
+      themeNarratives: Object.fromEntries(planned.themes.map((theme, index) => [theme.id, `I've done the grounded work described in example ${index + 1}.`])),
       interviewQuestions: [],
     });
   });
@@ -329,6 +330,21 @@ test("hostile HTML and Markdown render as escaped text and citation paths are en
       sectionId: '"><script>',
     }),
   ).toBe("/work/..%2F..%2Fapi%2Fsecret%3Fx#%22%3E%3Cscript%3E");
+});
+test("citation rendering stays compact while preserving the canonical deep link", () => {
+  const html = renderToStaticMarkup(
+    createElement(CitationRow, {
+      citation,
+      context: {
+        sourceTitles: new Map([["caseStudy:project", "CModel"]]),
+        sectionHeadings: new Map([["caseStudy:project:delivery", "Architecture evolution"]]),
+      },
+    }),
+  );
+  expect(html).toContain("CModel · Architecture evolution →");
+  expect(html).toContain('href="/work/project#delivery"');
+  expect(html).not.toContain("Case study");
+  expect(html).not.toContain("View source");
 });
 test("telemetry never includes provider exception text, JD, or generated data", async () => {
   const logs = vi.spyOn(console, "info").mockImplementation(() => {});
