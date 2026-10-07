@@ -44,6 +44,10 @@ export const decisionSchema = z
           .strict(),
       )
       .max(12),
+    requirementFits: z.array(z.object({
+      requirementId: z.string().regex(/^req_\d+$/),
+      fit: z.enum(["direct", "transferable", "gap"]),
+    }).strict()).max(25).optional(),
   })
   .strict();
 export type Decision = z.infer<typeof decisionSchema>;
@@ -53,4 +57,10 @@ export type Capability = {
   title: string;
   description: string;
   tags: string[];
+  evidence?: Array<{
+    sourceType: "caseStudy" | "profile";
+    sourceId: string;
+    sectionId: string;
+    note: string;
+  }>;
 };

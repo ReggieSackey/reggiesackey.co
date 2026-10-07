@@ -37,7 +37,7 @@ import type { LanguageModel } from "ai";
 
 export const ZAI_BASE_URL_DEFAULT = "https://api.z.ai/api/paas/v4";
 
-export const ZAI_MODEL_DEFAULT = "glm-5.3-flash";
+export const ZAI_MODEL_DEFAULT = "glm-5.3-flashx";
 
 /** Lowest supported reasoning effort (low | high | max). */
 export const ZAI_REASONING_EFFORT_DEFAULT = "low";

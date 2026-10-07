@@ -1,0 +1,79 @@
+{
+  "measuredAt": "2026-10-07T17:10:38.846Z",
+  "scope": "Live model + validation; in-memory proposed registry and canonical evidence, excludes HTTP/persistence/Convex targeted query. No registry approval performed.",
+  "corpusVersion": "076284c8c3be0bb2a6fadf05963c24828806fea1c85a5b8883855d6a5dd7ba24",
+  "results": [
+    {
+      "name": "product",
+      "match": 4178,
+      "retrieve": 0,
+      "plan": 2,
+      "synthesis": 16013,
+      "totalMs": 20194,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 5465,
+      "outputTokens": 1276,
+      "modelMs": 20186.288333000004,
+      "outcome": "failed",
+      "selection": null,
+      "failureStage": "synthesis_theme_contract"
+    },
+    {
+      "name": "ai",
+      "match": 3473,
+      "retrieve": 0,
+      "plan": 1,
+      "synthesis": 21300,
+      "totalMs": 24774,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 7303,
+      "outputTokens": 1476,
+      "modelMs": 24770.593041,
+      "outcome": "failed",
+      "selection": null,
+      "failureStage": "forged_planned_citation"
+    },
+    {
+      "name": "infrastructure",
+      "match": 3704,
+      "retrieve": 0,
+      "plan": 0,
+      "synthesis": 25691,
+      "coverage": 2,
+      "citations": 1,
+      "totalMs": 29399,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 5885,
+      "outputTokens": 1704,
+      "modelMs": 29390.724583999996,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "benchmark-18",
+          "benchmark-5",
+          "benchmark-14",
+          "benchmark-9",
+          "benchmark-7",
+          "benchmark-15"
+        ],
+        "evidenceSections": 10,
+        "evidenceCharacters": 7654,
+        "unmatchedRequirementIds": [
+          "req_9"
+        ],
+        "capabilities": [
+          "Production ownership for live systems",
+          "Cross-system production debugging",
+          "Whole-system reasoning",
+          "Recurring background workflows at scale",
+          "Permissions and delegated authorization",
+          "Learning velocity in unfamiliar systems"
+        ]
+      },
+      "failureStage": ""
+    }
+  ]
+}

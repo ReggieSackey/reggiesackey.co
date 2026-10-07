@@ -77,7 +77,7 @@ test.skipIf(process.env.LIVE_TARGETED !== "1")(
             },
           });
           writeFileSync(
-            `docs/benchmarks/analysis-${job.name}.json`,
+            `docs/benchmarks/${process.env.ANALYSIS_OUTPUT_PREFIX ?? "analysis"}-${job.name}.json`,
             JSON.stringify({ job: job.name, ...result }, null, 2),
           );
           selection = {

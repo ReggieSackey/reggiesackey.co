@@ -1,0 +1,107 @@
+{
+  "measuredAt": "2026-10-07T17:13:52.787Z",
+  "scope": "Live model + validation; in-memory proposed registry and canonical evidence, excludes HTTP/persistence/Convex targeted query. No registry approval performed.",
+  "corpusVersion": "076284c8c3be0bb2a6fadf05963c24828806fea1c85a5b8883855d6a5dd7ba24",
+  "results": [
+    {
+      "name": "product",
+      "match": 3198,
+      "retrieve": 0,
+      "plan": 3,
+      "synthesis": 23965,
+      "coverage": 0,
+      "citations": 1,
+      "totalMs": 27168,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 5709,
+      "outputTokens": 1504,
+      "modelMs": 27157.467125,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "benchmark-1",
+          "benchmark-4",
+          "benchmark-5",
+          "benchmark-6",
+          "benchmark-14",
+          "benchmark-15",
+          "benchmark-16",
+          "benchmark-18"
+        ],
+        "evidenceSections": 13,
+        "evidenceCharacters": 10765,
+        "unmatchedRequirementIds": [],
+        "capabilities": [
+          "Product engineering under ambiguity (0-to-1)",
+          "Third-party API integration and OAuth",
+          "Cross-system production debugging",
+          "Application data modeling",
+          "Whole-system reasoning",
+          "Learning velocity in unfamiliar systems",
+          "Consumer product and interaction design",
+          "Production ownership for live systems"
+        ]
+      },
+      "failureStage": ""
+    },
+    {
+      "name": "ai",
+      "match": 3098,
+      "retrieve": 0,
+      "plan": 2,
+      "synthesis": 26905,
+      "totalMs": 30005,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 6016,
+      "outputTokens": 1716,
+      "modelMs": 30000.302874999998,
+      "outcome": "failed",
+      "selection": null,
+      "failureStage": "synthesis_theme_contract"
+    },
+    {
+      "name": "infrastructure",
+      "match": 3447,
+      "retrieve": 0,
+      "plan": 0,
+      "synthesis": 24807,
+      "coverage": 0,
+      "citations": 0,
+      "totalMs": 28256,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 6082,
+      "outputTokens": 1613,
+      "modelMs": 28252.132291999995,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "benchmark-18",
+          "benchmark-5",
+          "benchmark-14",
+          "benchmark-9",
+          "benchmark-15",
+          "benchmark-7",
+          "benchmark-11"
+        ],
+        "evidenceSections": 11,
+        "evidenceCharacters": 8510,
+        "unmatchedRequirementIds": [
+          "req_9"
+        ],
+        "capabilities": [
+          "Production ownership for live systems",
+          "Cross-system production debugging",
+          "Whole-system reasoning",
+          "Recurring background workflows at scale",
+          "Learning velocity in unfamiliar systems",
+          "Permissions and delegated authorization",
+          "Choosing implementation boundaries"
+        ]
+      },
+      "failureStage": ""
+    }
+  ]
+}

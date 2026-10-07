@@ -47,3 +47,21 @@ This is **database lookup latency**, not full HTTP cache-hit latency: admission,
 ## Remaining bottlenecks
 
 Synthesis dominates at 43–52 seconds in the retained-default run; matching takes 8–12 seconds. There are still two sequential GLM requests. The architecture reduces input and enables instant model-free reuse, but **dramatically faster uncached analysis is not yet demonstrated**. A genuinely low-latency decision model, a shorter reliable synthesis contract, and larger quality/latency evaluation are the next measurement-driven options. Jev was not integrated; no authenticated Jev configuration was available or necessary for the existing-provider implementation.
+
+## Performance pass — October 7, 2026
+
+The retained files above were not changed. New `performance-*` files record each experiment, including exact deterministic failure codes. The final implementation builds a typed plan in application code: every requirement is assigned once; the matcher marks each requirement `direct`, `transferable`, or `gap`; theme titles, fit values, material-gap membership, and citation identities are fixed before prose generation. The model returns only an overall narrative, one narrative keyed by each planned theme ID, and up to three interview questions. Citations contain no generated quotes and are attached from the theme's reviewed evidence allowlist.
+
+| Role | Retained targeted total | Final total | Matcher | Synthesis | Input tokens | Output tokens | Result |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Product | 58.417 s | 14.008 s | 5.296 s | 8.707 s | 5,799 | 1,692 | pass |
+| AI applications | 62.106 s | 15.264 s | 5.732 s | 9.530 s | 6,122 | 1,923 | pass |
+| Infrastructure | 54.983 s | 20.775 s | 11.316 s | 9.458 s | 3,968 | 1,496 | pass |
+
+Against the retained targeted run, total latency fell 76.0%, 75.4%, and 62.2%; synthesis latency fell 82.7%, 81.6%, and 78.1%. All final runs passed coverage and citation validation with two provider calls and no repair. The infrastructure result now reports an overall gap and preserves eight unmatched specialized requirements instead of treating generic learning or production ownership as direct Kubernetes/AWS/Terraform/Kafka evidence.
+
+`performance-zai-planned.json`, `performance-zai-planned-v2.json`, and `performance-zai-planned-v3.json` preserve failed intermediate contracts. Their exact failures were `synthesis_theme_contract` and `forged_planned_citation`; those failures drove removal of model-owned theme allocation and citation selection. `performance-zai-planned-final.json` is the successful reduced-contract run on GLM-5.3-Flash. `performance-zai-flashx.json` compares the same contract on GLM-5.3-FlashX. `performance-final.json` is the definitive FlashX run with typed requirement fit decisions.
+
+The [official Z.AI model documentation](https://docs.z.ai/guides/vlm/glm-5.3-flash) identifies `glm-5.3-flashx` as the same model family served at up to 200 tokens/second and supports JSON structured output, so it is now the default synthesis/matcher model. The public route keeps `maxDuration = 300`: the shared safety contract still permits three bounded 80-second provider calls (two primary calls and one repair), plus retrieval and persistence. Lowering the route limit below that worst-case bound would create an avoidable platform timeout before the application can fail closed.
+
+The optional Jev matcher follows TypeSafe's current [`/v1/systemone` OpenAPI contract](https://api.typesafe.ai/docs) and defaults to `jev-latest`. It uses one request containing narrow `noul` and `choice` questions, then converts answers into the same `Decision` contract. No TypeSafe credential was configured, so `performance-jev.json` records `configuration_unavailable`; there are no invented Jev latency or quality numbers. Z.AI remains the matcher default until Jev completes the same live comparison.

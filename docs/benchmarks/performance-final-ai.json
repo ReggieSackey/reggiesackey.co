@@ -1,0 +1,243 @@
+{
+  "job": "ai",
+  "extractedJob": {
+    "jobTitle": "AI Application Engineer",
+    "company": "Example Tools",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Build AI product experiences using language model APIs",
+        "importance": "core",
+        "category": "AI application engineering"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Design structured generation pipelines and validate model output",
+        "importance": "core",
+        "category": "AI application engineering"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Implement secure backend APIs",
+        "importance": "core",
+        "category": "Backend engineering"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Implement retrieval grounded in source documents",
+        "importance": "core",
+        "category": "AI retrieval"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Build observable production systems",
+        "importance": "important",
+        "category": "Production operations"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Own frontend integration in TypeScript and React",
+        "importance": "core",
+        "category": "Frontend engineering"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Collaborate with product teams",
+        "importance": "important",
+        "category": "Collaboration"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Evaluate latency and cost of AI systems",
+        "importance": "important",
+        "category": "AI evaluation"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a strong hire for this role. He has shipped production LLM-powered product features end to end at CModel and Reaccord — schema-constrained generation with validation and failure handling, tool calling, selective runtime context, and model-independent architectures — on TypeScript/Next.js stacks. He pairs that with real third-party integration depth (Microsoft Graph, OAuth, multi-platform ingestion), production ownership of live systems serving paying customers, and a mature agentic engineering process covering evals, CI/CD, and cost-aware model selection. The one material gap is depth in consumer product and interaction design, where his evidence is genuine but self-driven rather than from a consumer product team; it is a growth area, not a disqualifier."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "AI application engineering",
+        "fit": "strong",
+        "narrative": "Reg has direct production experience building LLM application functionality: at CModel he built a strategic assistant in TypeScript/Next.js with the Vercel AI SDK, implementing tool calling, runtime context design, and schema-constrained generation where model output is validated and retried, repaired, or rejected before becoming application state. At Reaccord he went further, separating provider/model configuration from prompts, output shape, validation, and persistence so inference can change independently of product workflows. This is exactly the discipline of treating model output as a boundary to be engineered, not trusted.",
+        "requirementIds": [
+          "req_1",
+          "req_2"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "structured-generation"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Third-party API integration and OAuth",
+        "fit": "relevant",
+        "narrative": "Reg has implemented and maintained roughly nine external integrations at CModel — Microsoft Graph, SharePoint, Teams, DocuSign, HubSpot, and others — including OAuth flows, token lifecycle, error handling, and mapping external state into application models. At MusicBreakr he built ingestion across Instagram, TikTok, YouTube, and Twitter/X with differing identifiers, schemas, and rate limits, requiring a normalization layer and recurring server-side workflows. He debugs at system boundaries, which is where secure API integration actually fails.",
+        "requirementIds": [
+          "req_3"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "social-attribution"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "AI context and retrieval design",
+        "fit": "strong",
+        "narrative": "Retrieval and context design is one of Reg's strongest demonstrated areas. At CModel he kept prompts lean by combining provided organizational/page context with on-demand tool calls against application data and web search, rather than dumping full application state into every request. At Reaccord the application owns context selection — goals, plans, activity, and reflections are assembled per operation — keeping the longitudinal record in the application and only task-relevant information in the prompt.",
+        "requirementIds": [
+          "req_4"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "strategic-assistant"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "personalized-context"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Production ownership for live systems",
+        "fit": "relevant",
+        "narrative": "Reg has owned live production systems, not prototypes. At MusicBreakr he worked on marketplace, payment, and social-data ingestion systems serving thousands of users and hundreds of thousands of dollars in transactions, where failures crossed application, workflow, and external-service state. At CModel he shipped the strategic assistant and an email-to-decision-intelligence pipeline through production, and strengthened the engineering controls around it: CI/CD, automated validation, review practices for agent-generated changes, and evals where deterministic tests fall short.",
+        "requirementIds": [
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "production-ownership"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "impact"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Consumer product and interaction design",
+        "fit": "gap",
+        "narrative": "The genuine gap is consumer product and interaction design at team scale. Reg's evidence here is real but self-driven: he builds and daily-drives his own consumer app, Reaccord, iterating on information hierarchy, friction, and interaction quality from repeated personal use, and he has solved the state-management problems of a personalized, adaptive interface. He would benefit from working alongside dedicated product designers, and his track record suggests he absorbs that feedback quickly.",
+        "requirementIds": [
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "consumer-product-engineering"
+          }
+        ]
+      },
+      {
+        "id": "theme_6",
+        "title": "Product engineering under ambiguity (0-to-1)",
+        "fit": "relevant",
+        "narrative": "Reg's core strength is turning ambiguous 0-to-1 requirements into working software across product behavior, AI, APIs, data, and frontend. He owned CModel's email-to-decision-intelligence workflow from product definition through production, moved the product from Bubble prototypes to a conventional TypeScript/Supabase architecture as requirements matured, and explicitly works across technical boundaries rather than staying in one layer. This makes him effective in the product-collaboration loop, not just as an implementer.",
+        "requirementIds": [
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_7",
+        "title": "Agentic engineering process design",
+        "fit": "relevant",
+        "narrative": "Reg treats model choice and effort as cost/latency decisions, not architecture. At CModel he contributed to selecting models and reasoning effort by task complexity and cost, and built evals for AI behavior where deterministic tests are insufficient. At MusicBreakr he reworked ingestion under API quota and execution constraints — adjusting refresh frequency, batch size, scheduling, and system boundaries — showing he reasons concretely about the operational cost of automated systems.",
+        "requirementIds": [
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "agentic-engineering"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "impact"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Consumer product and interaction design",
+        "narrative": "The genuine gap is consumer product and interaction design at team scale. Reg's evidence here is real but self-driven: he builds and daily-drives his own consumer app, Reaccord, iterating on information hierarchy, friction, and interaction quality from repeated personal use, and he has solved the state-management problems of a personalized, adaptive interface. He would benefit from working alongside dedicated product designers, and his track record suggests he absorbs that feedback quickly.",
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "consumer-product-engineering"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "Walk us through a time schema validation rejected model output in production — how did your retry/repair/reject logic evolve, and what did you learn about the failure modes?",
+      "How did you decide between provided context and tool-call retrieval in CModel's assistant, and how did you measure the latency and cost impact of that choice?",
+      "Reaccord is your own product — how do you gather and incorporate user feedback beyond your own daily use, and how would that change on a team with dedicated designers?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "benchmark-2",
+      "benchmark-13",
+      "benchmark-3",
+      "benchmark-4",
+      "benchmark-18",
+      "benchmark-12",
+      "benchmark-16",
+      "benchmark-1",
+      "benchmark-9"
+    ],
+    "evidenceSections": 18,
+    "evidenceCharacters": 13481,
+    "unmatchedRequirementIds": []
+  }
+}

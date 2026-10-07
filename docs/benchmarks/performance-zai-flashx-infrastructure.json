@@ -1,0 +1,195 @@
+{
+  "job": "infrastructure",
+  "extractedJob": {
+    "jobTitle": "Senior Infrastructure Engineer",
+    "company": "Example Cloud",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Own and operate Kubernetes clusters and AWS infrastructure at large scale",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Design Terraform modules for infrastructure-as-code",
+        "importance": "core",
+        "category": "infrastructure-as-code"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Design and operate distributed streaming infrastructure using Kafka",
+        "importance": "core",
+        "category": "distributed systems"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Lead incident response and on-call rotations",
+        "importance": "core",
+        "category": "operations"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Capacity planning and defining service-level objectives",
+        "importance": "core",
+        "category": "reliability"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Linux networking expertise",
+        "importance": "important",
+        "category": "systems"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Security hardening of infrastructure",
+        "importance": "important",
+        "category": "security"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Five years of direct production infrastructure ownership",
+        "importance": "core",
+        "category": "experience"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Application engineering as a useful secondary skill",
+        "importance": "preferred",
+        "category": "software engineering"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a whole-system engineer who has owned live production systems serving paying customers — marketplace payments, delegated access, and multi-platform social-data ingestion — where failures crossed application, backend, and external-service boundaries and changes had to preserve revenue behavior. His demonstrated strengths are rapid learning in unfamiliar technical environments, recurring background workflow design at scale, authorization and delegated-access modeling, and reasoning across system boundaries rather than within a single layer. He is best hired for his production ownership mindset and learning velocity, with the expectation that his transferable judgment will be applied to deepening expertise in our specific infrastructure tooling."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Production ownership for live systems",
+        "fit": "strong",
+        "narrative": "Reg has operated production systems serving thousands of marketplace users and processing hundreds of thousands of dollars in transactions, including marketplace payments, delegated access, and social-data ingestion, while changes had to preserve live customer behavior. Debugging there routinely meant reconciling application state, backend workflow state, and external services like Stripe and social APIs — the cross-boundary failure reasoning incident response and on-call ownership demand. His profile is candid that his center of gravity is product/application engineering with breadth, so his production ownership is real and accountable, and his strongest claim is on systems thinking and failure handling rather than years in any single infrastructure layer.",
+        "requirementIds": [
+          "req_1",
+          "req_4",
+          "req_5",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "production-ownership"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "impact"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Learning velocity in unfamiliar systems",
+        "fit": "relevant",
+        "narrative": "Reg's effectiveness does not depend on prior familiarity with a role's stack: he builds mental models of unfamiliar systems quickly through documentation, existing code, and modern tooling, then validates the implementation. His recent productive work in C++/JUCE — an environment unrelated to his core background — is direct evidence of that velocity, and he is explicit that it demonstrates learning speed rather than long-term C++ specialization. That same approach is how he would take on new infrastructure domains.",
+        "requirementIds": [
+          "req_2",
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "learning-velocity"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Recurring background workflows at scale",
+        "fit": "relevant",
+        "narrative": "At MusicBreakr, Reg owned recurring ingestion pipelines where refresh frequency, batch size, scheduling, and query patterns directly affected data freshness and operating cost, and he reworked workflows and data structures that degraded at production scale — splitting scheduled work, restructuring data around access patterns, and shifting computation across system boundaries. At CModel he owned an email-signal workflow whose hardest problem was selecting relevant context from high-volume raw input. This is transferable experience in the design questions behind streaming infrastructure: scheduling, throughput, quota constraints, and cost-aware processing.",
+        "requirementIds": [
+          "req_3"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "data-ingestion"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Permissions and delegated authorization",
+        "fit": "relevant",
+        "narrative": "Reg implemented delegated account access at MusicBreakr: managers, labels, and collaborators could act on behalf of other accounts without credential sharing, with per-role permissions governing which resources and operations each delegate could reach. Combined with hands-on OAuth flows, token lifecycle, and external-system error handling across many third-party integrations, this shows practical judgment about how access is granted, scoped, and fails — the security-thinking foundation for hardening infrastructure.",
+        "requirementIds": [
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "delegated-access"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Whole-system reasoning",
+        "fit": "relevant",
+        "narrative": "Reg learned engineering from the application layer downward, progressively moving into conventional TypeScript, React, Next.js, and Node.js environments, and he thinks first about whole-system behavior: where data moves, which system owns which responsibility, what can fail, and what tradeoffs each implementation creates. As the useful secondary skill for this role, that means an infrastructure engineer who understands the applications riding on the platform — and who moves across technical boundaries rather than stopping at one.",
+        "requirementIds": [
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "engineering-foundations"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [],
+    "interviewQuestions": [
+      "Tell us about a specific production failure you owned end-to-end: what broke, how you diagnosed it across system boundaries, and what you changed afterward.",
+      "Walk us through how you'd approach becoming productive in Kubernetes, Terraform, and Kafka — what would your first 90 days of ramp-up look like on our stack?",
+      "How would you translate your scheduling, batching, and quota-management decisions from MusicBreakr ingestion into capacity planning and service-level objectives for a Kafka-based pipeline?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "benchmark-18",
+      "benchmark-14",
+      "benchmark-9",
+      "benchmark-5",
+      "benchmark-7",
+      "benchmark-15"
+    ],
+    "evidenceSections": 10,
+    "evidenceCharacters": 7654,
+    "unmatchedRequirementIds": []
+  }
+}

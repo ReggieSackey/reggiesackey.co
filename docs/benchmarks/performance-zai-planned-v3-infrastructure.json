@@ -1,0 +1,250 @@
+{
+  "job": "infrastructure",
+  "extractedJob": {
+    "jobTitle": "Senior Infrastructure Engineer",
+    "company": "Example Cloud",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Own and operate Kubernetes clusters and AWS infrastructure at large scale",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Design Terraform modules as infrastructure-as-code",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Build distributed streaming infrastructure using Kafka",
+        "importance": "core",
+        "category": "data-infrastructure"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Lead incident response and on-call rotations",
+        "importance": "core",
+        "category": "operations"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Perform capacity planning and define service-level objectives",
+        "importance": "important",
+        "category": "operations"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Develop Linux networking expertise",
+        "importance": "important",
+        "category": "systems"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Apply security hardening to infrastructure",
+        "importance": "important",
+        "category": "security"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Five years of direct production infrastructure ownership",
+        "importance": "core",
+        "category": "experience"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Application engineering as a useful secondary skill",
+        "importance": "preferred",
+        "category": "engineering"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a whole-system engineer with real production ownership: he ran marketplace payments, delegated access, and social-data ingestion for live customers, debugged failures across application, backend, and third-party system boundaries, and reworked recurring ingestion pipelines under real quota, cost, and scale constraints. His strengths align with the reasoning-heavy parts of this role — choosing implementation boundaries, cross-system debugging, capacity- and cost-conscious scheduling, and authorization design — and his demonstrated learning velocity suggests he can close tooling gaps quickly. The core candid caveat is that he is not primarily an infrastructure engineer: Kubernetes, Kafka-scale event infrastructure, and deep cloud/SRE work are explicitly not his strongest areas, so this is a fit for the judgment and ownership dimensions of the role rather than direct infrastructure specialization."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Production ownership for live systems",
+        "fit": "relevant",
+        "narrative": "Reg has owned live systems serving thousands of users and hundreds of thousands of dollars in transactions, including marketplace payments, delegated access, and social-data ingestion — all while changes had to preserve behavior for active customers. His debugging practice treats production failures as cross-boundary problems, comparing application state, backend workflow state, and third-party service state (e.g., Stripe, social APIs). This is genuine production ownership with customer-facing stakes, though in an application/runtime context rather than Kubernetes-and-AWS cluster operations.",
+        "requirementIds": [
+          "req_1",
+          "req_4",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "production-ownership"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "impact"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Choosing implementation boundaries",
+        "fit": "relevant",
+        "narrative": "Reg has repeatedly made explicit decisions about where implementation boundaries should sit: migrating CModel from Bubble to a conventional TypeScript/Supabase stack, and carving the strategic assistant into a standalone Next.js application connected to a broader data environment. His musicbreakr ingestion work shows the same discipline in performance terms — restructuring data around access patterns, moving logic between client, server, and external services. That boundary-design judgment transfers directly to designing Terraform modules, where the same questions of what each layer owns and what can fail apply, even though Terraform itself is not evidenced.",
+        "requirementIds": [
+          "req_2"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "data-ingestion"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Recurring background workflows at scale",
+        "fit": "relevant",
+        "narrative": "Reg has built and scaled recurring background processing under hard constraints. On musicbreakr, ingestion was bounded by API quotas and the runtime's execution model, forcing deliberate decisions about refresh frequency, batch size, scheduling, and query patterns — and rework as volume grew. At CModel he owns an email-signal pipeline that filters authorized inbox data into strategic context for AI workflows, a problem of signal selection at scale. This is transferable distributed-workflow thinking, not Kafka-specific event-streaming experience.",
+        "requirementIds": [
+          "req_3"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "data-ingestion"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Whole-system reasoning",
+        "fit": "relevant",
+        "narrative": "Whole-system reasoning is Reg's self-identified strongest area, and the evidence backs it: he reasons across product behavior, data, APIs, permissions, and backend workflows rather than treating them as separate concerns. His ingestion rework at musicbreakr shows capacity thinking in practice — balancing data freshness against cost and quota as volume increased. He has not formally defined SLOs, but the habit of asking what each system owns, what can fail, and what tradeoffs an implementation creates is the same muscle capacity planning and SLO definition require.",
+        "requirementIds": [
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "engineering-foundations"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Cross-system production debugging",
+        "fit": "relevant",
+        "narrative": "Reg's debugging strength is at system boundaries: production failures on musicbreakr required reconciling application state with backend workflow state and external services like Stripe and social APIs, and his CModel integration work (Microsoft Graph, OAuth token lifecycle, DocuSign, HubSpot, and others) is explicitly framed around failures where external behavior diverges from documentation or local state disagrees with remote state. He has not claimed deep Linux networking expertise, but the cross-system diagnostic method is the transferable core, and his demonstrated learning velocity covers unfamiliar technical territory quickly.",
+        "requirementIds": [
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "production-ownership"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          }
+        ]
+      },
+      {
+        "id": "theme_6",
+        "title": "Permissions and delegated authorization",
+        "fit": "relevant",
+        "narrative": "Reg implemented delegated account access at musicbreakr: one user acting on behalf of another without credential sharing, with role-scoped permissions controlling which resources and operations each delegate could reach. Combined with production OAuth and token-lifecycle work across many third-party integrations, this shows real authorization design experience — though it is application-level permissions and delegated authorization rather than infrastructure security hardening.",
+        "requirementIds": [
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "delegated-access"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      },
+      {
+        "id": "theme_7",
+        "title": "engineering",
+        "fit": "gap",
+        "narrative": "Reg is candid and specific about this gap: he is not primarily an infrastructure engineer, and Kubernetes, deep cloud-platform engineering, SRE, and Kafka-scale event infrastructure are not his strongest areas. What he brings instead is meaningful production evidence at the application and backend level — API design, data modeling, server-side workflows, OAuth, background processing, and production debugging — which is a related but distinct discipline. He should be hired for his ownership and system-reasoning with eyes open that the infrastructure tooling depth is something he would build on the job, aided by his demonstrated learning velocity.",
+        "requirementIds": [
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "engineering",
+        "narrative": "The gap is real and Reg names it himself: no direct evidence of operating Kubernetes clusters, AWS infrastructure, Kafka streaming, or formal SRE/on-call rotations, and infrastructure engineering is explicitly not his strongest discipline. His application-level production ownership, cross-boundary debugging, and fast ramp into unfamiliar technologies are the credible basis for closing that gap — but the role should expect to invest in his infrastructure tooling ramp-up rather than treat him as a day-one infrastructure specialist.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "You've reworked recurring ingestion pipelines under quota and cost constraints. How would you approach capacity planning and defining SLOs for a streaming system where you don't yet control the infrastructure layer?",
+      "Walk us through a production failure that crossed system boundaries — how did you isolate whether the fault was in your application, your backend workflows, or an external service?",
+      "Given that Kubernetes and Kafka are not your strongest areas, what would your first 90 days look like to take real ownership of our clusters and on-call rotation?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "benchmark-18",
+      "benchmark-5",
+      "benchmark-14",
+      "benchmark-9",
+      "benchmark-15",
+      "benchmark-7",
+      "benchmark-11"
+    ],
+    "evidenceSections": 11,
+    "evidenceCharacters": 8510,
+    "unmatchedRequirementIds": [
+      "req_9"
+    ]
+  }
+}

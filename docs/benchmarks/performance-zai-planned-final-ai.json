@@ -1,0 +1,280 @@
+{
+  "job": "ai",
+  "extractedJob": {
+    "jobTitle": "AI Application Engineer",
+    "company": "Example Tools",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Build AI product experiences using language model APIs",
+        "importance": "core",
+        "category": "AI engineering"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Design structured generation pipelines and validate model output",
+        "importance": "core",
+        "category": "AI engineering"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Implement secure backend APIs",
+        "importance": "core",
+        "category": "Backend engineering"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Implement retrieval grounded in source documents",
+        "importance": "core",
+        "category": "AI engineering"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Build observable production systems",
+        "importance": "important",
+        "category": "Production operations"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Own frontend integration in TypeScript and React",
+        "importance": "core",
+        "category": "Frontend engineering"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Collaborate with product teams",
+        "importance": "important",
+        "category": "Collaboration"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Evaluate latency and cost of AI features",
+        "importance": "important",
+        "category": "AI engineering"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Machine learning model training is not required",
+        "importance": "preferred",
+        "category": "Scope clarification"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a strong fit for the core of this role: he has shipped production AI application features — tool calling, schema-constrained generation with validation and failure handling, and selective context/retrieval design — as the owner of CModel's strategic assistant and Reaccord's model-independent AI architecture, both in TypeScript/Next.js with the Vercel AI SDK. He pairs that with proven third-party API and OAuth integration experience across roughly nine external systems, whole-system production ownership, and a track record of defining and shipping products in 0-to-1 conditions. The material gaps are narrower frontend ownership as a dedicated discipline and limited depth outside application-level backend work; neither undermines the core AI engineering requirements, and his self-directed move from Bubble abstractions down to conventional TypeScript, React, Node, and Supabase stacks shows he closes such gaps quickly."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "AI application engineering",
+        "fit": "strong",
+        "narrative": "Reg has direct production experience with exactly this role's core loop: he built CModel's strategic assistant in TypeScript/Next.js using the Vercel AI SDK, implementing tool calling against application data, schema-constrained generation, and validation with accept/retry/repair/reject handling so model output becomes deterministic application state. At Reaccord, he designed AI features so that prompts, expected output shapes, validation, and persistence are separated from model choice — evidence he treats structured generation as architecture, not prompt strings.",
+        "requirementIds": [
+          "req_1",
+          "req_2"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "structured-generation"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Third-party API integration and OAuth",
+        "fit": "relevant",
+        "narrative": "Reg has implemented and maintained OAuth flows, token lifecycle, and REST integrations across roughly nine external systems including Microsoft 365/Graph, SharePoint, Teams, DocuSign, HubSpot, and Google services, and built MusicBreakr's ingestion layer normalizing Instagram, TikTok, YouTube, and Twitter/X data despite differing schemas, identifiers, and rate limits. He reasons across system boundaries when integrations fail, and designed flexible-yet-contracted persistence (Convex with shared Zod validation) so external and generated state stay safe at the application boundary.",
+        "requirementIds": [
+          "req_3"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "social-attribution"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "AI context and retrieval design",
+        "fit": "strong",
+        "narrative": "Reg has built retrieval and context design twice in production: CModel's assistant combines provided page/organization context with on-demand tool calls and web search rather than stuffing full application state into prompts, and Reaccord assembles context per operation from persistent user state (goals, plans, activity, reflections) with the application owning context selection. This is precisely grounded, source-connected retrieval designed at the application level.",
+        "requirementIds": [
+          "req_4"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "strategic-assistant"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "personalized-context"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Whole-system reasoning",
+        "fit": "relevant",
+        "narrative": "Reg's defining strength is whole-system ownership: he ran MusicBreakr's marketplace, payments, and four-platform ingestion in production serving thousands of users and hundreds of thousands of dollars in transactions, debugging failures that crossed application state, workflows, and external services. At Reaccord he instrumented the full stack with PostHog — including failure events and server-side exception capture — to observe whether users actually progress through the product loop, not just page views.",
+        "requirementIds": [
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "engineering-foundations"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Frontend engineering",
+        "fit": "gap",
+        "narrative": "The plan identifies frontend ownership as a material gap, and it should be weighed honestly: Reg's evidence centers on AI application, backend, and integration work, with less demonstrated depth owning polished frontend implementation as a dedicated discipline. That said, his shipped products are TypeScript/Next.js applications he built end-to-end, and his trajectory — from Bubble abstractions down to React, Next.js, and Node — shows he acquires new layers quickly; this is a ramp question, not a capability absence.",
+        "requirementIds": [
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      },
+      {
+        "id": "theme_6",
+        "title": "Product engineering under ambiguity (0-to-1)",
+        "fit": "relevant",
+        "narrative": "Reg has repeatedly operated where the technical path was unspecified: he owned CModel's email-to-decision-intelligence workflow from product definition through production, and helped move the product from Bubble prototypes to a conventional TypeScript/Supabase architecture as requirements matured. He explicitly works at the intersection of product design, AI behavior, integrations, data, and frontend — determining what to build as well as how — which suits collaborative product-team environments.",
+        "requirementIds": [
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_7",
+        "title": "Model-independent AI architecture",
+        "fit": "relevant",
+        "narrative": "Reg treats model choice as configuration rather than architecture: Reaccord's AI features support model switching and bring-your-own-AI while prompts, validation, persistence, and UI remain stable, an architecture that directly enables evaluating latency, cost, and quality tradeoffs as models change. At CModel he extended this discipline to the development process itself — selecting models and reasoning effort by task complexity and cost, and building evals where deterministic tests fall short.",
+        "requirementIds": [
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "model-independent-ai"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "agentic-engineering"
+          }
+        ]
+      },
+      {
+        "id": "theme_8",
+        "title": "Scope clarification",
+        "fit": "gap",
+        "narrative": "On scope: the role does not require ML model training, and Reg's background is application-layer AI engineering, not model development or deep infrastructure — he is candid that Kubernetes-scale distributed systems and SRE are not his strongest areas. This makes the scope a match rather than a risk: his strengths sit exactly where the role's core requirements do, at the application and product boundary of LLM-powered features.",
+        "requirementIds": [
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Frontend engineering",
+        "narrative": "The plan identifies frontend ownership as a material gap, and it should be weighed honestly: Reg's evidence centers on AI application, backend, and integration work, with less demonstrated depth owning polished frontend implementation as a dedicated discipline. That said, his shipped products are TypeScript/Next.js applications he built end-to-end, and his trajectory — from Bubble abstractions down to React, Next.js, and Node — shows he acquires new layers quickly; this is a ramp question, not a capability absence.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      },
+      {
+        "title": "Scope clarification",
+        "narrative": "On scope: the role does not require ML model training, and Reg's background is application-layer AI engineering, not model development or deep infrastructure — he is candid that Kubernetes-scale distributed systems and SRE are not his strongest areas. This makes the scope a match rather than a risk: his strengths sit exactly where the role's core requirements do, at the application and product boundary of LLM-powered features.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "Walk us through a time schema validation rejected or repaired model output in production — how did you decide between retry, repair, and reject, and what did the failure handling look like end to end?",
+      "You've built in Next.js/React, but frontend ownership is your thinnest evidence area — how would you approach owning a complex React feature surface here, and what support or ramp would you want?",
+      "How did you evaluate latency and cost tradeoffs when making Reaccord's AI model-independent, and what signals drove model selection in practice?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "benchmark-2",
+      "benchmark-3",
+      "benchmark-4",
+      "benchmark-6",
+      "benchmark-13",
+      "benchmark-14",
+      "benchmark-18",
+      "benchmark-1",
+      "benchmark-12",
+      "benchmark-17"
+    ],
+    "evidenceSections": 18,
+    "evidenceCharacters": 14879,
+    "unmatchedRequirementIds": [
+      "req_6",
+      "req_9"
+    ]
+  }
+}

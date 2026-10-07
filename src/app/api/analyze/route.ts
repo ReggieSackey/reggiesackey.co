@@ -12,6 +12,7 @@ import {
 import { analysisCacheKey } from "@/lib/ai/cache";
 import { getZaiConfig } from "@/lib/ai/model";
 import { runTargeted } from "@/lib/ai/pipeline";
+import { configuredMatcherId } from "@/lib/ai/matcher";
 import { Timings, modelRun, newMetrics } from "@/lib/ai/telemetry";
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -60,6 +61,7 @@ export async function POST(request: Request) {
         snapshot.version,
         model.model,
         model.reasoningEffort,
+        configuredMatcherId(),
       );
       const cached = await timing.measure("cache", () =>
         fetchQuery(api.analysisGuards.cached, { secret, cacheKey }),

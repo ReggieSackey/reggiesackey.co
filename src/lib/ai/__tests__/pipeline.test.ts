@@ -368,8 +368,8 @@ describe("requirement synthesis into themes", () => {
 // --- Model configuration: GLM-5.3-Flash -------------------------------
 
 describe("model configuration", () => {
-  it("defaults to glm-5.3-flash", () => {
-    expect(ZAI_MODEL_DEFAULT).toBe("glm-5.3-flash");
+  it("defaults to the benchmarked low-latency FlashX model", () => {
+    expect(ZAI_MODEL_DEFAULT).toBe("glm-5.3-flashx");
   });
 
   it("defaults to the lowest supported reasoning effort", () => {

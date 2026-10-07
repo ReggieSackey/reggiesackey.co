@@ -1,0 +1,132 @@
+{
+  "measuredAt": "2026-10-07T17:20:02.657Z",
+  "scope": "Live model + validation; in-memory proposed registry and canonical evidence, excludes HTTP/persistence/Convex targeted query. No registry approval performed.",
+  "corpusVersion": "076284c8c3be0bb2a6fadf05963c24828806fea1c85a5b8883855d6a5dd7ba24",
+  "results": [
+    {
+      "name": "product",
+      "match": 5296,
+      "retrieve": 0,
+      "plan": 2,
+      "synthesis": 8707,
+      "coverage": 0,
+      "citations": 0,
+      "totalMs": 14008,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 5799,
+      "outputTokens": 1692,
+      "modelMs": 13997.168375000001,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "benchmark-1",
+          "benchmark-16",
+          "benchmark-6",
+          "benchmark-4",
+          "benchmark-5",
+          "benchmark-18",
+          "benchmark-14",
+          "benchmark-15"
+        ],
+        "evidenceSections": 13,
+        "evidenceCharacters": 10765,
+        "unmatchedRequirementIds": [],
+        "capabilities": [
+          "Product engineering under ambiguity (0-to-1)",
+          "Consumer product and interaction design",
+          "Application data modeling",
+          "Third-party API integration and OAuth",
+          "Cross-system production debugging",
+          "Production ownership for live systems",
+          "Whole-system reasoning",
+          "Learning velocity in unfamiliar systems"
+        ]
+      },
+      "failureStage": ""
+    },
+    {
+      "name": "ai",
+      "match": 5732,
+      "retrieve": 0,
+      "plan": 1,
+      "synthesis": 9530,
+      "coverage": 0,
+      "citations": 0,
+      "totalMs": 15264,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 6122,
+      "outputTokens": 1923,
+      "modelMs": 15260.236666,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "benchmark-2",
+          "benchmark-13",
+          "benchmark-3",
+          "benchmark-4",
+          "benchmark-18",
+          "benchmark-12",
+          "benchmark-16",
+          "benchmark-1",
+          "benchmark-9"
+        ],
+        "evidenceSections": 18,
+        "evidenceCharacters": 13481,
+        "unmatchedRequirementIds": [],
+        "capabilities": [
+          "AI application engineering",
+          "Model-independent AI architecture",
+          "AI context and retrieval design",
+          "Third-party API integration and OAuth",
+          "Production ownership for live systems",
+          "Agentic engineering process design",
+          "Consumer product and interaction design",
+          "Product engineering under ambiguity (0-to-1)",
+          "Recurring background workflows at scale"
+        ]
+      },
+      "failureStage": ""
+    },
+    {
+      "name": "infrastructure",
+      "match": 11316,
+      "retrieve": 0,
+      "plan": 0,
+      "synthesis": 9458,
+      "coverage": 0,
+      "citations": 0,
+      "totalMs": 20775,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 3968,
+      "outputTokens": 1496,
+      "modelMs": 20772.437625000002,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "benchmark-18",
+          "benchmark-14"
+        ],
+        "evidenceSections": 5,
+        "evidenceCharacters": 4695,
+        "unmatchedRequirementIds": [
+          "req_1",
+          "req_2",
+          "req_3",
+          "req_4",
+          "req_6",
+          "req_7",
+          "req_8",
+          "req_9"
+        ],
+        "capabilities": [
+          "Production ownership for live systems",
+          "Whole-system reasoning"
+        ]
+      },
+      "failureStage": ""
+    }
+  ]
+}

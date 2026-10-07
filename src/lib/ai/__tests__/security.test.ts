@@ -19,6 +19,7 @@ const caps = [
     title: "Ownership",
     description: "Deliver products",
     tags: [],
+    evidence: [{ sourceType: "caseStudy" as const, sourceId: "project", sectionId: "delivery", note: "Delivery evidence" }],
   },
 ];
 const extractedJob = {
@@ -192,7 +193,15 @@ test("raw JD and unexpected output fields do not flow to synthesis", async () =>
   const synthesis = vi.fn(async (args: { system: string; prompt: string }) => {
     expect(args.prompt).not.toContain(injection);
     expect(Object.keys(args).sort()).toEqual(["prompt", "system"]);
-    return JSON.stringify(fit());
+    const planned = JSON.parse(args.prompt) as {
+      themes: Array<{ id: string; fit: string; evidence: Array<{ id: string }> }>;
+      materialGapThemeIds: string[];
+    };
+    return JSON.stringify({
+      overallNarrative: "A grounded overall assessment.",
+      themeNarratives: Object.fromEntries(planned.themes.map((theme) => [theme.id, "A grounded theme assessment."])),
+      interviewQuestions: [],
+    });
   });
   await runTargeted({
     jd: injection,

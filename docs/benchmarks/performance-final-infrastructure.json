@@ -1,0 +1,290 @@
+{
+  "job": "infrastructure",
+  "extractedJob": {
+    "jobTitle": "Senior Infrastructure Engineer",
+    "company": "Example Cloud",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Own Kubernetes clusters at large scale",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Own AWS infrastructure at large scale",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Design Terraform modules (infrastructure as code)",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Design distributed streaming infrastructure using Kafka",
+        "importance": "core",
+        "category": "data-infrastructure"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Lead incident response and on-call rotations",
+        "importance": "core",
+        "category": "reliability"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Capacity planning",
+        "importance": "important",
+        "category": "reliability"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Define and manage service-level objectives",
+        "importance": "important",
+        "category": "reliability"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Linux networking expertise",
+        "importance": "core",
+        "category": "systems"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Security hardening",
+        "importance": "important",
+        "category": "security"
+      },
+      {
+        "id": "req_10",
+        "requirement": "Five years of direct production infrastructure ownership",
+        "importance": "core",
+        "category": "experience"
+      },
+      {
+        "id": "req_11",
+        "requirement": "Application engineering as a secondary skill",
+        "importance": "preferred",
+        "category": "engineering"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "gap",
+      "narrative": "Reg Sackey-Addo is a strong application/backend engineer with genuine production ownership of a live marketplace serving thousands of users and hundreds of thousands of dollars in transactions, plus whole-system reasoning across data, APIs, integrations, and workflows. However, this role's core demands — large-scale Kubernetes, AWS, Terraform, Kafka, SRE-style reliability work, Linux networking, and security hardening — are explicitly not his strongest areas, and the evidence does not support five years of direct infrastructure ownership. He is a credible hire only if Example Cloud is willing to hire for engineering judgment and production maturity and invest in closing the infrastructure depth gap; for a senior role expected to own these systems from day one, the gap is material."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "infrastructure",
+        "fit": "gap",
+        "narrative": "Reg has not worked as an infrastructure engineer: the evidence is explicit that Kubernetes, deep cloud-platform engineering, and large-scale distributed systems are not his strongest areas, and there is no Terraform or AWS ownership evidence to cite. What he does bring is production experience keeping a live, revenue-processing system stable while serving active customers, which shows the operational seriousness infrastructure ownership demands — but hiring him for this requirement means betting on trajectory, not demonstrated skill.",
+        "requirementIds": [
+          "req_1",
+          "req_2",
+          "req_3"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "data-infrastructure",
+        "fit": "gap",
+        "narrative": "There is no evidence of Kafka or streaming infrastructure experience; Reg states plainly that Kafka-scale event infrastructure is outside his strongest areas. His relevant adjacent experience is building background processing and ingestion workflows in production at MusicBreakr, including social-data ingestion across four platforms — real event-driven application work, but not the core streaming-infrastructure design this requirement calls for.",
+        "requirementIds": [
+          "req_4"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Production ownership for live systems",
+        "fit": "relevant",
+        "narrative": "This is Reg's strongest hiring case: at MusicBreakr he operated marketplace payments, delegated access, and social-data ingestion in production for thousands of users and hundreds of thousands of dollars in transactions, with named customers like Mass Appeal. Debugging routinely crossed application, backend workflow, and external-service boundaries (Stripe, social APIs), and changes had to preserve live payment and ingestion behavior — exactly the kind of accountable, customer-facing production ownership that transfers to on-call and incident leadership.",
+        "requirementIds": [
+          "req_5",
+          "req_10"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "production-ownership"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "impact"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "reliability",
+        "fit": "gap",
+        "narrative": "Reg has no evidence of formal SRE practice — no capacity planning or SLO definition experience is shown, and he self-identifies SRE as an area outside his depth. His production work required protecting live transaction behavior under real customer load, which reflects reliability instincts, but the specific discipline of defining SLOs and planning capacity would be new learning in this role.",
+        "requirementIds": [
+          "req_6",
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "systems",
+        "fit": "gap",
+        "narrative": "Linux networking expertise at the level this role requires is not evidenced; Reg identifies deep distributed-systems and low-level systems work as outside his strongest areas. His systems understanding is real but application-level — he learned engineering concepts from the abstraction downward and thinks carefully about where data moves and what can fail — which suggests capacity to build this depth, not existing expertise.",
+        "requirementIds": [
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      },
+      {
+        "id": "theme_6",
+        "title": "security",
+        "fit": "gap",
+        "narrative": "There is no infrastructure security-hardening evidence. Reg's security-adjacent experience is application-level: OAuth, authentication, permissions, and authorization in production systems handling delegated access and payments — meaningful for security-minded engineering, but not the platform hardening this requirement targets.",
+        "requirementIds": [
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      },
+      {
+        "id": "theme_7",
+        "title": "Whole-system reasoning",
+        "fit": "relevant",
+        "narrative": "Reg's breadth is his most distinctive asset: he turns ambiguous requirements into working software across product behavior, data modeling, APIs, integrations, frontend state, and backend workflows, with strong AI application engineering experience (tool calling, structured outputs, validation, failure handling). His path from high-level abstractions into TypeScript, React, Node.js, and databases produced engineers' judgment about system boundaries and failure modes rather than single-layer specialization — valuable for an infrastructure team that has to serve application engineers, and he is candid that this is breadth with product ownership, not deep specialization in every layer.",
+        "requirementIds": [
+          "req_11"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "engineering-foundations"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "infrastructure",
+        "narrative": "Reg has not worked as an infrastructure engineer: the evidence is explicit that Kubernetes, deep cloud-platform engineering, and large-scale distributed systems are not his strongest areas, and there is no Terraform or AWS ownership evidence to cite. What he does bring is production experience keeping a live, revenue-processing system stable while serving active customers, which shows the operational seriousness infrastructure ownership demands — but hiring him for this requirement means betting on trajectory, not demonstrated skill.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      },
+      {
+        "title": "data-infrastructure",
+        "narrative": "There is no evidence of Kafka or streaming infrastructure experience; Reg states plainly that Kafka-scale event infrastructure is outside his strongest areas. His relevant adjacent experience is building background processing and ingestion workflows in production at MusicBreakr, including social-data ingestion across four platforms — real event-driven application work, but not the core streaming-infrastructure design this requirement calls for.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      },
+      {
+        "title": "reliability",
+        "narrative": "Reg has no evidence of formal SRE practice — no capacity planning or SLO definition experience is shown, and he self-identifies SRE as an area outside his depth. His production work required protecting live transaction behavior under real customer load, which reflects reliability instincts, but the specific discipline of defining SLOs and planning capacity would be new learning in this role.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      },
+      {
+        "title": "systems",
+        "narrative": "Linux networking expertise at the level this role requires is not evidenced; Reg identifies deep distributed-systems and low-level systems work as outside his strongest areas. His systems understanding is real but application-level — he learned engineering concepts from the abstraction downward and thinks carefully about where data moves and what can fail — which suggests capacity to build this depth, not existing expertise.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      },
+      {
+        "title": "security",
+        "narrative": "There is no infrastructure security-hardening evidence. Reg's security-adjacent experience is application-level: OAuth, authentication, permissions, and authorization in production systems handling delegated access and payments — meaningful for security-minded engineering, but not the platform hardening this requirement targets.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "MusicBreakr handled payments and ingestion in production — walk us through a failure that crossed system boundaries and how you diagnosed and resolved it under live traffic.",
+      "You've said Kubernetes, AWS, Kafka, and SRE aren't your strongest areas. What's your concrete plan to reach senior-level ownership of these systems, and on what timeline?",
+      "Describe a performance or scale problem in your application work where you had to understand what was happening underneath an abstraction to fix it."
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "benchmark-18",
+      "benchmark-14"
+    ],
+    "evidenceSections": 5,
+    "evidenceCharacters": 4695,
+    "unmatchedRequirementIds": [
+      "req_1",
+      "req_2",
+      "req_3",
+      "req_4",
+      "req_6",
+      "req_7",
+      "req_8",
+      "req_9"
+    ]
+  }
+}

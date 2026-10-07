@@ -1,0 +1,246 @@
+{
+  "job": "product",
+  "extractedJob": {
+    "jobTitle": "Senior Product Engineer",
+    "company": "Example Learning",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Build consumer web applications with React and TypeScript",
+        "importance": "core",
+        "category": "frontend"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Own features from ambiguous customer needs through production delivery",
+        "importance": "core",
+        "category": "ownership"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Collaborate with designers and engineers",
+        "importance": "core",
+        "category": "collaboration"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Model application data",
+        "importance": "core",
+        "category": "data"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Integrate external APIs",
+        "importance": "core",
+        "category": "integrations"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Investigate and resolve production failures",
+        "importance": "important",
+        "category": "debugging"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Experience with relational databases",
+        "importance": "important",
+        "category": "data"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Rapid iteration capability",
+        "importance": "important",
+        "category": "adaptability"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Familiarity with education products",
+        "importance": "preferred",
+        "category": "domain"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a strong fit for this Senior Product Engineer role. He has repeatedly owned features end-to-end in 0-to-1 environments — from ambiguous customer needs through production — most notably at CModel and on his own consumer product Reaccord, working in React, TypeScript, and Next.js. He brings deep, production-proven strength in data modeling, third-party API integration and OAuth, and cross-system debugging of live products serving real customers and revenue. The one material gap is the absence of direct education-domain experience, which is a preferred rather than core requirement and is offset by demonstrated rapid learning in unfamiliar domains."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Consumer product and interaction design",
+        "fit": "relevant",
+        "narrative": "Reg builds consumer applications in React and TypeScript and uses his own product, Reaccord, daily, which surfaces a class of defect functional testing misses — interactions that work but are too slow, confusing, or intrusive. He has repeatedly reshaped information hierarchy, reduced input friction, and redesigned daily composition based on actual repeated use. His adaptive-interface architecture, which derives each day's UI from evolving user state, shows he treats consumer interaction design as an engineering problem, not just a visual one.",
+        "requirementIds": [
+          "req_1",
+          "req_3"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "consumer-product-engineering"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "adaptive-interface"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Product engineering under ambiguity (0-to-1)",
+        "fit": "strong",
+        "narrative": "Shipping under ambiguity is Reg's strongest area, with direct evidence at CModel where he owned an email-to-decision-intelligence workflow from product definition through production, and built the strategic assistant as a standalone TypeScript/Next.js application. He works across product behavior, data, APIs, frontend state, and backend workflows as one system rather than separate layers. His path from Bubble through progressively more code-first environments reflects a career of defining what to build, not just how.",
+        "requirementIds": [
+          "req_2"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Application data modeling",
+        "fit": "strong",
+        "narrative": "Reg has designed persistence layers for both stable domain concepts and rapidly changing structures, distinguishing durable relationships from flexible state and validating at application boundaries with shared schemas. At MusicBreakr he restructured data and workflows around application access patterns as production volume grew, explicitly deciding scheduling, storage, and system boundaries. This covers both application data modeling and the relational-database expectation with real production evidence.",
+        "requirementIds": [
+          "req_4",
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "data-ingestion"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "flexible-backend"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Third-party API integration and OAuth",
+        "fit": "strong",
+        "narrative": "Reg has implemented and maintained OAuth flows, token lifecycle, and integrations across Microsoft 365/Graph, SharePoint, Teams, DocuSign, HubSpot, and Google services, among others, mapping external state into application models. At MusicBreakr he built ingestion across Instagram, TikTok, YouTube, and Twitter/X — each with different identifiers, schemas, and rate limits — through a normalization layer feeding recurring attribution workflows. This is integration experience operating in production, not in prototypes.",
+        "requirementIds": [
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "social-attribution"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Cross-system production debugging",
+        "fit": "strong",
+        "narrative": "Reg has debugged production failures in live systems where issues crossed application state, backend workflow state, and external services like Stripe and social APIs, while preserving existing payment and marketplace behavior for active customers. He reasons across system boundaries rather than treating an API call in isolation, which is where real integration and authorization failures occur. His products served thousands of users and processed hundreds of thousands of dollars in transactions.",
+        "requirementIds": [
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "production-ownership"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          }
+        ]
+      },
+      {
+        "id": "theme_6",
+        "title": "Learning velocity in unfamiliar systems",
+        "fit": "strong",
+        "narrative": "Reg's effectiveness does not depend on prior familiarity with a stack — he builds mental models of unfamiliar systems quickly and validates implementations. His recent productive work in C++/JUCE, a domain far from his core, demonstrates that velocity concretely. He also initiated an agentic development process at CModel that accelerated team-wide feature development with engineer review and CI/CD controls.",
+        "requirementIds": [
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "learning-velocity"
+          }
+        ]
+      },
+      {
+        "id": "theme_7",
+        "title": "domain",
+        "fit": "gap",
+        "narrative": "Reg has not worked directly in education products; this is the one genuine gap against the role. It is a preferred rather than core requirement, and his track record of entering unfamiliar domains quickly — and of building consumer products around evolving user needs — suggests he would close it faster than most, but the team should plan for a domain ramp-up period.",
+        "requirementIds": [
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "domain",
+        "narrative": "Reg has not worked directly in education products; this is the one genuine gap against the role. It is a preferred rather than core requirement, and his track record of entering unfamiliar domains quickly — and of building consumer products around evolving user needs — suggests he would close it faster than most, but the team should plan for a domain ramp-up period.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "Walk us through a feature at CModel where the customer need was genuinely ambiguous — how did you decide what to build, and what did you get wrong first?",
+      "Reaccord's interface is derived from evolving user state. How did you handle the hardest state-management or synchronization problems in that architecture?",
+      "How would you approach ramping up on the education domain and Example Learning's learners in your first 90 days?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "benchmark-1",
+      "benchmark-4",
+      "benchmark-5",
+      "benchmark-6",
+      "benchmark-14",
+      "benchmark-15",
+      "benchmark-16",
+      "benchmark-18"
+    ],
+    "evidenceSections": 13,
+    "evidenceCharacters": 10765,
+    "unmatchedRequirementIds": [
+      "req_9"
+    ]
+  }
+}

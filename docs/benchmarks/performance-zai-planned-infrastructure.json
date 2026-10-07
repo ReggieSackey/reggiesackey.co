@@ -1,0 +1,205 @@
+{
+  "job": "infrastructure",
+  "extractedJob": {
+    "jobTitle": "Senior Infrastructure Engineer",
+    "company": "Example Cloud",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Own and operate Kubernetes clusters and AWS infrastructure at large scale",
+        "importance": "core",
+        "category": "Infrastructure"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Design Terraform modules (infrastructure as code)",
+        "importance": "core",
+        "category": "Infrastructure"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Design distributed streaming infrastructure using Kafka",
+        "importance": "core",
+        "category": "Distributed Systems"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Lead incident response and on-call rotations",
+        "importance": "core",
+        "category": "Operations"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Capacity planning and service-level objectives (SLOs)",
+        "importance": "important",
+        "category": "Operations"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Linux networking expertise",
+        "importance": "important",
+        "category": "Systems"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Security hardening of infrastructure",
+        "importance": "important",
+        "category": "Security"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Five years of direct production infrastructure ownership",
+        "importance": "core",
+        "category": "Experience"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Application engineering as a useful secondary skill",
+        "importance": "preferred",
+        "category": "Engineering"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a strong hire for teams that value production judgment and whole-system thinking: he has owned live systems serving real customers and revenue, debugged failures across application, workflow, and third-party service boundaries, and reason reliably about capacity, cost, and scheduling tradeoffs. He is candid that Kubernetes, Terraform-scale IaC, Kafka, and infrastructure security hardening are not his deepest areas — but his track record of rapidly forming mental models in unfamiliar technologies and moving across technical boundaries makes a strong case that he can grow into the platform layer while immediately contributing on reliability, debugging, and cross-system operations."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Production ownership for live systems",
+        "fit": "relevant",
+        "narrative": "Reg has owned live production systems serving thousands of marketplace users and processing hundreds of thousands of dollars in transactions, where every change had to preserve existing payment and ingestion behavior for active customers. That experience maps directly to incident-response readiness and the accountability required for five years of production ownership — he has made changes under real customer load and debugged failures spanning applications, workflows, and external services like Stripe and social APIs. This is genuine, revenue-bearing ownership rather than toy or staging environments.",
+        "requirementIds": [
+          "req_1",
+          "req_4",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "production-ownership"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "impact"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Infrastructure",
+        "fit": "gap",
+        "narrative": "Reg is direct that large-scale Kubernetes, deep cloud-platform engineering, and Kafka-scale event infrastructure are not his strongest areas, and he has not designed Terraform modules. He is explicit that his production evidence sits at the application/backend layer, a different discipline from building the underlying infrastructure.",
+        "requirementIds": [
+          "req_2"
+        ],
+        "citations": []
+      },
+      {
+        "id": "theme_3",
+        "title": "Whole-system reasoning",
+        "fit": "relevant",
+        "narrative": "Reg's core strength is whole-system reasoning: he decides what to build, where data moves, which system owns which responsibility, and what can fail, rather than treating layers in isolation. At Musicbreakr he explicitly managed capacity and cost tradeoffs — refresh frequency, batch size, scheduling, and query patterns — and restructured data and workflows as production volume grew. That kind of quota-, cost-, and scale-aware decision-making is the mindset behind capacity planning and SLOs, and it extends naturally to designing streaming-adjacent infrastructure where throughput and scheduling tradeoffs dominate.",
+        "requirementIds": [
+          "req_3",
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "data-ingestion"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Cross-system production debugging",
+        "fit": "relevant",
+        "narrative": "Reg repeatedly debugs failures at system boundaries, comparing local application state against backend workflow state and remote state held by services such as Stripe, social APIs, and enterprise platforms like Microsoft Graph, DocuSign, and HubSpot. He understands that integration failures rarely look like documented API behavior — expired tokens, unexpected external state, local/remote disagreement — and reasons across both systems rather than treating a call in isolation. This is exactly the disposition Linux networking and infrastructure debugging demand: tracing problems across opaque layers to find where state diverges.",
+        "requirementIds": [
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "production-ownership"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Security",
+        "fit": "gap",
+        "narrative": "Infrastructure security hardening is a genuine gap: Reg's security experience lives at the application level (OAuth, authentication, permissions, authorization), not at the cloud-platform or cluster-hardening layer, and he does not claim deep security engineering expertise.",
+        "requirementIds": [
+          "req_7"
+        ],
+        "citations": []
+      },
+      {
+        "id": "theme_6",
+        "title": "Engineering",
+        "fit": "gap",
+        "narrative": "Application engineering as a secondary skill is partially present — Reg clearly has strong application and backend engineering — but it is not a 'preferred' nice-to-have; it is his primary discipline, while the infrastructure context where it would apply here is unfamiliar to him.",
+        "requirementIds": [
+          "req_9"
+        ],
+        "citations": []
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Infrastructure",
+        "narrative": "Reg is direct that large-scale Kubernetes, deep cloud-platform engineering, and Kafka-scale event infrastructure are not his strongest areas, and he has not designed Terraform modules. He is explicit that his production evidence sits at the application/backend layer, a different discipline from building the underlying infrastructure.",
+        "citations": []
+      },
+      {
+        "title": "Security",
+        "narrative": "Infrastructure security hardening is a genuine gap: Reg's security experience lives at the application level (OAuth, authentication, permissions, authorization), not at the cloud-platform or cluster-hardening layer, and he does not claim deep security engineering expertise.",
+        "citations": []
+      },
+      {
+        "title": "Engineering",
+        "narrative": "Application engineering as a secondary skill is partially present — Reg clearly has strong application and backend engineering — but it is not a 'preferred' nice-to-have; it is his primary discipline, while the infrastructure context where it would apply here is unfamiliar to him.",
+        "citations": []
+      }
+    ],
+    "interviewQuestions": [
+      "Reg has owned production systems end-to-end — how would he approach his first 90 days ramping into Kubernetes and Terraform ownership at Example Cloud?",
+      "Describe a production failure at Musicbreakr or CModel where the root cause sat at a system boundary — how did he diagnose and prevent recurrence?",
+      "How would he approach defining SLOs and capacity plans for a service he had not operated before?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "benchmark-18",
+      "benchmark-5",
+      "benchmark-14",
+      "benchmark-9"
+    ],
+    "evidenceSections": 8,
+    "evidenceCharacters": 6790,
+    "unmatchedRequirementIds": [
+      "req_2",
+      "req_7",
+      "req_9"
+    ]
+  }
+}

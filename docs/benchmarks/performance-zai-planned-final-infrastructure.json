@@ -1,0 +1,210 @@
+{
+  "job": "infrastructure",
+  "extractedJob": {
+    "jobTitle": "Senior Infrastructure Engineer",
+    "company": "Example Cloud",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Own and operate Kubernetes clusters and AWS infrastructure at large scale",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Design Terraform modules for infrastructure as code",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Design distributed streaming infrastructure using Kafka",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Lead incident response and on-call rotations",
+        "importance": "core",
+        "category": "operations"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Capacity planning and defining service-level objectives",
+        "importance": "important",
+        "category": "operations"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Linux networking expertise",
+        "importance": "important",
+        "category": "systems"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Security hardening of infrastructure",
+        "importance": "important",
+        "category": "security"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Five years of direct production infrastructure ownership",
+        "importance": "core",
+        "category": "experience"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Application engineering as a useful secondary skill",
+        "importance": "preferred",
+        "category": "software"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a strong candidate for the application-layer and operational dimensions of this Senior Infrastructure Engineer role: he has years of direct production ownership of live systems serving thousands of users and hundreds of thousands of dollars in transactions, demonstrates whole-system debugging across application, backend, and third-party boundaries, and has a proven record of ramping quickly in unfamiliar technical environments. The material gaps are genuine and should be planned around: he is not primarily an infrastructure engineer — Kubernetes, Kafka-scale event infrastructure, Terraform module design, and deep infrastructure security hardening are not his strongest areas — so his fit is strongest if the team can pair him with existing infrastructure depth while he builds toward those domains."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Production ownership for live systems",
+        "fit": "relevant",
+        "narrative": "Reg has owned live production systems serving thousands of marketplace users, processing hundreds of thousands of dollars in transactions, and operating payments, delegated access, and social-data ingestion for customers including Mass Appeal. Because changes had to preserve existing marketplace, payment, and ingestion behavior while serving active customers, he brings real judgment about operating under constraints rather than building on greenfield assumptions. This is direct, multi-year production ownership of live systems, though at application/backend level rather than large-scale cloud infrastructure, and he is candid about that distinction.",
+        "requirementIds": [
+          "req_1",
+          "req_4",
+          "req_5",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "production-ownership"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "impact"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "infrastructure",
+        "fit": "gap",
+        "narrative": "This is the most material gap: Reg states plainly that he is not primarily an infrastructure engineer and that Kubernetes, deep cloud-platform engineering, SRE, and Kafka-scale event infrastructure are not his strongest areas. He has meaningful production evidence at the application/backend level — API design, data modeling, background processing, OAuth and authorization — but hiring for the Terraform and Kafka requirements should assume he would need structured ramp-up and support, not day-one ownership of these systems.",
+        "requirementIds": [
+          "req_2",
+          "req_3"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Learning velocity in unfamiliar systems",
+        "fit": "relevant",
+        "narrative": "Reg's track record shows genuine learning velocity: he built his engineering foundation from high-level abstractions downward and progressively moved into conventional JavaScript, TypeScript, React, Next.js, Node.js, and databases, and his recent C++/JUCE audio work demonstrates he can become productive quickly in unfamiliar technical environments (he explicitly frames that as evidence of ramp-up speed, not long-term C++ specialization). For the Linux networking requirement, this suggests he can close knowledge gaps, though it is transferable capability rather than demonstrated networking depth.",
+        "requirementIds": [
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "learning-velocity"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "security",
+        "fit": "gap",
+        "narrative": "Infrastructure security hardening is a second material gap: Reg does not claim deep security engineering, and his security-adjacent experience (OAuth flows, token lifecycle, permissions and authorization) is application-level rather than infrastructure hardening. A team hiring him for this requirement should plan for mentorship or complementary expertise on that dimension.",
+        "requirementIds": [
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Cross-system production debugging",
+        "fit": "relevant",
+        "narrative": "Reg's debugging strength is reasoning across system boundaries: at Musicbreakr, production failures routinely required comparing application state, backend workflow state, and external services like Stripe and social APIs, and his CModel integration work across Microsoft Graph, SharePoint, Teams, DocuSign, and others built exactly the habit of reasoning about disagreements between local and remote systems rather than treating calls in isolation. This cross-system production debugging is a directly relevant secondary skill for an infrastructure role where failures rarely respect layer boundaries.",
+        "requirementIds": [
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "production-ownership"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "infrastructure",
+        "narrative": "This is the most material gap: Reg states plainly that he is not primarily an infrastructure engineer and that Kubernetes, deep cloud-platform engineering, SRE, and Kafka-scale event infrastructure are not his strongest areas. He has meaningful production evidence at the application/backend level — API design, data modeling, background processing, OAuth and authorization — but hiring for the Terraform and Kafka requirements should assume he would need structured ramp-up and support, not day-one ownership of these systems.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      },
+      {
+        "title": "security",
+        "narrative": "Infrastructure security hardening is a second material gap: Reg does not claim deep security engineering, and his security-adjacent experience (OAuth flows, token lifecycle, permissions and authorization) is application-level rather than infrastructure hardening. A team hiring him for this requirement should plan for mentorship or complementary expertise on that dimension.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "Walk me through a production failure you owned end-to-end at Musicbreakr — how did you diagnose and resolve it while serving active customers?",
+      "You'd be stepping into Kubernetes and Kafka infrastructure you haven't operated at scale. Describe how you'd ramp up and what support you'd need in your first six months.",
+      "Your OAuth and authorization experience is application-level. How would you approach infrastructure security hardening, and where would you want a teammate's help?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "benchmark-18",
+      "benchmark-5",
+      "benchmark-14",
+      "benchmark-15"
+    ],
+    "evidenceSections": 7,
+    "evidenceCharacters": 5908,
+    "unmatchedRequirementIds": [
+      "req_2",
+      "req_3",
+      "req_7"
+    ]
+  }
+}

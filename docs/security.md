@@ -4,7 +4,7 @@ Security does not depend on hiding prompts, schemas, code, or thresholds. This i
 
 ## Boundaries
 
-Untrusted: public HTTP requests, pasted JDs, client state, model responses, capability proposals, and model-generated citations. Structured requirements remain semantically untrusted even after shape validation; conversion to JSON does not eliminate prompt injection.
+Untrusted: public HTTP requests, pasted JDs, client state, model responses, and capability proposals. Structured requirements remain semantically untrusted even after shape validation; conversion to JSON does not eliminate prompt injection.
 
 Trusted: server application code, validated deployment configuration, published canonical Convex evidence, and reviewed capability relationships validated against that evidence. Content administrators and deployment operators can change the truth source and must be trusted accordingly.
 
@@ -14,7 +14,7 @@ Only Next.js holds the Z.AI credential. A separate random server credential prot
 
 | Threat                                                           | Implemented boundary                                                                                                                                                                                                              |
 | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Prompt injection / requests for secrets or fabricated experience | Bounded structured decision output; exact capability allowlist; application-owned evidence resolution; synthesis has no tools, secrets in prompts, or side effects. No claim that text instructions alone prevent injection.      |
+| Prompt injection / requests for secrets or fabricated experience | Bounded structured decision output; exact capability allowlist; application-owned evidence resolution, requirement allocation, fit planning, and citations; synthesis has no tools, secrets in prompts, or side effects. No claim that text instructions alone prevent injection.      |
 | Fabricated citations / quotes                                    | Exact composite source identity against the supplied package and whitespace-normalized substring quote verification.                                                                                                              |
 | Unsupported advocacy                                             | Reject forged citations, unverifiable quotes, duplicate theme IDs, and non-gap themes with no valid citation. Complete, unique requirement coverage is mandatory. Semantic entailment remains a model-quality risk.               |
 | Output injection / XSS                                           | React text rendering; no generated HTML execution or Markdown link/image interpretation. Citation paths are encoded and built from internal IDs.                                                                                  |
@@ -23,7 +23,7 @@ Only Next.js holds the Z.AI credential. A separate random server credential prot
 | Retry amplification                                              | `maxRetries: 0`; at most 3 calls across a request, including one shared serialization/shape repair. Provider, grounding, and coverage failures are not retried.                                                                   |
 | Provider failure                                                 | 80-second timeout per call; generic client errors; daily allowance retained; failure circuit breaker; leases expire after 5 minutes.                                                                                              |
 | Leaked credentials / private content                             | Server-only model module; ignored environment files; placeholder example; no raw JD persistence on new analyses; allowlisted numeric telemetry; heuristic full-history scan and Gitleaks CI.                                      |
-| Stale analysis                                                   | SHA-256 of published bodies/headings/identities and active capabilities/relationships, plus normalized JD hash, contract version, candidate configuration, model and reasoning settings. Validate snapshot again after synthesis. |
+| Stale analysis                                                   | SHA-256 of published bodies/headings/identities and active capabilities/relationships, plus normalized JD hash, contract version, candidate configuration, matcher, model and reasoning settings. Validate snapshot again after synthesis. |
 
 ## Rate and budget semantics
 
@@ -37,7 +37,7 @@ Expired leases are cleaned opportunistically, and failed processes cannot retain
 
 ## Grounding failure decision
 
-The public path rejects an analysis if a non-gap theme lacks citations, any cited identity is forged, or any quote is unverifiable. It does not generate a semantic repair: deleting a theme breaks complete coverage, while generic replacement text weakens advocacy and may leave the overall thesis unsupported. The legacy validator's strip/downgrade behavior remains in the preserved baseline for comparison; `assertGroundedFit` runs first on every new public analysis. A genuine gap may be stated without a citation, but the model must distinguish unknown from demonstrated absence. Review this quality boundary when evaluating results.
+The public path rejects an analysis if a non-gap theme lacks citations or any cited identity is forged. Theme membership, fit, and citations are fixed by application code before prose generation; quotes are no longer generated. It does not generate a semantic repair: deleting a theme breaks complete coverage, while generic replacement text weakens advocacy and may leave the overall thesis unsupported. The legacy validator's strip/downgrade behavior remains in the preserved baseline for comparison; `assertGroundedFit` runs first on every new public analysis. Review this quality boundary when evaluating results.
 
 ## Residual risks and operations
 

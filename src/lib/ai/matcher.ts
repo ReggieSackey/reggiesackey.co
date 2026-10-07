@@ -21,6 +21,11 @@ export function validateDecision(
   if (requirements.size !== decision.extractedJob.requirements.length)
     throw new Error("Duplicate extracted requirement");
   const seen = new Set<string>();
+  if (decision.requirementFits) {
+    const assessed = new Set(decision.requirementFits.map((item) => item.requirementId));
+    if (assessed.size !== requirements.size || [...assessed].some((id) => !requirements.has(id)))
+      throw new Error("Invalid requirement fit decision");
+  }
   for (const m of decision.matches) {
     if (
       !known.has(m.capabilityId) ||
@@ -39,7 +44,7 @@ export function createZaiMatcher(caller?: CallModel): CapabilityMatcher {
     async interpretAndMatch(jd, capabilities) {
       if (!capabilities.length || capabilities.length > 60)
         throw new Error("Approve a compact capability registry first");
-      const shape = `Return JSON {"extractedJob":{"jobTitle":string|null,"company":string|null,"requirements":[{"id":"req_1","requirement":string,"importance":"core"|"important"|"preferred","category":string}]},"matches":[{"capabilityId":string,"requirementIds":["req_1"],"score":number}]}. Extract 3–25 meaningful employer requirements, unique sequential req_N IDs, max 500 characters per requirement. Select at most 8 capabilities (hard maximum 12), score 0–1. Exact registry IDs only. Multiple capabilities may address the same requirement. Preserve unmatched requirements; never invent a match.`;
+      const shape = `Return JSON {"extractedJob":{"jobTitle":string|null,"company":string|null,"requirements":[{"id":"req_1","requirement":string,"importance":"core"|"important"|"preferred","category":string}]},"matches":[{"capabilityId":string,"requirementIds":["req_1"],"score":number}],"requirementFits":[{"requirementId":"req_1","fit":"direct"|"transferable"|"gap"}]}. Extract 3–25 meaningful employer requirements, unique sequential req_N IDs, max 500 characters per requirement. Do not extract something the employer explicitly says is not required. Select at most 8 capabilities (hard maximum 12), score 0–1. Exact registry IDs only. Multiple capabilities may address the same requirement. Preserve unmatched requirements; never invent a match. Assess every requirement exactly once: direct means demonstrated experience with the underlying capability, transferable means strong adjacent evidence but a meaningful difference remains, and gap means no defensible capability match or a role-defining domain/tool depth is absent. A generic learning capability does not turn Kubernetes, SRE, model training, or another specialized requirement into transferable evidence.`;
       const decision = await callStructured(
         caller,
         "match",
@@ -62,4 +67,10 @@ export function createZaiMatcher(caller?: CallModel): CapabilityMatcher {
       return validateDecision(decision, capabilities);
     },
   };
+}
+
+export function configuredMatcherId() {
+  const id = process.env.ANALYSIS_MATCHER?.trim() || "zai-structured-v1";
+  if (id !== "zai-structured-v1" && id !== "jev-v1") throw new Error(`[ai] Unsupported ANALYSIS_MATCHER "${id}".`);
+  return id;
 }

@@ -1,0 +1,217 @@
+{
+  "job": "product",
+  "extractedJob": {
+    "jobTitle": "Senior Product Engineer",
+    "company": "Example Learning",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Build consumer web applications with React and TypeScript",
+        "importance": "core",
+        "category": "frontend"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Own features end-to-end from ambiguous customer needs through production delivery",
+        "importance": "core",
+        "category": "product ownership"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Collaborate with designers and engineers",
+        "importance": "important",
+        "category": "collaboration"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Model application data",
+        "importance": "core",
+        "category": "backend"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Integrate external APIs",
+        "importance": "important",
+        "category": "integrations"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Investigate and resolve production failures",
+        "importance": "important",
+        "category": "debugging"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Experience with relational databases",
+        "importance": "important",
+        "category": "backend"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Rapid iteration on product features",
+        "importance": "important",
+        "category": "product"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Familiarity with education products",
+        "importance": "preferred",
+        "category": "domain"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a product engineer who has repeatedly taken ideas from ambiguous customer needs through architecture, implementation, and production operation — including a live marketplace serving thousands of users and hundreds of thousands of dollars in transactions, and a strategic assistant product he owned end-to-end. He builds in TypeScript, React, and Next.js, models application data around access patterns, and has implemented and maintained OAuth integrations across many third-party platforms. His strongest evidence is in exactly the profile this role needs: whole-system product ownership where frontend, data, APIs, and backend behavior have to be reasoned about together, with a demonstrated ability to debug failures across system boundaries while serving active customers. He has not worked in education products specifically, but his track record of becoming productive quickly in unfamiliar domains makes that a manageable onboarding question rather than a disqualifier."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Consumer product and interaction design",
+        "fit": "relevant",
+        "narrative": "Reg's strongest consumer-product evidence comes from Reaccord, an application he built and uses daily, where repeated real use exposed defects that functional testing never would: interactions that were too slow, repetitive, or confusing to survive daily use. He has repeatedly reworked information hierarchy, reduced required input, and removed friction based on that actual use, and designed an adaptive daily interface that derives each day's UI from persistent user state rather than a static dashboard. He works across interaction design and implementation in TypeScript and React, and his daily-use testing discipline is a direct fit for consumer work that requires collaboration with designers on what the product should feel like.",
+        "requirementIds": [
+          "req_1",
+          "req_3"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "consumer-product-engineering"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "adaptive-interface"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Product engineering under ambiguity (0-to-1)",
+        "fit": "strong",
+        "narrative": "This is Reg's strongest area: he describes himself, and demonstrates, an ability to own products from ambiguous definition through production. At CModel he built the strategic assistant — a TypeScript/Next.js application with tool calling, schema-constrained generation, validation, and failure handling — and owned an email-to-decision-intelligence workflow from product definition through production, moving across successive architectures as the product evolved from Bubble prototypes to a conventional TypeScript/Supabase stack. His MusicBreakr marketplace ran in production serving thousands of users, and his background learning engineering from the application layer downward means he reasons about the whole system — product behavior, data, APIs, frontend state, and backend workflows — rather than treating them as separate concerns.",
+        "requirementIds": [
+          "req_2",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Application data modeling",
+        "fit": "strong",
+        "narrative": "Reg has designed application data models across very different constraints. On MusicBreakr he restructured data around application access patterns as volume grew, splitting ingestion work across scheduled workflows and changing client/server boundaries to fix production-scale performance. On Reaccord he deliberately separated durable domain concepts from rapidly changing AI-generated structures, designing a persistence layer with flexible storage validated at application boundaries via shared Zod schemas — a design that lets product structures change quickly without giving up correctness where it matters. This is exactly the judgment needed to model application data in a product that will keep evolving.",
+        "requirementIds": [
+          "req_4",
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "data-ingestion"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "flexible-backend"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Third-party API integration and OAuth",
+        "fit": "strong",
+        "narrative": "Reg has implemented and maintained a wide set of production integrations: Microsoft 365/Outlook via Microsoft Graph, SharePoint, Teams, DocuSign, HubSpot, Monday, Harvest, Freshdesk, Google services, plus marketplace payments and social ingestion at MusicBreakr. That work spans OAuth flows, token lifecycle, REST pagination, rate limits, and mapping external state into application models — including a normalization layer reconciling four social platforms with different identifiers, schemas, and access models. He is explicit that integration failures live at system boundaries, which is where his cross-system reasoning pays off.",
+        "requirementIds": [
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "social-attribution"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Cross-system production debugging",
+        "fit": "strong",
+        "narrative": "Reg debugged production failures on systems serving live customers, comparing application state, backend workflow state, and external service state across Stripe, social APIs, and OAuth-protected integrations. At MusicBreakr he did this while preserving marketplace, payment, and ingestion behavior under active load; at CModel the same boundary-crossing reasoning applied to integration failures like expired authorization and disagreement between local and remote data. He treats debugging as a whole-system activity rather than inspecting isolated API calls.",
+        "requirementIds": [
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "production-ownership"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          }
+        ]
+      },
+      {
+        "id": "theme_6",
+        "title": "Learning velocity in unfamiliar systems",
+        "fit": "relevant",
+        "narrative": "Reg has no direct education-product experience, but his track record shows he becomes productive in unfamiliar environments quickly: he learned engineering concepts from the application layer downward and progressed into conventional TypeScript, React, Next.js, Node.js, and databases, and recent C++/JUCE audio work demonstrates the same rapid mental-model formation. For a preferred rather than core requirement, this learning velocity plus his product-ownership instincts make the domain gap one he can close on the job.",
+        "requirementIds": [
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "learning-velocity"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [],
+    "interviewQuestions": [
+      "Walk us through a time your daily use of Reaccord forced you to change a design that was functionally correct — what was the defect and how did you detect and fix it?",
+      "At MusicBreakr, tell us about a production failure that crossed application, workflow, and external service state — how did you isolate it while customers were live?",
+      "How would you approach modeling data for a product where some structures are stable and others change weekly — what tradeoffs do you weigh between flexible and relational storage?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "benchmark-1",
+      "benchmark-4",
+      "benchmark-5",
+      "benchmark-6",
+      "benchmark-14",
+      "benchmark-15",
+      "benchmark-16",
+      "benchmark-18"
+    ],
+    "evidenceSections": 13,
+    "evidenceCharacters": 10765,
+    "unmatchedRequirementIds": []
+  }
+}

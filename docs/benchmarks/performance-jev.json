@@ -1,0 +1,8 @@
+{
+  "measuredAt": "2026-10-07T17:20:02.657Z",
+  "matcher": "jev-v1",
+  "status": "configuration_unavailable",
+  "reason": "TYPESAFE_API_KEY was not configured in the benchmark environment.",
+  "measurements": [],
+  "conclusion": "No live latency or quality claim is made. The implementation is covered by a mocked contract test, but zai-structured-v1 remains the production default until Jev can be evaluated on the same registry and three synthetic jobs."
+}
