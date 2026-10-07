@@ -1,3 +1,4 @@
+import { candidate } from "@/config/candidate";
 import Link from "next/link";
 
 /**
@@ -10,10 +11,10 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-5xl items-start justify-between px-6 py-5">
         <Link href="/" className="group block">
           <span className="block text-[15px] font-semibold tracking-tight text-neutral-900">
-            Reg Sackey-Addo
+            {candidate.name}
           </span>
           <span className="mt-0.5 block text-[13px] text-neutral-500">
-            Product Engineer
+            {candidate.headline}
           </span>
         </Link>
 
@@ -30,14 +31,14 @@ export function SiteHeader() {
           >
             About
           </Link>
-          {/* Placeholder until a contact route exists. */}
-          <span
-            aria-disabled="true"
-            className="cursor-default text-[13px] text-neutral-400"
-            title="Contact page coming soon"
-          >
-            Contact
-          </span>
+          {candidate.contactEmail ? (
+            <a
+              href={`mailto:${candidate.contactEmail}`}
+              className="text-[13px] text-neutral-600 hover:text-neutral-900"
+            >
+              Contact
+            </a>
+          ) : null}
         </nav>
       </div>
     </header>

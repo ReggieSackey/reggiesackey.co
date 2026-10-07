@@ -1,0 +1,78 @@
+{
+  "measuredAt": "2026-10-06T17:46:43.693Z",
+  "scope": "Live model + validation; in-memory proposed registry and canonical evidence, excludes HTTP/persistence/Convex targeted query. No registry approval performed.",
+  "corpusVersion": "076284c8c3be0bb2a6fadf05963c24828806fea1c85a5b8883855d6a5dd7ba24",
+  "results": [
+    {
+      "name": "product",
+      "match": 10203,
+      "retrieve": 1,
+      "synthesis": 30122,
+      "coverage": 1,
+      "totalMs": 40326,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 7847,
+      "outputTokens": 2233,
+      "modelMs": 40315.035291,
+      "outcome": "failed",
+      "selection": null,
+      "failureStage": "requirement_coverage"
+    },
+    {
+      "name": "ai",
+      "match": 7773,
+      "retrieve": 0,
+      "synthesis": 24444,
+      "coverage": 0,
+      "citations": 1,
+      "totalMs": 32220,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 7943,
+      "outputTokens": 1818,
+      "modelMs": 32214.681958,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "benchmark-2",
+          "benchmark-3",
+          "benchmark-13",
+          "benchmark-7",
+          "benchmark-6",
+          "benchmark-14",
+          "benchmark-18",
+          "benchmark-1"
+        ],
+        "evidenceSections": 14,
+        "evidenceCharacters": 10800,
+        "capabilities": [
+          "AI application engineering",
+          "AI context and retrieval design",
+          "Model-independent AI architecture",
+          "Permissions and delegated authorization",
+          "Application data modeling",
+          "Whole-system reasoning",
+          "Production ownership for live systems",
+          "Product engineering under ambiguity (0-to-1)"
+        ]
+      },
+      "failureStage": ""
+    },
+    {
+      "name": "infrastructure",
+      "match": 14503,
+      "retrieve": 0,
+      "synthesis": 32527,
+      "totalMs": 47030,
+      "calls": 3,
+      "repairs": 1,
+      "inputTokens": 7453,
+      "outputTokens": 2519,
+      "modelMs": 47022.846208999996,
+      "outcome": "failed",
+      "selection": null,
+      "failureStage": "call_limit"
+    }
+  ]
+}

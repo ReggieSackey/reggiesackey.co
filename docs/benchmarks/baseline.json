@@ -1,0 +1,48 @@
+{
+  "measuredAt": "2026-10-06T16:10:03.933Z",
+  "scope": "Live model + corpus + validation; excludes HTTP and persistence",
+  "results": [
+    {
+      "name": "product",
+      "corpus": 548,
+      "extract": 7727,
+      "evaluate": 63763,
+      "coverage": 0,
+      "citations": 1,
+      "totalMs": 72040,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 9396,
+      "outputTokens": 3067,
+      "modelMs": 71482.539667,
+      "outcome": "complete"
+    },
+    {
+      "name": "ai",
+      "corpus": 154,
+      "extract": 8601,
+      "evaluate": 90363,
+      "coverage": 0,
+      "totalMs": 99119,
+      "calls": 3,
+      "repairs": 1,
+      "inputTokens": 11756,
+      "outputTokens": 5058,
+      "modelMs": 98959.18079199997,
+      "outcome": "failed"
+    },
+    {
+      "name": "infrastructure",
+      "corpus": 321,
+      "extract": 8197,
+      "evaluate": 49768,
+      "totalMs": 58286,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 9454,
+      "outputTokens": 2488,
+      "modelMs": 57957.23637500001,
+      "outcome": "failed"
+    }
+  ]
+}

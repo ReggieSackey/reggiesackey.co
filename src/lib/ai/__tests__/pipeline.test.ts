@@ -986,7 +986,7 @@ describe("seed content integrity", () => {
   // runtime import) so tests can assert its shape without env gates.
   it("imports the canonical seed data", async () => {
     const mod = await import("@convex/seedData");
-    expect(mod.CASE_STUDIES.length).toBe(3);
+    expect(mod.CASE_STUDIES.length).toBe(4);
     expect(mod.PROFILE_DOCUMENTS.length).toBe(1);
   });
 

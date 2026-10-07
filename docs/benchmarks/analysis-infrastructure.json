@@ -1,0 +1,163 @@
+{
+  "job": "infrastructure",
+  "extractedJob": {
+    "jobTitle": "Senior Infrastructure Engineer",
+    "company": "Example Cloud",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Own and operate Kubernetes clusters and AWS infrastructure at large scale",
+        "importance": "core",
+        "category": "Infrastructure Operations"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Design Terraform modules for infrastructure as code",
+        "importance": "core",
+        "category": "Infrastructure as Code"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Design and operate distributed streaming infrastructure using Kafka",
+        "importance": "core",
+        "category": "Data Infrastructure"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Lead incident response and on-call rotations",
+        "importance": "core",
+        "category": "Reliability"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Capacity planning and defining service-level objectives",
+        "importance": "important",
+        "category": "Reliability"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Linux networking expertise",
+        "importance": "important",
+        "category": "Systems"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Security hardening of infrastructure",
+        "importance": "important",
+        "category": "Security"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Five years of direct production infrastructure ownership",
+        "importance": "core",
+        "category": "Experience"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Application engineering as a secondary skill",
+        "importance": "preferred",
+        "category": "Software Engineering"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "gap",
+      "narrative": "Reg is a strong product/backend application engineer with real production ownership, cross-system debugging, and recurring background-processing design. However, this is a senior infrastructure role centered on Kubernetes, AWS, Terraform, and Kafka, and he states plainly that infrastructure engineering is not his discipline. His transferable systems judgment and learning velocity are genuine, but the core of this role is a material mismatch with his demonstrated specialization."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Production ownership and reliability thinking",
+        "fit": "relevant",
+        "narrative": "Reg has operated live systems serving thousands of users and real transactions, making changes that had to preserve payment, marketplace, and ingestion behavior. He understands production constraints, failure modes, and the discipline of evolving systems under load.",
+        "requirementIds": ["req_4", "req_5", "req_8", "req_9"],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "production-ownership",
+            "quote": "I worked on these systems while they were serving active customers, so changes had to preserve existing marketplace, payment, and ingestion behavior."
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "impact"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Cross-system debugging and data workflow engineering",
+        "fit": "relevant",
+        "narrative": "He diagnoses failures that span application state, third-party services, and external systems, and has reworked recurring ingestion under API quotas, scheduling, and cost constraints — reasoning that overlaps with the operational mindset infrastructure roles require, even though the tooling differs.",
+        "requirementIds": ["req_3", "req_6"],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "data-ingestion",
+            "quote": "splitting work across scheduled workflows"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations",
+            "quote": "Debugging requires reasoning across both systems rather than treating the API call as an isolated unit."
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Systems reasoning and learning velocity",
+        "fit": "relevant",
+        "narrative": "Reg thinks in terms of system boundaries, responsibility ownership, and failure modes, and has repeatedly become productive in unfamiliar technical environments quickly. This supports ramping on new infrastructure tooling, but does not substitute for direct Kubernetes/Terraform experience.",
+        "requirementIds": ["req_1", "req_2", "req_7"],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "learning-velocity",
+            "quote": "I can become productive in unfamiliar technical environments quickly"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "No demonstrated Kubernetes, AWS, Terraform, or Kafka infrastructure experience",
+        "narrative": "The core of this role — operating clusters, designing IaC modules, and running streaming infrastructure — is a discipline Reg identifies as not his strongest area. His production evidence is at the application/backend layer, not in building and operating underlying infrastructure.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience",
+            "quote": "I am not primarily an infrastructure engineer. Large-scale distributed systems, Kubernetes, deep cloud-platform engineering, SRE, and Kafka-scale event infrastructure are not my strongest areas."
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "You reworked MusicBreakr's ingestion under quota and cost constraints — walk me through the tradeoffs you weighed and how you'd approach the same problem with Kafka-style streaming infrastructure.",
+      "You describe learning new systems quickly: what would your first 90 days look like ramping into Kubernetes and Terraform ownership, and what would you need to be genuinely reliable on-call?",
+      "Tell me about a production incident you owned end-to-end — what failed, how you diagnosed it across system boundaries, and what you changed afterwards."
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "benchmark-18",
+      "benchmark-5",
+      "benchmark-14",
+      "benchmark-9",
+      "benchmark-15"
+    ],
+    "evidenceSections": 9,
+    "evidenceCharacters": 7321
+  }
+}

@@ -32,6 +32,12 @@ type Env = {
   readonly CONVEX_SITE_URL: string;
   readonly ADMIN_BOOTSTRAP_ENABLED: string | undefined;
   readonly ALLOW_DEV_SEED: string | undefined;
+  readonly ANALYSIS_BURST: string | undefined;
+  readonly ANALYSIS_CONCURRENCY: string | undefined;
+  readonly ANALYSIS_DAILY_CALLS: string | undefined;
+  readonly ANALYSIS_FAILURE_LIMIT: string | undefined;
+  readonly ANALYSIS_HOURLY: string | undefined;
+  readonly ANALYSIS_SERVER_SECRET: string | undefined;
 };
 
 /**

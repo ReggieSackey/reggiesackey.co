@@ -1,0 +1,218 @@
+{
+  "job": "ai",
+  "extractedJob": {
+    "jobTitle": "AI Application Engineer",
+    "company": "Example Tools",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Build AI product experiences using language model APIs",
+        "importance": "core",
+        "category": "AI engineering"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Design structured generation pipelines for LLM outputs",
+        "importance": "core",
+        "category": "AI engineering"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Validate model output and handle non-conforming responses",
+        "importance": "core",
+        "category": "AI engineering"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Implement secure backend APIs",
+        "importance": "core",
+        "category": "Backend"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Design retrieval grounded in source documents",
+        "importance": "core",
+        "category": "AI engineering"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Build observable production systems",
+        "importance": "important",
+        "category": "Operations"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Own frontend integration in TypeScript and React",
+        "importance": "core",
+        "category": "Frontend"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Collaborate with product teams",
+        "importance": "important",
+        "category": "Collaboration"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Evaluate latency and cost of AI systems",
+        "importance": "important",
+        "category": "AI engineering"
+      },
+      {
+        "id": "req_10",
+        "requirement": "Machine learning model training not required",
+        "importance": "preferred",
+        "category": "Scope"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "strong",
+      "narrative": "Reg is a direct fit for an AI application engineering role: he has shipped production LLM features end to end — tool calling, schema-constrained generation, output validation and failure handling, and runtime context design — as a TypeScript/Next.js application owner. He pairs that AI work with whole-system product ownership, secure API and authorization experience, and production systems serving real customers. Nothing in his background suggests a material mismatch for this role's scope."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Production LLM feature engineering",
+        "fit": "strong",
+        "narrative": "Reg built CModel's strategic assistant in TypeScript/Next.js with the Vercel AI SDK: tool calling, schema-constrained generation, and an explicit validate-then-accept/retry/repair/reject boundary between model output and application state. At Reaccord he extended this with model-independent architecture that separates provider configuration from prompts, output shape, validation, and UI — directly relevant to managing latency and cost as models change.",
+        "requirementIds": [
+          "req_1",
+          "req_2",
+          "req_3",
+          "req_9",
+          "req_10"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "structured-generation"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "model-independent-ai"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Retrieval and context design",
+        "fit": "strong",
+        "narrative": "Reg designs what models see rather than dumping everything into prompts. CModel's assistant combines provided organization/page context with selective tool-based retrieval; Reaccord assembles task-specific context from persistent user state so the application owns context selection. This is exactly the retrieval-grounded-in-source-documents capability the role targets.",
+        "requirementIds": [
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "strategic-assistant"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "personalized-context"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Backend, security, and frontend ownership in TypeScript",
+        "fit": "strong",
+        "narrative": "Reg implements and maintains OAuth/API integrations across Microsoft 365 and other third-party systems, and has designed delegated authorization with role-scoped permissions in production. His data-modeling work pairs durable domain structures with Zod-validated contracts for AI-generated state. He ships full-stack in TypeScript, React, and Next.js.",
+        "requirementIds": [
+          "req_4",
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "delegated-access"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "flexible-backend"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Production operations under real constraints",
+        "fit": "strong",
+        "narrative": "Reg has operated live systems serving thousands of users and real transactions, where debugging crossed application, backend, and external-service boundaries. At MusicBreakr he made explicit tradeoffs between data freshness, scheduling, batch size, and operating cost — the same observability and cost-conscious reasoning AI systems demand.",
+        "requirementIds": [
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "production-ownership"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "data-ingestion"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Product collaboration and 0-to-1 ownership",
+        "fit": "strong",
+        "narrative": "Reg owns workflows from product definition through production, translating ambiguous founder-level requirements into shipped features. At CModel he also initiated an agentic team development process combining shared technical context, AI-assisted development, engineer review, and CI/CD controls — evidence he raises the whole team's output, not just his own.",
+        "requirementIds": [
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [],
+    "interviewQuestions": [
+      "Walk me through a case where model output repeatedly failed validation — how did you decide between retry, repair, and reject, and what did that boundary look like in code?",
+      "How did you measure and manage latency and cost in the strategic assistant or Reaccord's AI features as usage or model choices changed?",
+      "Tell me about a production AI feature where the context or retrieval design turned out to be wrong in practice — how did you detect it and what did you change?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "benchmark-2",
+      "benchmark-3",
+      "benchmark-13",
+      "benchmark-7",
+      "benchmark-6",
+      "benchmark-14",
+      "benchmark-18",
+      "benchmark-1"
+    ],
+    "evidenceSections": 14,
+    "evidenceCharacters": 10800
+  }
+}

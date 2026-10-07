@@ -1,0 +1,14 @@
+{
+  "measuredAt": "2026-10-06T18:06:03.627Z",
+  "scope": "Live HTTPS completed-cache lookup only; excludes route admission, fingerprint snapshot, hashing and rendering. One isolated benchmark-prefixed result retained on development; no raw JD stored.",
+  "samplesMs": [
+    174,
+    94,
+    330,
+    97,
+    97
+  ],
+  "medianMs": 97,
+  "modelCalls": 0,
+  "repairs": 0
+}

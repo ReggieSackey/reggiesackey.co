@@ -7,9 +7,7 @@ import Link from "next/link";
  * visitors to AuthKit. Convex admin functions verify identity again
  * (convex/adminAuth.ts).
  */
-export default async function AdminLayout({
-  children,
-}: LayoutProps<"/admin">) {
+export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   // withAuth() reads the session the proxy refreshed and forwarded.
   const { user } = await withAuth({ ensureSignedIn: true });
 
@@ -26,6 +24,12 @@ export default async function AdminLayout({
             </span>
           </div>
           <nav aria-label="Admin" className="flex items-center gap-5 pt-0.5">
+            <Link
+              href="/admin/capabilities"
+              className="text-[13px] text-neutral-600 hover:text-neutral-900"
+            >
+              Capabilities
+            </Link>
             <Link
               href="/admin/work"
               className="text-[13px] text-neutral-600 hover:text-neutral-900"

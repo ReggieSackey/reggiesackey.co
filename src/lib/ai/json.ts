@@ -16,9 +16,7 @@ import type { z } from "zod";
 
 /** Preview cap embedded in error objects (logs cap again at 10k). */
 const PREVIEW_CAP = 10_000;
-export type StructuredOutputFailureStage =
-  | "json_parse"
-  | "schema_validation";
+export type StructuredOutputFailureStage = "json_parse" | "schema_validation";
 
 export class StructuredOutputParseError extends Error {
   readonly failureStage: StructuredOutputFailureStage;
@@ -46,7 +44,11 @@ export class StructuredOutputParseError extends Error {
  * Trims whitespace, JSON.parses, and validates against the supplied Zod
  * schema. Returns the typed object, or throws StructuredOutputParseError.
  */
-export function parseStructuredJson<T>(rawText: string, schema: z.ZodType<T>): T {
+export function parseStructuredJson<T>(
+  rawText: string,
+  schema: z.ZodType<T>,
+): T {
+  if (rawText.length > 100_000) throw new Error("Model output limit");
   const text = rawText.trim();
 
   let value: unknown;

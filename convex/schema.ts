@@ -5,11 +5,56 @@ import { v } from "convex/values";
  * Canonical data model.
  *
  * Case studies and profile documents are the canonical factual source
- * material. Evidence is NOT precomputed or manually maintained — the future
- * analysis pipeline will dynamically derive it from caseStudySections and
- * profileSections at query time.
+ * material. Capabilities interpret those facts; relationships reference stable
+ * source identities without copying canonical section bodies.
  */
+export const evidenceRef = v.object({
+  sourceType: v.union(v.literal("caseStudy"), v.literal("profile")),
+  sourceId: v.string(),
+  sectionId: v.string(),
+  note: v.string(),
+});
+export const capabilityFields = {
+  slug: v.string(),
+  title: v.string(),
+  description: v.string(),
+  tags: v.array(v.string()),
+};
 export default defineSchema({
+  capabilities: defineTable({
+    ...capabilityFields,
+    active: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_active", ["active"]),
+  capabilityEvidence: defineTable({
+    capabilityId: v.id("capabilities"),
+    ...evidenceRef.fields,
+  }).index("by_capability", ["capabilityId"]),
+  capabilityProposals: defineTable({
+    ...capabilityFields,
+    evidence: v.array(evidenceRef),
+    corpusVersion: v.string(),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("approved"),
+      v.literal("rejected"),
+    ),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("by_status", ["status"]),
+  analysisBudget: defineTable({
+    day: v.string(),
+    reservedCalls: v.number(),
+    failures: v.number(),
+    circuitUntil: v.number(),
+  }).index("by_day", ["day"]),
+  analysisLeases: defineTable({
+    analysisId: v.optional(v.id("jobAnalyses")),
+    expiresAt: v.number(),
+  }).index("by_expiry", ["expiresAt"]),
   users: defineTable({
     /** WorkOS user id (the `subject` of the auth token). */
     authId: v.string(),
@@ -78,6 +123,7 @@ export default defineSchema({
    */
   jobAnalyses: defineTable({
     inputHash: v.string(),
+    cacheKey: v.optional(v.string()),
     jobTitle: v.optional(v.string()),
     company: v.optional(v.string()),
     overallFit: v.optional(
@@ -98,10 +144,7 @@ export default defineSchema({
           requirementIds: v.array(v.string()),
           citations: v.array(
             v.object({
-              sourceType: v.union(
-                v.literal("caseStudy"),
-                v.literal("profile"),
-              ),
+              sourceType: v.union(v.literal("caseStudy"), v.literal("profile")),
               sourceId: v.string(),
               sectionId: v.string(),
               quote: v.optional(v.string()),
@@ -117,10 +160,7 @@ export default defineSchema({
           narrative: v.string(),
           citations: v.array(
             v.object({
-              sourceType: v.union(
-                v.literal("caseStudy"),
-                v.literal("profile"),
-              ),
+              sourceType: v.union(v.literal("caseStudy"), v.literal("profile")),
               sourceId: v.string(),
               sectionId: v.string(),
               quote: v.optional(v.string()),
@@ -137,6 +177,7 @@ export default defineSchema({
     updatedAt: v.optional(v.number()),
   })
     .index("by_inputHash", ["inputHash"])
+    .index("by_cache_status", ["cacheKey", "status"])
     .index("by_status", ["status"]),
 
   /**

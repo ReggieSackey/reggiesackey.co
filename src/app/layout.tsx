@@ -1,3 +1,4 @@
+import { candidate } from "@/config/candidate";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -15,11 +16,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Reg Sackey-Addo — Product Engineer",
-    template: "%s — Reg Sackey-Addo",
+    default: `${candidate.name} — ${candidate.headline}`,
+    template: `%s — ${candidate.name}`,
   },
-  description:
-    "Paste a job description and get a grounded analysis of Reg Sackey-Addo's fit for the role.",
+  description: `Paste a job description and get a grounded analysis of ${candidate.name}'s fit for the role.`,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -1,0 +1,224 @@
+{
+  "job": "product",
+  "extractedJob": {
+    "jobTitle": "Senior Product Engineer",
+    "company": "Example Learning",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Build consumer web applications with React and TypeScript",
+        "importance": "core",
+        "category": "frontend"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Own features end-to-end from ambiguous customer needs through production delivery",
+        "importance": "core",
+        "category": "product ownership"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Collaborate with designers and engineers",
+        "importance": "core",
+        "category": "collaboration"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Model application data",
+        "importance": "core",
+        "category": "data"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Integrate external APIs",
+        "importance": "core",
+        "category": "integrations"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Investigate production failures",
+        "importance": "core",
+        "category": "debugging"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Experience with relational databases",
+        "importance": "important",
+        "category": "backend"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Rapid iteration",
+        "importance": "important",
+        "category": "ways of working"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Familiarity with education products",
+        "importance": "preferred",
+        "category": "domain"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "strong",
+      "narrative": "Reg is a product engineer who has repeatedly taken ambiguous needs through architecture, data modeling, integrations, and frontend implementation to production systems serving live customers. He builds in TypeScript, React, and Next.js, integrates heavily with external APIs, and debugs failures across system boundaries. The one real difference: his evidence sits in marketplace, social, and AI-assistant products rather than education."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Full-stack product engineering in TypeScript and React",
+        "fit": "strong",
+        "narrative": "Reg built CModel's strategic assistant as a TypeScript/Next.js application and has moved progressively from high-level platforms into conventional JavaScript, TypeScript, React, and Node.js — a deliberate path into code-first development, not a surface familiarity.",
+        "requirementIds": ["req_1"],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities",
+            "quote": "Built CModel's strategic assistant as a standalone TypeScript/Next.js application"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "engineering-foundations",
+            "quote": "then progressively moved into conventional JavaScript, TypeScript, React, Next.js, Node.js, databases, APIs, and other code-first environments"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "End-to-end ownership from ambiguity to production",
+        "fit": "strong",
+        "narrative": "Ownership under ambiguity is his defining pattern: he owned an email-to-decision workflow from product definition through production, ships in 0-to-1 environments where the technical path is unspecified, and iterates on his own consumer product through repeated personal use.",
+        "requirementIds": ["req_2", "req_8"],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities",
+            "quote": "Owned an email-to-decision-intelligence workflow from product definition through production"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas",
+            "quote": "Product engineering under ambiguity — helping determine what should be built as well as how to build it."
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Third-party API integration",
+        "fit": "strong",
+        "narrative": "Reg has implemented and maintained OAuth flows, token lifecycle, pagination, and error handling across roughly nine external systems including Microsoft Graph, DocuSign, and HubSpot, plus four social platform APIs with conflicting schemas and rate limits.",
+        "requirementIds": ["req_5"],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations",
+            "quote": "OAuth flows, token lifecycle, REST APIs, pagination, external data models, error handling"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "social-attribution",
+            "quote": "The platforms exposed different identifiers, response schemas, access models, and rate limits."
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Data modeling and relational backend work",
+        "fit": "strong",
+        "narrative": "His data modeling is shaped by how the application consumes data: restructuring MusicBreakr's data around access patterns at production scale, building normalization layers over heterogeneous external data, and designing Supabase and Convex persistence with explicit validation contracts where correctness matters.",
+        "requirementIds": ["req_4", "req_7"],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "data-ingestion",
+            "quote": "restructuring data around application access patterns"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "flexible-backend",
+            "quote": "validated against the contracts that code expects, including shared Zod schemas"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Production debugging across system boundaries",
+        "fit": "strong",
+        "narrative": "Reg debugs live production failures by comparing application state, backend workflow state, and external service state (Stripe, social APIs) — reasoning across both sides of an integration boundary rather than treating API calls in isolation, on systems with real transactions and active customers.",
+        "requirementIds": ["req_6"],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "production-ownership",
+            "quote": "Debugging required comparing application state, backend workflow state, and the state held by external services"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "impact",
+            "quote": "Processed hundreds of thousands of dollars in transactions."
+          }
+        ]
+      },
+      {
+        "id": "theme_6",
+        "title": "Collaboration and consumer product sensibility",
+        "fit": "relevant",
+        "narrative": "At CModel he initiated a team-wide agentic development process combining shared technical context, AI-assisted feature development, engineer review, and CI/CD controls — evidence of working with other engineers and shaping how a small team ships. His consumer work shows design judgment grounded in actual daily use.",
+        "requirementIds": ["req_3", "req_9"],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities",
+            "quote": "Initiated an agentic development process combining shared technical context, team-wide AI-assisted feature development, engineer review, automated testing, and CI/CD controls"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "consumer-product-engineering",
+            "quote": "I have repeatedly changed information hierarchy, reduced required input, adjusted daily composition, and removed friction based on actual repeated use."
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "No documented experience with education products",
+        "narrative": "Reg's product evidence is in marketplaces, social attribution, decision intelligence, and consumer self-improvement — not learning or education products. This is a preferred requirement, and his record of fast domain ramp-up makes it a manageable one.",
+        "citations": []
+      }
+    ],
+    "interviewQuestions": [
+      "Walk me through a feature where you had to decide what to build, not just how — how did you get from an ambiguous customer need to a shipped decision?",
+      "Tell me about the hardest cross-system production failure you've debugged. How did you locate which side of the boundary was wrong?",
+      "You'd be joining an education product — how do you approach building a mental model of a new domain and its users quickly?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "benchmark-1",
+      "benchmark-4",
+      "benchmark-5",
+      "benchmark-6",
+      "benchmark-15",
+      "benchmark-16",
+      "benchmark-14",
+      "benchmark-18"
+    ],
+    "evidenceSections": 13,
+    "evidenceCharacters": 10765
+  }
+}

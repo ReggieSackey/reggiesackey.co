@@ -1,4 +1,5 @@
 import { mutation, query } from "./_generated/server";
+import { requireAnalysisServer } from "./serverAuth";
 import { v } from "convex/values";
 
 /**
@@ -9,7 +10,8 @@ import { v } from "convex/values";
  * narrative, synthesized themes (each covering extracted requirement
  * ids), optional material gaps, and at most 3 interview questions.
  *
- * TODO(v2): authenticated admin variants + purge of old rows.
+ * Writes require the Next.js service credential. New raw JDs are not retained.
+ * Long-term retention/purge remains an operational decision.
  */
 
 const citationValidator = v.object({
@@ -22,33 +24,16 @@ const citationValidator = v.object({
 const themeValidator = v.object({
   id: v.string(),
   title: v.string(),
-  fit: v.union(
-    v.literal("strong"),
-    v.literal("relevant"),
-    v.literal("gap"),
-  ),
+  fit: v.union(v.literal("strong"), v.literal("relevant"), v.literal("gap")),
   narrative: v.string(),
   requirementIds: v.array(v.string()),
   citations: v.array(citationValidator),
 });
 
-export const createProcessingAnalysis = mutation({
-  args: {
-    inputHash: v.string(),
-    rawJobDescription: v.string(),
-  },
-  handler: async (ctx, args) => {
-    return await ctx.db.insert("jobAnalyses", {
-      inputHash: args.inputHash,
-      rawJobDescription: args.rawJobDescription,
-      status: "processing",
-      createdAt: Date.now(),
-    });
-  },
-});
-
 export const markAnalysisComplete = mutation({
+  returns: v.null(),
   args: {
+    secret: v.string(),
     id: v.id("jobAnalyses"),
     jobTitle: v.optional(v.string()),
     company: v.optional(v.string()),
@@ -69,22 +54,41 @@ export const markAnalysisComplete = mutation({
     interviewQuestions: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
-    const { id, ...rest } = args;
-    await ctx.db.patch(id, { ...rest, status: "complete", updatedAt: Date.now() });
+    requireAnalysisServer(args.secret);
+    const { id, secret: _secret, ...rest } = args;
+    void _secret;
+    const current = await ctx.db.get(id);
+    if (
+      current?.status !== "processing" ||
+      current.createdAt < Date.now() - 300_000
+    )
+      throw new Error("Analysis lease expired");
+    await ctx.db.patch(id, {
+      ...rest,
+      status: "complete",
+      updatedAt: Date.now(),
+    });
+    return null;
   },
 });
 
 export const markAnalysisFailed = mutation({
+  returns: v.null(),
   args: {
+    secret: v.string(),
     id: v.id("jobAnalyses"),
     errorMessage: v.string(),
   },
   handler: async (ctx, args) => {
+    requireAnalysisServer(args.secret);
+    const current = await ctx.db.get(args.id);
+    if (current?.status !== "processing") return null;
     await ctx.db.patch(args.id, {
       status: "failed",
       errorMessage: args.errorMessage,
       updatedAt: Date.now(),
     });
+    return null;
   },
 });
 

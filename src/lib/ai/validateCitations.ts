@@ -12,7 +12,7 @@ export function normalizeWhitespace(text: string): string {
 }
 
 function corpusKey(sourceType: string, sourceId: string, sectionId: string) {
-  return `${sourceType}:${sourceId}:${sectionId}`;
+  return JSON.stringify([sourceType, sourceId, sectionId]);
 }
 
 function buildCorpusIndex(sources: SourceSection[]) {
@@ -180,7 +180,9 @@ export function validateCandidateFit(
     const validCitations = validateCitationList(theme.citations, index);
     const claimedGrounding = theme.fit !== "gap";
     const lostAllGrounding =
-      claimedGrounding && validCitations.length === 0 && theme.citations.length > 0;
+      claimedGrounding &&
+      validCitations.length === 0 &&
+      theme.citations.length > 0;
 
     return {
       id: theme.id,
@@ -205,4 +207,46 @@ export function validateCandidateFit(
     interviewQuestions: fit.interviewQuestions,
     duplicateThemeIds,
   };
+}
+
+/** Public pipeline fails closed on grounding loss; no semantic repair or advocacy downgrade. */
+export function assertGroundedFit(
+  fit: CandidateFit,
+  sources: SourceSection[],
+): void {
+  const index = buildCorpusIndex(sources);
+  if (new Set(fit.themes.map((t) => t.id)).size !== fit.themes.length)
+    throw new Error("Duplicate theme IDs");
+  for (const theme of fit.themes) {
+    if (
+      theme.fit !== "gap" &&
+      !validateCitationList(theme.citations, index).length
+    )
+      throw new Error("Ungrounded theme");
+  }
+  // A gap claim is also a factual claim. If citations were supplied, forgery must not survive as prose.
+  for (const group of [...fit.themes, ...fit.materialGaps]) {
+    if (
+      group.citations.some(
+        (c) => !index.has(corpusKey(c.sourceType, c.sourceId, c.sectionId)),
+      )
+    )
+      throw new Error("Forged citation");
+    if (
+      group.citations.some(
+        (c) =>
+          c.quote &&
+          !quoteVerified(
+            c.quote,
+            index.get(corpusKey(c.sourceType, c.sourceId, c.sectionId))!.body,
+          ),
+      )
+    )
+      throw new Error("Unverifiable quote");
+  }
+  if (
+    fit.overallAssessment.fit !== "gap" &&
+    !fit.themes.some((t) => t.fit !== "gap" && t.citations.length)
+  )
+    throw new Error("Ungrounded overall assessment");
 }

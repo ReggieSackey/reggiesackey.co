@@ -1,0 +1,347 @@
+{
+  "proposals": [
+    {
+      "slug": "product-engineering-under-ambiguity",
+      "title": "Product engineering under ambiguity (0-to-1)",
+      "description": "Turning ambiguous requirements into working software, including helping determine what to build, not just how. Spans product definition through production in early-stage and unspecified technical environments.",
+      "tags": ["product", "ownership", "0-to-1"],
+      "evidence": [
+        {
+          "sourceType": "profile",
+          "sourceId": "technical",
+          "sectionId": "strongest-areas",
+          "note": "Explicitly names product engineering under ambiguity and shipping in 0-to-1 environments as strongest areas."
+        },
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "cmodel-strategic-assistant",
+          "sectionId": "responsibilities",
+          "note": "Owned email-to-decision-intelligence workflow from product definition through production."
+        }
+      ]
+    },
+    {
+      "slug": "ai-application-engineering",
+      "title": "AI application engineering",
+      "description": "Building production LLM-powered product features: tool calling, structured/schema-constrained generation, validation and failure handling for non-conforming output, and connecting models to application and organizational context.",
+      "tags": ["ai", "llm", "product"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "cmodel-strategic-assistant",
+          "sectionId": "structured-generation",
+          "note": "Schema-constrained generation with validate/accept/retry/repair/reject boundary between model output and app state."
+        },
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "cmodel-strategic-assistant",
+          "sectionId": "responsibilities",
+          "note": "Tool calling, context design, validation, failure handling for the strategic assistant."
+        },
+        {
+          "sourceType": "profile",
+          "sourceId": "technical",
+          "sectionId": "ai-application-engineering",
+          "note": "Summarizes direct production LLM feature experience."
+        }
+      ]
+    },
+    {
+      "slug": "ai-context-design",
+      "title": "AI context and retrieval design",
+      "description": "Designing what models see at runtime: page/organization-level provided context, selective tool-based retrieval, and assembling task-specific context from persistent product state rather than indiscriminately loading history.",
+      "tags": ["ai", "context", "retrieval"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "cmodel-strategic-assistant",
+          "sectionId": "strategic-assistant",
+          "note": "Two-source runtime context: provided state plus selective tool calls."
+        },
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "reaccord",
+          "sectionId": "personalized-context",
+          "note": "Context assembled per operation from persistent user state; application owns context selection."
+        }
+      ]
+    },
+    {
+      "slug": "third-party-integrations",
+      "title": "Third-party API integration and OAuth",
+      "description": "Implementing and maintaining production integrations across many external systems: OAuth flows, token lifecycle, REST APIs, pagination, error handling, and mapping external state into internal application models.",
+      "tags": ["integrations", "oauth", "api"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "cmodel-strategic-assistant",
+          "sectionId": "integrations",
+          "note": "Roughly nine external systems including Microsoft Graph, DocuSign, HubSpot; OAuth and token lifecycle."
+        },
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "musicbreakr",
+          "sectionId": "social-attribution",
+          "note": "Four social platform APIs with differing identifiers, schemas, access models, and rate limits."
+        }
+      ]
+    },
+    {
+      "slug": "cross-boundary-debugging",
+      "title": "Cross-system production debugging",
+      "description": "Diagnosing production failures that span application state, backend workflows, payment systems, and third-party services by reasoning across both sides of a boundary rather than treating API calls in isolation.",
+      "tags": ["debugging", "production", "systems"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "musicbreakr",
+          "sectionId": "production-ownership",
+          "note": "Failures crossing application, workflow, payment, and external service state; live customers."
+        },
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "cmodel-strategic-assistant",
+          "sectionId": "integrations",
+          "note": "Integration failures at system boundaries: expired auth, unexpected external state, doc/behavior mismatches."
+        }
+      ]
+    },
+    {
+      "slug": "application-data-modeling",
+      "title": "Application data modeling",
+      "description": "Designing data structures and access patterns around how the application consumes data, including normalization layers for heterogeneous external data and flexible persistence for evolving AI-generated state with contracts where correctness matters.",
+      "tags": ["data", "modeling", "backend"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "musicbreakr",
+          "sectionId": "data-ingestion",
+          "note": "Restructured data around application access patterns at production scale."
+        },
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "reaccord",
+          "sectionId": "flexible-backend",
+          "note": "Persistence split between durable domain concepts and flexible AI-generated structures with Zod validation boundaries."
+        }
+      ]
+    },
+    {
+      "slug": "permissions-authorization",
+      "title": "Permissions and delegated authorization",
+      "description": "Designing authorization models including delegated account access where one user acts on another's behalf without credential sharing, with role-scoped resources and operations.",
+      "tags": ["auth", "security", "permissions"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "musicbreakr",
+          "sectionId": "delegated-access",
+          "note": "Delegated access for managers, labels, collaborators with role-scoped permissions."
+        },
+        {
+          "sourceType": "profile",
+          "sourceId": "technical",
+          "sectionId": "strongest-areas",
+          "note": "Lists application data modeling and permissions/authorization among strongest areas."
+        }
+      ]
+    },
+    {
+      "slug": "marketplace-payments",
+      "title": "Marketplace payments engineering",
+      "description": "Implementing connected-account payment flows: onboarding, payout eligibility, transaction state coordination between application and payment provider, and correctness under incomplete or disagreeing state.",
+      "tags": ["payments", "stripe", "marketplace"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "musicbreakr",
+          "sectionId": "stripe-connect",
+          "note": "Stripe Connect onboarding, payouts, and transaction-state coordination for marketplace flow."
+        }
+      ]
+    },
+    {
+      "slug": "background-workflows",
+      "title": "Recurring background workflows at scale",
+      "description": "Designing server-side scheduled processing under API quotas, execution limits, and cost constraints: scheduling, batching, refresh frequency, and moving work across client/server and service boundaries.",
+      "tags": ["backend", "scheduling", "scale"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "musicbreakr",
+          "sectionId": "data-ingestion",
+          "note": "Recurring ingestion reworked for scale: split workflows, adjusted frequency/volume, moved logic across boundaries."
+        },
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "cmodel-strategic-assistant",
+          "sectionId": "email-signals",
+          "note": "Owned email-to-decision-intelligence pipeline with signal selection over inbox data."
+        }
+      ]
+    },
+    {
+      "slug": "cross-platform-architecture",
+      "title": "Cross-platform application architecture",
+      "description": "Structuring products as shared backends with multiple clients (web and native mobile), monorepo organization, shared contracts, and behavioral parity without duplicated products.",
+      "tags": ["architecture", "monorepo", "mobile"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "reaccord",
+          "sectionId": "cross-platform-architecture",
+          "note": "Turborepo monorepo, shared TypeScript/Zod contracts, web/mobile parity checks over one backend."
+        },
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "reaccord",
+          "sectionId": "responsibilities",
+          "note": "Architected Next.js web plus Expo/React Native mobile over shared Convex backend."
+        }
+      ]
+    },
+    {
+      "slug": "implementation-boundary-decisions",
+      "title": "Choosing implementation boundaries",
+      "description": "Deciding where functionality lives — low-code vs conventional stacks, standalone apps vs embedded features, client vs server, custom code vs external services — and executing migrations between them while preserving product behavior.",
+      "tags": ["architecture", "migration", "tradeoffs"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "cmodel-strategic-assistant",
+          "sectionId": "architecture-evolution",
+          "note": "Bubble-to-TypeScript/Supabase transition; standalone Next.js assistant boundary choice."
+        },
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "musicbreakr",
+          "sectionId": "data-ingestion",
+          "note": "Moved selected logic to JavaScript/external services and changed client/server boundaries."
+        }
+      ]
+    },
+    {
+      "slug": "agentic-development-process",
+      "title": "Agentic engineering process design",
+      "description": "Establishing team-wide AI-assisted development: shared technical context for humans and agents, agent-based contribution workflows with engineer review, CI/CD and test controls, evals, and task decomposition/model selection by cost and complexity.",
+      "tags": ["ai", "process", "engineering-culture"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "cmodel-strategic-assistant",
+          "sectionId": "agentic-engineering",
+          "note": "Initiated process: shared docs, agent-assisted features, review, testing, CI/CD, evals, model selection."
+        },
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "cmodel-strategic-assistant",
+          "sectionId": "impact",
+          "note": "Expanded development beyond engineering while strengthening documentation, review, testing, delivery controls."
+        }
+      ]
+    },
+    {
+      "slug": "model-independent-ai-architecture",
+      "title": "Model-independent AI architecture",
+      "description": "Separating model/provider configuration from prompts, application state, output shape, validation, and UI so inference can change independently of workflows — treating model choice as configuration, not architecture.",
+      "tags": ["ai", "architecture", "portability"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "reaccord",
+          "sectionId": "model-independent-ai",
+          "note": "Model switching and bring-your-own-AI with provider config decoupled from workflow concerns."
+        }
+      ]
+    },
+    {
+      "slug": "whole-system-reasoning",
+      "title": "Whole-system reasoning",
+      "description": "Reasoning across product behavior, data, APIs, frontend state, permissions, and backend workflows as one system: where data moves, which system owns which responsibility, what can fail, and what tradeoffs result.",
+      "tags": ["systems", "architecture", "ownership"],
+      "evidence": [
+        {
+          "sourceType": "profile",
+          "sourceId": "technical",
+          "sectionId": "strongest-areas",
+          "note": "Names whole-system reasoning explicitly as a strongest area."
+        },
+        {
+          "sourceType": "profile",
+          "sourceId": "technical",
+          "sectionId": "engineering-foundations",
+          "note": "Learned engineering from abstractions downward; thinks first about system behavior and responsibility ownership."
+        }
+      ]
+    },
+    {
+      "slug": "learning-velocity",
+      "title": "Learning velocity in unfamiliar systems",
+      "description": "Rapidly building mental models of unfamiliar technologies via documentation, existing code, and AI-accelerated investigation, then validating implementations — enabling productivity without prior stack familiarity.",
+      "tags": ["learning", "adaptability"],
+      "evidence": [
+        {
+          "sourceType": "profile",
+          "sourceId": "technical",
+          "sectionId": "learning-velocity",
+          "note": "Explicit claim with C++/JUCE as recent evidence of range, not specialization."
+        }
+      ]
+    },
+    {
+      "slug": "consumer-product-design",
+      "title": "Consumer product and interaction design",
+      "description": "Designing and iterating on end-user product experience: interaction models, onboarding, adaptive interfaces derived from user state, and friction reduction based on actual repeated daily use.",
+      "tags": ["design", "ux", "consumer"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "reaccord",
+          "sectionId": "consumer-product-engineering",
+          "note": "Repeated personal use drives information hierarchy, input reduction, friction removal."
+        },
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "reaccord",
+          "sectionId": "adaptive-interface",
+          "note": "Derived daily interface from user state with temporal/derived-state management."
+        }
+      ]
+    },
+    {
+      "slug": "product-analytics",
+      "title": "Product analytics instrumentation",
+      "description": "Instrumenting products across web, server, and native surfaces with event models tied to application behavior, enabling inspection of whether users progress through the core product loop.",
+      "tags": ["analytics", "product"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "reaccord",
+          "sectionId": "analytics",
+          "note": "PostHog across browser, server, and React Native covering onboarding, coaching, failures, exceptions."
+        }
+      ]
+    },
+    {
+      "slug": "production-ownership-under-constraints",
+      "title": "Production ownership for live systems",
+      "description": "Operating and evolving systems serving active customers and real transactions, where changes must preserve existing marketplace, payment, and data-ingestion behavior.",
+      "tags": ["production", "ownership", "reliability"],
+      "evidence": [
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "musicbreakr",
+          "sectionId": "production-ownership",
+          "note": "Worked on live systems with thousands of users and real transactions; changes had to preserve behavior."
+        },
+        {
+          "sourceType": "caseStudy",
+          "sourceId": "musicbreakr",
+          "sectionId": "impact",
+          "note": "Operated payments, delegated access, and ingestion in production at marketplace scale."
+        }
+      ]
+    }
+  ],
+  "corpusVersion": "076284c8c3be0bb2a6fadf05963c24828806fea1c85a5b8883855d6a5dd7ba24"
+}

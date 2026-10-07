@@ -1,131 +1,182 @@
-import { NextResponse } from "next/server";
-import { fetchMutation } from "convex/nextjs";
+import { safeFailureCode } from "@/lib/ai/failures";
+import { fetchMutation, fetchQuery } from "convex/nextjs";
 import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
+import { hashJobDescription } from "@/lib/ai/jd";
 import {
-  normalizeJobDescription,
-  hashJobDescription,
-  MAX_JD_LENGTH,
-  MIN_JD_LENGTH,
-} from "@/lib/ai/jd";
-import { getPublicSourceCorpus } from "@/lib/ai/corpus";
-import {
-  extractJobRequirements,
-  evaluateCandidateFit,
-} from "@/lib/ai/modelCalls";
-import { validateCandidateFit, validateThemeCoverage } from "@/lib/ai/validateCitations";
-
+  readJobRequest,
+  clientKey,
+  analysisSecret,
+  RequestError,
+} from "@/lib/ai/request";
+import { analysisCacheKey } from "@/lib/ai/cache";
+import { getZaiConfig } from "@/lib/ai/model";
+import { runTargeted } from "@/lib/ai/pipeline";
+import { Timings, modelRun, newMetrics } from "@/lib/ai/telemetry";
 export const runtime = "nodejs";
-export const maxDuration = 300; // two sequential model calls
-
-type Body = { jobDescription?: unknown };
+export const maxDuration = 300;
 
 export async function POST(request: Request) {
-  // ---- Input validation ------------------------------------------
-  let body: Body;
-  try {
-    body = (await request.json()) as Body;
-  } catch {
-    return NextResponse.json(
-      { error: "Invalid request body." },
-      { status: 400 },
-    );
-  }
-
-  const raw = typeof body.jobDescription === "string" ? body.jobDescription : "";
-  const jd = normalizeJobDescription(raw);
-
-  if (jd.length < MIN_JD_LENGTH) {
-    return NextResponse.json(
-      {
-        error: `That looks too short to analyze. Paste at least ${MIN_JD_LENGTH} characters of the job description.`,
-      },
-      { status: 400 },
-    );
-  }
-  if (jd.length > MAX_JD_LENGTH) {
-    return NextResponse.json(
-      {
-        error: `Job descriptions are limited to ${MAX_JD_LENGTH.toLocaleString()} characters. Paste the most relevant portion.`,
-      },
-      { status: 400 },
-    );
-  }
-
-  // TODO(next pass, before model execution):
-  //   - per-IP/anonymized rate limiting
-  //   - JD-hash cache reuse (return existing complete analysis for inputHash)
-  //   - global daily spend ceiling check
-
-  // ---- Persist processing row ------------------------------------
-  const inputHash = await hashJobDescription(jd);
-  const id = await fetchMutation(api.jobAnalyses.createProcessingAnalysis, {
-    inputHash,
-    rawJobDescription: jd,
-  });
-
-  try {
-    // ---- Stage A: extraction (JD only) ---------------------------
-    const extractedJob = await extractJobRequirements(jd);
-
-    // ---- Corpus: published sources only --------------------------
-    const sources = await getPublicSourceCorpus();
-
-    // ---- Stage B: advocacy evaluation ----------------------------
-    const fit = await evaluateCandidateFit({ extractedJob, sources });
-
-    // ---- Deterministic theme coverage ----------------------------
-    // Every extracted requirement must be covered by exactly one theme
-    // — enforced in code, not trusted to the prompt (matters especially
-    // when a malformed evaluation went through the JSON-repair pass).
-    validateThemeCoverage(fit, extractedJob.requirements);
-
-    // ---- Server-side citation validation -------------------------
-    const validated = validateCandidateFit(fit, sources);
-
-    // ---- Persist completed analysis ------------------------------
-    await fetchMutation(api.jobAnalyses.markAnalysisComplete, {
-      id,
-      jobTitle: extractedJob.jobTitle ?? undefined,
-      company: extractedJob.company ?? undefined,
-      overallFit: validated.overallAssessment.fit,
-      overallNarrative: validated.overallAssessment.narrative,
-      themes: validated.themes.map((t) => ({
-        id: t.id,
-        title: t.title,
-        fit: t.fit,
-        narrative: t.narrative,
-        requirementIds: t.requirementIds,
-        citations: t.citations,
-      })),
-      materialGaps: validated.materialGaps.map((g) => ({
-        title: g.title,
-        narrative: g.narrative,
-        citations: g.citations,
-      })),
-      interviewQuestions: validated.interviewQuestions,
-    });
-
-    return NextResponse.json({ id });
-  } catch (error) {
-    // Log useful detail server-side; expose nothing sensitive.
-    // JSON.stringify inline so Next's dev log formatter can't drop it.
-    console.error(
-      "[analyze] analysis failed:",
-      JSON.stringify({
-        analysisId: id,
+  return modelRun.run(newMetrics(), async () => {
+    const timing = new Timings();
+    let id: Id<"jobAnalyses"> | undefined,
+      lease: Id<"analysisLeases"> | undefined;
+    let outcome = "failed",
+      failed = true;
+    try {
+      const secret = analysisSecret();
+      const admission = await timing.measure("rateLimit", () =>
+        fetchMutation(api.analysisGuards.admitRequest, {
+          secret,
+          clientKey: clientKey(request),
+        }),
+      );
+      if (!admission.ok) {
+        outcome = "rate-limit";
+        return Response.json(
+          { error: "Too many requests. Please try again later." },
+          {
+            status: 429,
+            headers: {
+              "Retry-After": String(
+                Math.max(1, Math.ceil(admission.retryAfter / 1000)),
+              ),
+            },
+          },
+        );
+      }
+      const jd = await timing.measure("parseNormalize", () =>
+        readJobRequest(request),
+      );
+      const inputHash = await timing.measure("hash", () =>
+        hashJobDescription(jd),
+      );
+      const snapshot = await timing.measure("snapshot", () =>
+        fetchQuery(api.capabilities.getSnapshot, { secret }),
+      );
+      const model = getZaiConfig();
+      const cacheKey = await analysisCacheKey(
         inputHash,
-        error: error instanceof Error ? error.message : String(error),
-      }),
-    );
-    await fetchMutation(api.jobAnalyses.markAnalysisFailed, {
-      id,
-      errorMessage:
-        error instanceof Error ? error.message.slice(0, 500) : "Unknown error",
-    }).catch((e) => console.error("[analyze] failed to mark failed", e));
-
-    return NextResponse.json(
-      { error: "Analysis failed. Please try again." },
-      { status: 500 },
-    );
-  }
+        snapshot.version,
+        model.model,
+        model.reasoningEffort,
+      );
+      const cached = await timing.measure("cache", () =>
+        fetchQuery(api.analysisGuards.cached, { secret, cacheKey }),
+      );
+      if (cached) {
+        outcome = "cache-hit";
+        return Response.json({ id: cached });
+      }
+      if (!snapshot.capabilities.length)
+        throw new RequestError(
+          503,
+          "Analysis is being prepared. Please check back soon.",
+        );
+      const reservation = await timing.measure("createReserve", () =>
+        fetchMutation(api.analysisGuards.reserve, {
+          secret,
+          cacheKey,
+          inputHash,
+        }),
+      );
+      if (
+        reservation.status === "cached" ||
+        reservation.status === "processing"
+      ) {
+        outcome = reservation.status;
+        return Response.json(
+          { id: reservation.id },
+          { status: reservation.status === "processing" ? 202 : 200 },
+        );
+      }
+      if (
+        reservation.status !== "reserved" ||
+        !reservation.id ||
+        !reservation.lease
+      ) {
+        outcome = reservation.status;
+        return Response.json(
+          {
+            error:
+              "Analysis is temporarily unavailable. Please try again later.",
+          },
+          {
+            status: 503,
+            headers: {
+              "Retry-After": String(
+                Math.max(1, Math.ceil(reservation.retryAfter / 1000)),
+              ),
+            },
+          },
+        );
+      }
+      id = reservation.id;
+      lease = reservation.lease;
+      const { extractedJob, validated } = await runTargeted({
+        jd,
+        capabilities: snapshot.capabilities,
+        timing,
+        retrieve: (ids) =>
+          fetchQuery(api.capabilities.retrieve, {
+            secret,
+            version: snapshot.version,
+            capabilityIds: ids as Id<"capabilities">[],
+          }),
+      });
+      // Refuse to publish a result against evidence that changed during synthesis.
+      const current = await fetchQuery(api.capabilities.getSnapshot, {
+        secret,
+      });
+      if (current.version !== snapshot.version)
+        throw new Error("Evidence changed");
+      await timing.measure("persist", () =>
+        fetchMutation(api.jobAnalyses.markAnalysisComplete, {
+          secret,
+          id: id!,
+          jobTitle: extractedJob.jobTitle ?? undefined,
+          company: extractedJob.company ?? undefined,
+          overallFit: validated.overallAssessment.fit,
+          overallNarrative: validated.overallAssessment.narrative,
+          themes: validated.themes,
+          materialGaps: validated.materialGaps,
+          interviewQuestions: validated.interviewQuestions,
+        }),
+      );
+      failed = false;
+      outcome = "complete";
+      return Response.json({ id });
+    } catch (error) {
+      outcome = safeFailureCode(error);
+      if (id)
+        await fetchMutation(api.jobAnalyses.markAnalysisFailed, {
+          secret: analysisSecret(),
+          id,
+          errorMessage: "analysis_failed",
+        }).catch(() => {});
+      if (error instanceof RequestError) {
+        outcome = `request-${error.status}`;
+        return Response.json(
+          { error: error.message },
+          { status: error.status },
+        );
+      }
+      return Response.json(
+        {
+          error: "Analysis is temporarily unavailable. Please try again later.",
+        },
+        { status: 503 },
+      );
+    } finally {
+      if (lease)
+        await fetchMutation(api.analysisGuards.release, {
+          secret: analysisSecret(),
+          lease,
+          failed,
+        }).catch(() => {
+          console.error("[analyze] lease release failed");
+        });
+      timing.finish(outcome);
+    }
+  });
 }

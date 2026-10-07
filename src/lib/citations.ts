@@ -16,9 +16,9 @@ import type { Citation } from "./analysis";
 export function resolveCitationUrl(citation: Citation): string | null {
   switch (citation.sourceType) {
     case "caseStudy":
-      return `/work/${citation.sourceId}#${citation.sectionId}`;
+      return `/work/${encodeURIComponent(citation.sourceId)}#${encodeURIComponent(citation.sectionId)}`;
     case "profile":
-      return `/profile/${citation.sourceId}#${citation.sectionId}`;
+      return `/profile/${encodeURIComponent(citation.sourceId)}#${encodeURIComponent(citation.sectionId)}`;
     default:
       return null;
   }

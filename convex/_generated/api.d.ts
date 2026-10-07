@@ -9,11 +9,16 @@
  */
 
 import type * as admin from "../admin.js";
+import type * as analysisGuards from "../analysisGuards.js";
+import type * as capabilities from "../capabilities.js";
 import type * as caseStudies from "../caseStudies.js";
+import type * as evidence from "../evidence.js";
 import type * as jobAnalyses from "../jobAnalyses.js";
+import type * as portfolioCaseStudy from "../portfolioCaseStudy.js";
 import type * as profileDocuments from "../profileDocuments.js";
 import type * as seed from "../seed.js";
 import type * as seedData from "../seedData.js";
+import type * as serverAuth from "../serverAuth.js";
 import type * as testHelpers from "../testHelpers.js";
 
 import type {
@@ -24,11 +29,16 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   admin: typeof admin;
+  analysisGuards: typeof analysisGuards;
+  capabilities: typeof capabilities;
   caseStudies: typeof caseStudies;
+  evidence: typeof evidence;
   jobAnalyses: typeof jobAnalyses;
+  portfolioCaseStudy: typeof portfolioCaseStudy;
   profileDocuments: typeof profileDocuments;
   seed: typeof seed;
   seedData: typeof seedData;
+  serverAuth: typeof serverAuth;
   testHelpers: typeof testHelpers;
 }>;
 
@@ -58,4 +68,6 @@ export declare const internal: FilterApi<
   FunctionReference<any, "internal">
 >;
 
-export declare const components: {};
+export declare const components: {
+  rateLimiter: import("@convex-dev/rate-limiter/_generated/component.js").ComponentApi<"rateLimiter">;
+};

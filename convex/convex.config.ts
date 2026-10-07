@@ -1,4 +1,5 @@
 import { defineApp } from "convex/server";
+import rateLimiter from "@convex-dev/rate-limiter/convex.config.js";
 import { v } from "convex/values";
 
 const app = defineApp({
@@ -8,6 +9,12 @@ const app = defineApp({
      * (dev or prod) ONLY while bootstrapping, then remove it.
      * See convex/admin.ts and README.
      */
+    ANALYSIS_SERVER_SECRET: v.optional(v.string()),
+    ANALYSIS_BURST: v.optional(v.string()),
+    ANALYSIS_HOURLY: v.optional(v.string()),
+    ANALYSIS_DAILY_CALLS: v.optional(v.string()),
+    ANALYSIS_CONCURRENCY: v.optional(v.string()),
+    ANALYSIS_FAILURE_LIMIT: v.optional(v.string()),
     ADMIN_BOOTSTRAP_ENABLED: v.optional(v.string()),
 
     /**
@@ -18,4 +25,5 @@ const app = defineApp({
   },
 });
 
+app.use(rateLimiter);
 export default app;
