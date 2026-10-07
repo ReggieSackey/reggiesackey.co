@@ -5,6 +5,7 @@ import { convexTest } from "convex-test";
 import rateLimiterTest from "@convex-dev/rate-limiter/test";
 import schema from "./schema";
 import { api } from "./_generated/api";
+import { CANONICAL_CAPABILITIES } from "./canonicalCapabilities";
 const modules = import.meta.glob("./**/*.ts");
 const secret = "s".repeat(40),
   clientKey = "a".repeat(64);
@@ -58,6 +59,64 @@ const proposal = {
     },
   ],
 };
+
+async function canonicalCorpus(t: ReturnType<typeof setup>) {
+  await t.run(async (ctx) => {
+    const grouped = new Map<
+      string,
+      { sourceType: "caseStudy" | "profile"; sections: Set<string> }
+    >();
+    for (const capability of CANONICAL_CAPABILITIES) {
+      for (const ref of capability.evidence) {
+        const key = `${ref.sourceType}:${ref.sourceId}`;
+        const group = grouped.get(key) ?? {
+          sourceType: ref.sourceType,
+          sections: new Set<string>(),
+        };
+        group.sections.add(ref.sectionId);
+        grouped.set(key, group);
+      }
+    }
+    for (const [key, group] of grouped) {
+      const sourceId = key.slice(key.indexOf(":") + 1);
+      if (group.sourceType === "caseStudy") {
+        const parent = await ctx.db.insert("caseStudies", {
+          slug: sourceId,
+          title: sourceId,
+          companyOrProject: "Test",
+          summary: "Canonical test source",
+          published: true,
+          createdAt: 1,
+          updatedAt: 1,
+        });
+        let order = 0;
+        for (const sectionId of group.sections)
+          await ctx.db.insert("caseStudySections", {
+            caseStudyId: parent,
+            slug: sectionId,
+            heading: sectionId,
+            body: `Published evidence for ${sectionId}.`,
+            order: order++,
+          });
+      } else {
+        const parent = await ctx.db.insert("profileDocuments", {
+          type: sourceId,
+          title: sourceId,
+          published: true,
+        });
+        let order = 0;
+        for (const sectionId of group.sections)
+          await ctx.db.insert("profileSections", {
+            profileDocumentId: parent,
+            slug: sectionId,
+            heading: sectionId,
+            body: `Published evidence for ${sectionId}.`,
+            order: order++,
+          });
+      }
+    }
+  });
+}
 
 test("anonymous callers cannot access registry administration or analysis writes", async () => {
   const t = setup();
@@ -175,6 +234,76 @@ test("proposal references, stale approvals, explicit merge, and targeted retriev
       capabilityIds: [snapshot.capabilities[0].id],
     }),
   ).rejects.toThrow("No published evidence");
+});
+test("canonical registry sync validates evidence and is exact and idempotent", async () => {
+  const t = setup();
+  await t.run((ctx) =>
+    ctx.db.insert("users", {
+      authId: "admin",
+      email: "admin@example.test",
+      role: "admin",
+    }),
+  );
+  const admin = t.withIdentity({ subject: "admin" });
+
+  await expect(
+    admin.mutation(api.capabilities.syncCanonicalRegistry, {}),
+  ).rejects.toThrow("Invalid published evidence reference");
+  expect((await admin.query(api.capabilities.adminList, {})).capabilities).toHaveLength(0);
+
+  await canonicalCorpus(t);
+  await t.run(async (ctx) => {
+    await ctx.db.insert("capabilities", {
+      slug: "obsolete-capability",
+      title: "Obsolete",
+      description: "Should be deactivated by exact canonical sync.",
+      tags: [],
+      active: true,
+      createdAt: 1,
+      updatedAt: 1,
+    });
+  });
+
+  const first = await admin.mutation(api.capabilities.syncCanonicalRegistry, {});
+  expect(first).toMatchObject({
+    inserted: 12,
+    updated: 0,
+    unchanged: 0,
+    deactivated: 1,
+    activeCount: 12,
+  });
+  const second = await admin.mutation(api.capabilities.syncCanonicalRegistry, {});
+  expect(second).toMatchObject({
+    inserted: 0,
+    updated: 0,
+    unchanged: 12,
+    deactivated: 0,
+    activeCount: 12,
+  });
+
+  const active = (await admin.query(api.capabilities.adminList, {})).capabilities;
+  expect(active).toHaveLength(12);
+  expect(active.map(({ slug }) => slug).sort()).toEqual(
+    CANONICAL_CAPABILITIES.map(({ slug }) => slug).sort(),
+  );
+  expect(new Set(active.map(({ slug }) => slug)).size).toBe(12);
+  for (const capability of active) {
+    const canonical = CANONICAL_CAPABILITIES.find(
+      ({ slug }) => slug === capability.slug,
+    );
+    expect(capability).toMatchObject({
+      title: canonical?.title,
+      description: canonical?.description,
+      tags: canonical?.tags,
+    });
+    expect(capability.evidence).toEqual(
+      [...(canonical?.evidence ?? [])].sort((a, b) =>
+        JSON.stringify([a.sourceType, a.sourceId, a.sectionId]).localeCompare(
+          JSON.stringify([b.sourceType, b.sourceId, b.sectionId]),
+        ),
+      ),
+    );
+  }
 });
 test("shared burst and hourly limits survive separate calls", async () => {
   vi.stubEnv("ANALYSIS_BURST", "2");

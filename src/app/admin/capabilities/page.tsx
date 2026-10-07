@@ -13,7 +13,7 @@ export default function CapabilitiesPage() {
   );
   const review = useMutation(api.capabilities.review);
   const deactivate = useMutation(api.capabilities.deactivate);
-  const stageCanonical = useMutation(api.capabilities.stageCanonicalBootstrap);
+  const syncCanonical = useMutation(api.capabilities.syncCanonicalRegistry);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
@@ -59,17 +59,21 @@ export default function CapabilitiesPage() {
         onClick={async () => {
           setBusy(true);
           try {
-            const result = await stageCanonical({});
-            setMessage(`${result.staged} canonical capabilities staged for review; ${result.skipped} already pending.`);
+            const result = await syncCanonical({});
+            setMessage(
+              `Canonical registry synchronized: ${result.activeCount} active (${result.inserted} added, ${result.updated} updated, ${result.unchanged} unchanged, ${result.deactivated} noncanonical deactivated).`,
+            );
           } catch {
-            setMessage("Unable to stage the canonical registry. Verify published evidence references.");
+            setMessage(
+              "Unable to synchronize the canonical registry. Verify published evidence references.",
+            );
           } finally {
             setBusy(false);
           }
         }}
         className="ml-3 rounded border border-neutral-300 px-4 py-2 disabled:opacity-50"
       >
-        Stage canonical registry
+        Sync canonical registry
       </button>
       <p role="status" className="text-sm">
         {message}

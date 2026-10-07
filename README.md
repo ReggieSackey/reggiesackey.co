@@ -25,7 +25,7 @@ node scripts/configure-dev-analysis.mjs
 ```
 
 5. Bootstrap the first administrator: temporarily set `ADMIN_BOOTSTRAP_ENABLED=1` on your dev Convex deployment, visit `/admin`, sign in through WorkOS, and use **Become admin**. Immediately remove the flag. Identity comes from the verified session, not a supplied email. In production, keep bootstrap disabled outside the controlled initial setup window.
-6. Add your published source content, then visit `/admin/capabilities` to generate and review the registry. The new pipeline fails closed with 503 until active capabilities exist. Production rollout must include registry preparation before switching the public route.
+6. Add your published source content, then visit `/admin/capabilities` and synchronize the source-controlled canonical registry. The pipeline fails closed with 503 until active capabilities exist. Production rollout must include this reviewed synchronization before switching the public route.
 
 ## Candidate content and fork setup
 
@@ -48,6 +48,8 @@ The generic application engine does not require a taxonomy of particular technol
 ## Capability administration
 
 `/admin/capabilities` generates proposals from current published sections. Generation is admin-only and uses the same daily/concurrency budget as public analysis. Proposals are stored as pending, leaving the active registry untouched.
+
+The 12 entries in `convex/canonicalCapabilities.ts` are manually reviewed source-controlled records. **Sync canonical registry** validates their published evidence references and idempotently makes the active runtime registry match them. This operation does not approve or otherwise consume generated proposals.
 
 Inspect and edit the proposal JSON, including exact evidence references. Approve a new concept, reject it, or select an existing capability for a merge. A merge preloads the union of both evidence sets; approval explicitly replaces the target with the edited fields shown. Deactivation removes a concept from matching. A rejected proposal does not affect the active registry. Approval revalidates published source identities and rejects stale corpus versions. Regenerate after material source edits; approval never copies source bodies into relationships.
 
@@ -82,7 +84,7 @@ Complete requirement coverage, `strong / relevant / gap`, hiring themes, materia
 
 The effective key hashes normalized JD + exact published-content/active-registry fingerprint + candidate configuration + model/reasoning settings + `ANALYSIS_CONTRACT_VERSION`. Bump that constant when prompt, schema, matching, retrieval, or validation behavior changes. Full bodies are read inside a bounded Convex snapshot to catch direct dashboard edits; only selected evidence is returned to the synthesis path. No timestamp-maintenance discipline is required for correctness.
 
-An optional `jobAnalyses.cacheKey` and compound cache/status index are additive. Old analyses are not reused automatically. No factual-data backfill is required; capabilities start empty and require reviewed population. Existing result URLs remain historical snapshots. New rows do not persist raw JDs; existing rows may still hold them.
+An optional `jobAnalyses.cacheKey` and compound cache/status index are additive. Old analyses are not reused automatically. No factual-data backfill is required; synchronize the reviewed canonical registry before serving analysis traffic. Existing result URLs remain historical snapshots. New rows do not persist raw JDs; existing rows may still hold them.
 
 ## Limits and telemetry
 
@@ -124,7 +126,7 @@ Preserve earlier JSON reports before rerunning; `BENCHMARK_OUTPUT` selects a dif
 
 1. Review code, source content, dependency/credential scans, and `docs/security.md`. Never publish private logs, real env files, database exports, or old JD rows with the repository.
 2. Deploy the additive Convex schema/component changes to the intended production project; configure WorkOS and independent production analysis credentials/thresholds there and on Vercel.
-3. Keep the existing frontend deployment available while preparing and approving the capability registry through a protected preview pointed at the intended deployment. Do not switch anonymous traffic to a route with an empty registry.
+3. Keep the existing frontend deployment available while synchronizing the canonical capability registry through a protected preview pointed at the intended deployment. Do not switch anonymous traffic to a route with an empty registry.
 4. Add the portfolio case study through a reviewed, scoped content import. Generate capabilities **after** intended content changes. No production content is changed by this code-only update.
 5. Deploy the frontend; use direct trusted Vercel ingress, configure firewall controls, and smoke-test one valid analysis, cache reuse, and rejection paths. Check that the frontend and Convex share the server credential.
 6. Observe validation failures, repair frequency, model latency, quota/circuit events, and spend. Adjust limits deliberately. Rotate secrets, disable bootstrap/dev seed, and adopt result/client-key retention rules.
