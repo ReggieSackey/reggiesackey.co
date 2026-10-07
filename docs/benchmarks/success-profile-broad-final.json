@@ -1,0 +1,247 @@
+{
+  "measuredAt": "2026-10-07T20:42:11.756Z",
+  "scope": "Live model + validation; in-memory proposed registry and canonical evidence, excludes HTTP/persistence/Convex targeted query. No registry approval performed.",
+  "corpusVersion": "076284c8c3be0bb2a6fadf05963c24828806fea1c85a5b8883855d6a5dd7ba24",
+  "results": [
+    {
+      "name": "forward-deployed-technical",
+      "match": 9040,
+      "retrieve": 0,
+      "plan": 4,
+      "synthesis": 8652,
+      "coverage": 0,
+      "citations": 1,
+      "totalMs": 17699,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 10902,
+      "outputTokens": 2756,
+      "modelMs": 17680.479166999998,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "ambiguous-problem-to-working-system",
+          "applied-ai-systems",
+          "ai-enabled-process-design",
+          "integration-workflow-engineering",
+          "production-problem-solving",
+          "cross-boundary-execution",
+          "whole-system-reasoning",
+          "rapid-technical-adaptation"
+        ],
+        "evidenceSections": 23,
+        "evidenceCharacters": 18030,
+        "unmatchedRequirementIds": [
+          "req_10"
+        ],
+        "capabilities": [
+          "Ambiguous problem → working system",
+          "Applied AI systems",
+          "AI-enabled process design",
+          "Integration & workflow engineering",
+          "Production problem solving",
+          "Cross-boundary execution",
+          "Whole-system reasoning",
+          "Rapid technical adaptation"
+        ]
+      },
+      "failureStage": ""
+    },
+    {
+      "name": "technical-product-manager",
+      "match": 8253,
+      "retrieve": 0,
+      "plan": 1,
+      "synthesis": 8322,
+      "coverage": 0,
+      "citations": 0,
+      "totalMs": 16577,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 10598,
+      "outputTokens": 2543,
+      "modelMs": 16571.654209,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "ambiguous-problem-to-working-system",
+          "zero-to-one-product-building",
+          "product-interaction-judgment",
+          "cross-boundary-execution",
+          "whole-system-reasoning",
+          "integration-workflow-engineering",
+          "data-state-modeling",
+          "production-problem-solving"
+        ],
+        "evidenceSections": 20,
+        "evidenceCharacters": 15558,
+        "unmatchedRequirementIds": [],
+        "capabilities": [
+          "Ambiguous problem → working system",
+          "Zero-to-one product building",
+          "Product & interaction judgment",
+          "Cross-boundary execution",
+          "Whole-system reasoning",
+          "Integration & workflow engineering",
+          "Data & state modeling",
+          "Production problem solving"
+        ]
+      },
+      "failureStage": ""
+    },
+    {
+      "name": "automation-systems",
+      "match": 7511,
+      "retrieve": 0,
+      "plan": 1,
+      "synthesis": 7753,
+      "coverage": 0,
+      "citations": 0,
+      "totalMs": 15266,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 9554,
+      "outputTokens": 2370,
+      "modelMs": 15260.690083999994,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "ambiguous-problem-to-working-system",
+          "integration-workflow-engineering",
+          "data-state-modeling",
+          "production-problem-solving",
+          "zero-to-one-product-building",
+          "whole-system-reasoning",
+          "platform-extension-abstraction-escape",
+          "rapid-technical-adaptation"
+        ],
+        "evidenceSections": 22,
+        "evidenceCharacters": 16495,
+        "unmatchedRequirementIds": [],
+        "capabilities": [
+          "Ambiguous problem → working system",
+          "Integration & workflow engineering",
+          "Data & state modeling",
+          "Production problem solving",
+          "Zero-to-one product building",
+          "Whole-system reasoning",
+          "Platform extension & abstraction escape",
+          "Rapid technical adaptation"
+        ]
+      },
+      "failureStage": ""
+    },
+    {
+      "name": "deep-infrastructure",
+      "match": 8277,
+      "retrieve": 0,
+      "plan": 1,
+      "synthesis": 15767,
+      "coverage": 0,
+      "citations": 0,
+      "totalMs": 24047,
+      "calls": 3,
+      "repairs": 1,
+      "inputTokens": 11926,
+      "outputTokens": 3670,
+      "modelMs": 24042.228417000006,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "production-problem-solving",
+          "whole-system-reasoning",
+          "ambiguous-problem-to-working-system",
+          "cross-boundary-execution",
+          "rapid-technical-adaptation"
+        ],
+        "evidenceSections": 16,
+        "evidenceCharacters": 12399,
+        "unmatchedRequirementIds": [
+          "req_9"
+        ],
+        "capabilities": [
+          "Production problem solving",
+          "Whole-system reasoning",
+          "Ambiguous problem → working system",
+          "Cross-boundary execution",
+          "Rapid technical adaptation"
+        ]
+      },
+      "failureStage": ""
+    },
+    {
+      "name": "credentialed-profession",
+      "match": 4811,
+      "retrieve": 0,
+      "plan": 0,
+      "synthesis": 3786,
+      "coverage": 0,
+      "citations": 0,
+      "totalMs": 8599,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 2874,
+      "outputTokens": 964,
+      "modelMs": 8595.519749999992,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [],
+        "evidenceSections": 1,
+        "evidenceCharacters": 655,
+        "unmatchedRequirementIds": [
+          "req_1",
+          "req_2",
+          "req_3",
+          "req_4",
+          "req_5"
+        ],
+        "capabilities": []
+      },
+      "failureStage": ""
+    },
+    {
+      "name": "emerging-role",
+      "match": 8594,
+      "retrieve": 0,
+      "plan": 1,
+      "synthesis": 7866,
+      "coverage": 0,
+      "citations": 0,
+      "totalMs": 16462,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 9244,
+      "outputTokens": 2388,
+      "modelMs": 16458.58825100001,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "ai-enabled-process-design",
+          "ambiguous-problem-to-working-system",
+          "applied-ai-systems",
+          "zero-to-one-product-building",
+          "integration-workflow-engineering",
+          "production-problem-solving",
+          "product-interaction-judgment",
+          "whole-system-reasoning"
+        ],
+        "evidenceSections": 25,
+        "evidenceCharacters": 19623,
+        "unmatchedRequirementIds": [
+          "req_7"
+        ],
+        "capabilities": [
+          "AI-enabled process design",
+          "Ambiguous problem → working system",
+          "Applied AI systems",
+          "Zero-to-one product building",
+          "Integration & workflow engineering",
+          "Production problem solving",
+          "Product & interaction judgment",
+          "Whole-system reasoning"
+        ]
+      },
+      "failureStage": ""
+    }
+  ]
+}

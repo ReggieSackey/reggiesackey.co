@@ -35,13 +35,22 @@ An administrator generates proposals from published material, edits their descri
     },
     {
       slug: "targeted-analysis",
-      heading: "Targeted analysis and cache compatibility",
+      heading: "Analysis architecture and cache compatibility",
       order: 3,
-      body: `The original path extracted requirements with one GLM call and sent the entire published corpus to a second call. The current path combines structured extraction and capability matching in a small decision call, resolves evidence in application code, then builds a typed synthesis plan before one prose-generation call. The application owns requirement allocation, theme titles, fit values, material-gap identification, and per-theme citation allowlists; the model writes only narratives, citation-ID selections, and interview questions.
+      body: `The analysis architecture evolved in four measured iterations:
 
-The matcher remains replaceable through server configuration. The retained Z.AI implementation is the safe default; an optional Jev implementation uses TypeSafe's typed decision API and maps its answers into the same validated internal decision contract. No vector database is required.
+- v1: job description → requirements → full corpus → generative evaluation.
+- v2: job description → capability matching → targeted evidence → generative evaluation.
+- v3: job description → capability matching → deterministic synthesis plan → reduced prose generation.
+- Current: job description → success profile plus requirements → role-relevant demonstrated capabilities → targeted canonical evidence → deterministic value-oriented synthesis plan → reduced prose generation → deterministic validation.
+
+The current decision contract identifies the organization's mission, concrete work, success drivers, and conservative hard constraints above the detailed requirement list. Matching records how central each demonstrated capability is to that success profile. The application owns requirement allocation, capability combinations, theme titles, fit values, material constraints, and citation identities; the model writes only the overall narrative, planned theme narratives, and interview questions.
+
+The reviewed registry contains durable patterns of action rather than job families or technologies. Administrators can explicitly stage the canonical registry as proposals and approve or merge each record; the bootstrap never overwrites the active registry. Future proposal generation asks whether new evidence establishes a missing durable capability or strengthens an existing one, preferring reviewed merges over ontology replacement. No vector database is required.
 
 On three synthetic roles, the final GLM-5.3-FlashX path completed in 14.0, 15.3, and 20.8 seconds versus 58.4, 62.1, and 55.0 seconds for the retained targeted baseline. Synthesis fell from 43–52 seconds to 8.7–9.5 seconds, and all three final runs passed deterministic coverage and grounding checks without repair. These are development benchmark measurements over an in-memory reviewed proposal registry; they exclude HTTP admission, persistence, and rendering.
+
+Adding the richer success-profile decision contract increased the measured totals to 19.5 seconds for Product, 16.3 seconds for AI applications, and 22.3 seconds for Infrastructure in the consolidated final run. All three passed deterministic coverage and grounding, while Product and Infrastructure used the single allowed structured-output repair. A six-role broader sample completed between 8.6 and 24.0 seconds; it found strong value themes for an unfamiliar agent-workflow title while keeping credentialed accounting and deep infrastructure as overall gaps.
 
 Completed results are reused only when the normalized JD, published content, active capability relationships, model settings, candidate configuration, and analysis contract match. Content fingerprints cover section bodies directly, so a profile edit invalidates stale analyses without depending on manually updated timestamps.`,
     },

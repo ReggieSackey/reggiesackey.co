@@ -10,6 +10,7 @@
 
 import type * as admin from "../admin.js";
 import type * as analysisGuards from "../analysisGuards.js";
+import type * as canonicalCapabilities from "../canonicalCapabilities.js";
 import type * as capabilities from "../capabilities.js";
 import type * as caseStudies from "../caseStudies.js";
 import type * as evidence from "../evidence.js";
@@ -30,6 +31,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   admin: typeof admin;
   analysisGuards: typeof analysisGuards;
+  canonicalCapabilities: typeof canonicalCapabilities;
   capabilities: typeof capabilities;
   caseStudies: typeof caseStudies;
   evidence: typeof evidence;

@@ -1,0 +1,281 @@
+{
+  "job": "product",
+  "successProfile": {
+    "mission": "Ship production consumer web features for a learning product by turning ambiguous customer needs into reliable React/TypeScript applications.",
+    "work": [
+      {
+        "id": "work_1",
+        "activity": "Own features end-to-end from ambiguous customer needs through production delivery",
+        "importance": "core"
+      },
+      {
+        "id": "work_2",
+        "activity": "Build consumer web applications in React and TypeScript",
+        "importance": "core"
+      },
+      {
+        "id": "work_3",
+        "activity": "Model application data and design application state",
+        "importance": "important"
+      },
+      {
+        "id": "work_4",
+        "activity": "Integrate external APIs into product workflows",
+        "importance": "important"
+      },
+      {
+        "id": "work_5",
+        "activity": "Investigate and resolve production failures",
+        "importance": "important"
+      },
+      {
+        "id": "work_6",
+        "activity": "Collaborate with designers and engineers across product, design, and implementation",
+        "importance": "important"
+      }
+    ],
+    "successDrivers": [
+      {
+        "id": "driver_1",
+        "driver": "Features actually reach production and work in real use, not just demos",
+        "importance": "core"
+      },
+      {
+        "id": "driver_2",
+        "driver": "Progress on incompletely specified customer needs without waiting for full requirements",
+        "importance": "core"
+      },
+      {
+        "id": "driver_3",
+        "driver": "Correct, coherent application data and state as the product evolves",
+        "importance": "important"
+      },
+      {
+        "id": "driver_4",
+        "driver": "Rapid iteration without accumulating incoherent system behavior",
+        "importance": "important"
+      },
+      {
+        "id": "driver_5",
+        "driver": "Effective collaboration across design and engineering boundaries",
+        "importance": "important"
+      }
+    ],
+    "hardConstraints": []
+  },
+  "extractedJob": {
+    "jobTitle": "Senior Product Engineer",
+    "company": "Example Learning",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Build consumer web applications with React",
+        "importance": "core",
+        "category": "frontend"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Build consumer web applications with TypeScript",
+        "importance": "core",
+        "category": "frontend"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Own features from ambiguous customer needs through production delivery",
+        "importance": "core",
+        "category": "ownership"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Model application data",
+        "importance": "core",
+        "category": "data"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Integrate external APIs",
+        "importance": "important",
+        "category": "integration"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Investigate production failures",
+        "importance": "important",
+        "category": "reliability"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Collaborate with designers and engineers",
+        "importance": "important",
+        "category": "collaboration"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Experience with relational databases",
+        "importance": "important",
+        "category": "data"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Rapid iteration",
+        "importance": "important",
+        "category": "ways-of-working"
+      },
+      {
+        "id": "req_10",
+        "requirement": "Familiarity with education products",
+        "importance": "preferred",
+        "category": "domain"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "gap",
+      "narrative": "Reg Sackey-Addo is a product engineer whose career is built around exactly what this role needs: turning vague customer needs into production features that actually work. At CModel he owned AI features, integrations, and cross-system workflows from product definition through production; independently he built Reaccord, a consumer behavior-change product, end to end in Next.js, TypeScript, React Native, and Convex; and at MusicBreakr he kept a two-sided marketplace serving thousands of paying users alive in production. The one material gap is direct experience in education products specifically, but the underlying work — ambiguous problem-solving, consumer interfaces, data modeling, integration, and production reliability — is squarely on display across three shipped products."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Own features end-to-end from ambiguous customer needs through production delivery",
+        "fit": "gap",
+        "narrative": "End-to-end ownership under ambiguity is the defining pattern of Reg's career, even though education products specifically are new territory. At CModel he owned an email-to-decision-intelligence workflow from product definition through production and worked across the product's move from Bubble prototypes to a TypeScript/Supabase stack, deciding what to preserve and what to redesign. He built Reaccord alone as a consumer product — interaction model, onboarding, visual system, and daily-use workflows included — which is the strongest possible evidence he can determine what to build, not just how. The domain is a gap, but his track record of forming product judgment quickly in unfamiliar problem spaces suggests it is a shallow one.",
+        "requirementIds": [
+          "req_1",
+          "req_3",
+          "req_7",
+          "req_10"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "overview"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Build consumer web applications in React and TypeScript",
+        "fit": "strong",
+        "narrative": "Reg's core stack is a direct match: he builds consumer applications in TypeScript, React, and Next.js across every recent project, from CModel's standalone strategic assistant to Reaccord's Next.js web and Expo/React Native clients in a Turborepo monorepo with shared TypeScript contracts. His iteration speed is evidenced by repeated zero-to-one delivery and an agentic development process he initiated to let a small team ship faster with engineer review, automated testing, and CI/CD controls. Critically, his builds reach real production use, not demos.",
+        "requirementIds": [
+          "req_2",
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "overview"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Model application data and design application state",
+        "fit": "relevant",
+        "narrative": "Reg models data with an explicit design philosophy rather than by default. On Reaccord he separated durable domain relationships (goals, plans, actions, history) from fast-changing generated state, validating at the application boundary with shared Zod contracts so the product could evolve without losing correctness guarantees. His MusicBreakr work required mapping heterogeneous external platform data into a coherent internal model of creators, promotions, and campaigns supporting performance rollups. He has worked with Supabase and Postgres alongside Convex, giving him both relational and flexible-persistence fluency.",
+        "requirementIds": [
+          "req_4",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "flexible-backend"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "behavior-model"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Integrate external APIs into product workflows",
+        "fit": "strong",
+        "narrative": "API integration is one of Reg's clearest strengths. At CModel he implemented and maintained OAuth-secured integrations across Microsoft Graph, SharePoint, Teams, DocuSign, HubSpot, Monday, Harvest, Freshdesk, and Google services, including token lifecycle and error handling. At MusicBreakr he built attribution ingestion across Instagram, TikTok, YouTube, and Twitter/X under real-world constraints — differing schemas, rate limits, and quotas — plus Stripe Connect for marketplace payments. He treats integrations as system-boundary problems, mapping external state into the application model rather than treating API calls as isolated units.",
+        "requirementIds": [
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Investigate and resolve production failures",
+        "fit": "strong",
+        "narrative": "Reg has debugged live production systems with paying customers on the line. At MusicBreakr, failures routinely crossed application state, backend workflows, payment systems, and third-party APIs, and fixes had to preserve existing marketplace and payment behavior. His CModel integration experience reinforces the same discipline: diagnosing expired authorizations, undocumented API behavior, and disagreement between local and remote state by reasoning across both systems at once. This is exactly the reliability mindset a consumer learning product needs.",
+        "requirementIds": [
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "responsibilities"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Own features end-to-end from ambiguous customer needs through production delivery",
+        "narrative": "End-to-end ownership under ambiguity is the defining pattern of Reg's career, even though education products specifically are new territory. At CModel he owned an email-to-decision-intelligence workflow from product definition through production and worked across the product's move from Bubble prototypes to a TypeScript/Supabase stack, deciding what to preserve and what to redesign. He built Reaccord alone as a consumer product — interaction model, onboarding, visual system, and daily-use workflows included — which is the strongest possible evidence he can determine what to build, not just how. The domain is a gap, but his track record of forming product judgment quickly in unfamiliar problem spaces suggests it is a shallow one.",
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "overview"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "You've never worked on an education product specifically. How would you approach learning what learners and educators actually need, and what would you do in your first 90 days here?",
+      "Walk us through a feature you owned from an ambiguous customer need to production — what did you decide to build without being told, and how did you know it worked in real use?",
+      "Reaccord deliberately mixed durable relational state with flexible storage for AI-generated data. How do you decide where correctness contracts matter versus where flexibility should win?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "zero-to-one-product-building",
+      "ambiguous-problem-to-working-system",
+      "data-state-modeling",
+      "integration-workflow-engineering",
+      "production-problem-solving",
+      "whole-system-reasoning",
+      "product-interaction-judgment",
+      "cross-boundary-execution"
+    ],
+    "evidenceSections": 20,
+    "evidenceCharacters": 15558,
+    "unmatchedRequirementIds": [
+      "req_10"
+    ]
+  }
+}

@@ -1,0 +1,302 @@
+{
+  "job": "forward-deployed-technical",
+  "successProfile": {
+    "mission": "Turn enterprise customers' operational problems into dependable AI-powered workflows that work in production and are trusted by both technical and business stakeholders.",
+    "work": [
+      {
+        "id": "work_1",
+        "activity": "Engage enterprise customers to discover and define operational problems",
+        "importance": "core"
+      },
+      {
+        "id": "work_2",
+        "activity": "Prototype AI workflows against real customer problems",
+        "importance": "core"
+      },
+      {
+        "id": "work_3",
+        "activity": "Integrate customer systems, data, and APIs into the solution",
+        "importance": "core"
+      },
+      {
+        "id": "work_4",
+        "activity": "Harden successful prototypes into reliable production implementations",
+        "importance": "core"
+      },
+      {
+        "id": "work_5",
+        "activity": "Troubleshoot deployed solutions and resolve failures",
+        "importance": "important"
+      },
+      {
+        "id": "work_6",
+        "activity": "Communicate technical tradeoffs across business and technical audiences",
+        "importance": "important"
+      }
+    ],
+    "successDrivers": [
+      {
+        "id": "driver_1",
+        "driver": "Making progress on customer problems that arrive without complete specifications",
+        "importance": "core"
+      },
+      {
+        "id": "driver_2",
+        "driver": "Working AI solutions that hold up under real operational use, not demos",
+        "importance": "core"
+      },
+      {
+        "id": "driver_3",
+        "driver": "Successful connection to customer systems and data",
+        "importance": "core"
+      },
+      {
+        "id": "driver_4",
+        "driver": "Customer trust from on-site presence and clear communication across boundaries",
+        "importance": "important"
+      }
+    ],
+    "hardConstraints": [
+      {
+        "id": "constraint_1",
+        "constraint": "Frequent customer travel",
+        "severity": "material"
+      }
+    ]
+  },
+  "extractedJob": {
+    "jobTitle": "AI Solutions Engineer",
+    "company": null,
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Discover operational problems through direct engagement with enterprise customers",
+        "importance": "core",
+        "category": "customer discovery"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Turn loosely defined customer needs into concrete solution definitions",
+        "importance": "core",
+        "category": "problem definition"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Prototype useful AI workflows",
+        "importance": "core",
+        "category": "AI prototyping"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Connect customer systems and data via integrations",
+        "importance": "core",
+        "category": "integration"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Convert successful prototypes into dependable production implementations",
+        "importance": "core",
+        "category": "delivery"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Troubleshoot and resolve failures in deployed solutions",
+        "importance": "important",
+        "category": "operations"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Communicate tradeoffs across technical and business teams",
+        "importance": "important",
+        "category": "communication"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Reason about how systems, data, workflows, and failure modes interact end to end",
+        "importance": "important",
+        "category": "systems thinking"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Be productive quickly in unfamiliar customer technical environments",
+        "importance": "important",
+        "category": "adaptability"
+      },
+      {
+        "id": "req_10",
+        "requirement": "Frequent customer travel",
+        "importance": "core",
+        "category": "logistics"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is an unusually strong fit for this role because his career has been exactly the loop this job requires: take an ambiguous operational problem, prototype an AI workflow against it, integrate the customer's real systems and data, and harden the result into production software that survives actual use. At CModel he owned an email-to-decision-intelligence workflow end to end — from product definition through production — built a standalone AI assistant with tool calling, schema-constrained generation, and validation/failure handling, and maintained OAuth/API integrations across Microsoft 365 and many other business systems. At MusicBreakr he ran production integrations and payments for a marketplace serving thousands of users, debugging failures across application state, backend workflows, and third-party APIs. He moves fluidly across product, AI behavior, data, and integrations — the exact blend an AI Solutions Engineer needs to earn trust from both technical and business stakeholders. The one material gap is on-site customer travel: his evidence shows deep customer-adjacent product work but no documented record of frequent travel; this should be discussed directly regarding availability and logistics."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Engage enterprise customers to discover and define operational problems",
+        "fit": "relevant",
+        "narrative": "Reg's core strength is turning ambiguous requirements into working software — determining what should be built as well as how. At CModel he owned an email-to-decision-intelligence workflow from product definition through production, including the central judgment call of selecting which email signals become strategic context rather than flooding models with raw inbox content. That combination of problem discovery, cross-boundary product thinking, and a working end-to-end system maps directly onto engaging enterprise customers to define loosely specified operational problems.",
+        "requirementIds": [
+          "req_1",
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Prototype AI workflows against real customer problems",
+        "fit": "strong",
+        "narrative": "Reg has repeatedly built AI workflows against real product problems rather than demos. At CModel he built a strategic assistant with tool calling against application data, page- and organization-level runtime context, schema-constrained generation, and validation with retry/repair/reject around non-conforming output. At Reaccord he designed AI features so planning and coaching workflows are decoupled from any single model, treating model choice as configuration. He prototypes with the production boundary in mind — an explicit separation between probabilistic model output and deterministic application state.",
+        "requirementIds": [
+          "req_2",
+          "req_3"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Integrate customer systems, data, and APIs into the solution",
+        "fit": "strong",
+        "narrative": "Integration engineering is one of Reg's demonstrated strengths. He has implemented and maintained OAuth/API integrations with Microsoft 365 (Graph), SharePoint, Teams, DocuSign, HubSpot, Monday, Harvest, Freshdesk, and Google services, handling token lifecycle, pagination, and mapping external state into application models. At MusicBreakr he built social attribution across Instagram, TikTok, YouTube, and Twitter/X — normalizing four heterogeneous platform APIs into internal models under rate limits and recurring scheduling constraints. He explicitly frames integration debugging as reasoning across both systems at the boundary, which is exactly the systems thinking this work requires.",
+        "requirementIds": [
+          "req_4",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Harden successful prototypes into reliable production implementations",
+        "fit": "strong",
+        "narrative": "Reg has carried prototypes through to dependable production multiple times. He worked the CModel transition from Bubble prototypes to a TypeScript/Supabase stack, separating product behavior from implementation and rebuilding AI workflows with proper control over logic, data, and integrations. His schema-constrained generation pattern — generate, validate, accept/retry/repair/reject — is a concrete mechanism for making AI output safe as application state, and he initiated team-wide testing and CI/CD controls to keep AI-assisted development reliable.",
+        "requirementIds": [
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Troubleshoot deployed solutions and resolve failures",
+        "fit": "strong",
+        "narrative": "Reg's production troubleshooting experience is directly on point. At MusicBreakr he debugged live failures across application state, backend workflows, payments (Stripe Connect), and third-party APIs while serving thousands of active users, and at CModel he maintains integrations where failures live at system boundaries — expired authorization, unexpected external state, APIs that diverge from documentation. His self-described learning path from abstractions downward gives him a habit of reasoning about what can fail across the whole system, and he has shown he can form rapid mental models in unfamiliar environments.",
+        "requirementIds": [
+          "req_6",
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_6",
+        "title": "Frequent customer travel",
+        "fit": "gap",
+        "narrative": "The one material gap is frequent customer travel: the evidence shows customer-adjacent product ownership but no documented history of regular on-site customer work, and travel availability is not established in the supplied materials. This is a logistics question rather than a capability question — his communication and cross-boundary work suggest he would be effective in front of customers — but the commitment to frequent travel should be verified explicitly during the process.",
+        "requirementIds": [
+          "req_10"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Frequent customer travel",
+        "narrative": "The one material gap is frequent customer travel: the evidence shows customer-adjacent product ownership but no documented history of regular on-site customer work, and travel availability is not established in the supplied materials. This is a logistics question rather than a capability question — his communication and cross-boundary work suggest he would be effective in front of customers — but the commitment to frequent travel should be verified explicitly during the process.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "This role involves frequent on-site customer travel. Can you walk through your current constraints and confirm you can sustain that cadence?",
+      "Walk us through a time a customer arrived with a vague operational problem. How did you get from that conversation to a concrete solution definition and a first prototype?",
+      "Describe a production AI or integration failure you diagnosed at a system boundary. How did you figure out what was actually wrong, and what did you change so it wouldn't recur?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "ambiguous-problem-to-working-system",
+      "applied-ai-systems",
+      "ai-enabled-process-design",
+      "integration-workflow-engineering",
+      "production-problem-solving",
+      "cross-boundary-execution",
+      "whole-system-reasoning",
+      "rapid-technical-adaptation"
+    ],
+    "evidenceSections": 23,
+    "evidenceCharacters": 18030,
+    "unmatchedRequirementIds": [
+      "req_10"
+    ]
+  }
+}

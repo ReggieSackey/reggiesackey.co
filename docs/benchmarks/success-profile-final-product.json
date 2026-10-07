@@ -1,0 +1,262 @@
+{
+  "job": "product",
+  "successProfile": {
+    "mission": "Ship production consumer web features for a learning product — taking ambiguous customer needs through data modeling, API integration, and delivery into a live React/TypeScript application.",
+    "work": [
+      {
+        "id": "work_1",
+        "activity": "Own features end-to-end from ambiguous customer needs to production delivery",
+        "importance": "core"
+      },
+      {
+        "id": "work_2",
+        "activity": "Build and iterate on consumer web applications with React and TypeScript",
+        "importance": "core"
+      },
+      {
+        "id": "work_3",
+        "activity": "Model application data using relational databases",
+        "importance": "important"
+      },
+      {
+        "id": "work_4",
+        "activity": "Integrate external APIs into the product",
+        "importance": "important"
+      },
+      {
+        "id": "work_5",
+        "activity": "Investigate and resolve production failures",
+        "importance": "important"
+      },
+      {
+        "id": "work_6",
+        "activity": "Collaborate with designers and engineers across functional boundaries",
+        "importance": "important"
+      }
+    ],
+    "successDrivers": [
+      {
+        "id": "driver_1",
+        "driver": "Features actually reach production and work for real users, not just prototypes",
+        "importance": "core"
+      },
+      {
+        "id": "driver_2",
+        "driver": "Progress on poorly specified customer needs without waiting for complete specs",
+        "importance": "core"
+      },
+      {
+        "id": "driver_3",
+        "driver": "Rapid iteration pace on a consumer-facing product",
+        "importance": "important"
+      },
+      {
+        "id": "driver_4",
+        "driver": "Reliable behavior across frontend, backend data, and external systems",
+        "importance": "important"
+      }
+    ],
+    "hardConstraints": []
+  },
+  "extractedJob": {
+    "jobTitle": "Senior Product Engineer",
+    "company": "Example Learning",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Build consumer web applications with React and TypeScript",
+        "importance": "core",
+        "category": "frontend"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Own features end-to-end from ambiguous needs to production",
+        "importance": "core",
+        "category": "ownership"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Model application data with relational databases",
+        "importance": "important",
+        "category": "data"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Integrate external APIs",
+        "importance": "important",
+        "category": "integration"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Investigate production failures",
+        "importance": "important",
+        "category": "operations"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Collaborate with designers and engineers",
+        "importance": "important",
+        "category": "collaboration"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Rapid iteration",
+        "importance": "important",
+        "category": "execution"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Familiarity with education products",
+        "importance": "preferred",
+        "category": "domain"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a product engineer whose career matches what this role actually rewards: turning ambiguous customer needs into working production software across React/TypeScript frontends, relational data (Supabase/Postgres), and third-party systems. At CModel he owned AI features, integrations, and cross-system workflows from product definition through production, and helped migrate the product from Bubble prototypes to a conventional TypeScript stack. His integrations and production-debugging record is the strongest part of the case; the one material gap is no direct education-domain experience, though nothing in his record suggests difficulty transferring into a new product domain."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Own features end-to-end from ambiguous customer needs to production delivery",
+        "fit": "relevant",
+        "narrative": "Reg repeatedly does the hard part of this job: taking poorly specified needs to shipped features. At CModel he owned an email-to-decision-intelligence workflow from product definition through production and built the strategic assistant as a standalone Next.js/TypeScript application, including validation and failure handling for non-conforming model output. He also built Reaccord, an independent consumer behavior-change product, end to end — architecture, interaction model, onboarding, and daily-use workflows — which is direct evidence of rapid iteration on a consumer-facing product with real ownership of what gets built, not just how.",
+        "requirementIds": [
+          "req_1",
+          "req_2",
+          "req_6",
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Model application data using relational databases",
+        "fit": "relevant",
+        "narrative": "Reg models application data with the whole system in mind. At Reaccord he designed a persistence layer that keeps durable relationships (goals → plans → actions → completion → reflection) while validating application-consumed state against shared Zod contracts, and separated persistent state from derived presentation. At CModel he worked across the migration to a Supabase/TypeScript stack, and at MusicBreakr he mapped heterogeneous external data onto internal creator, promotion, and campaign models and designed access patterns that held up as ingestion volume grew.",
+        "requirementIds": [
+          "req_3"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "flexible-backend"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "behavior-model"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Integrate external APIs into the product",
+        "fit": "strong",
+        "narrative": "This is his strongest area. He has implemented and maintained production integrations with Microsoft 365/Graph, SharePoint, Teams, DocuSign, HubSpot, Monday, Harvest, Freshdesk, and Google services, including OAuth flows, token lifecycle, pagination, and mapping third-party state into application models. At MusicBreakr he built rate-limit-aware ingestion across Instagram, TikTok, YouTube, and Twitter/X, plus Stripe Connect for marketplace onboarding, transactions, and payouts — evidence he can handle both the happy path and the failure modes at external boundaries.",
+        "requirementIds": [
+          "req_4"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Investigate and resolve production failures",
+        "fit": "strong",
+        "narrative": "Reg debugs across boundaries, which is where real production failures live. At MusicBreakr he resolved production failures spanning application state, backend workflows, payment systems, and third-party APIs while the marketplace served active customers, requiring changes that preserved existing behavior. At CModel he reasons about integration failures — expired authorization, unexpected external state, APIs diverging from documentation — across both systems involved rather than treating the API call in isolation.",
+        "requirementIds": [
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Familiarity with education products",
+        "fit": "gap",
+        "narrative": "The honest gap: the evidence shows no prior work on education products specifically. That said, his track record of building consumer products around evolving user state — Reaccord's personalized daily interface over goals, actions, and reflection — plus a demonstrated ability to form rapid mental models in unfamiliar domains suggests the domain transfer is a learning curve, not a structural risk. It is the one area where the case rests on transfer rather than direct evidence.",
+        "requirementIds": [
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Familiarity with education products",
+        "narrative": "The honest gap: the evidence shows no prior work on education products specifically. That said, his track record of building consumer products around evolving user state — Reaccord's personalized daily interface over goals, actions, and reflection — plus a demonstrated ability to form rapid mental models in unfamiliar domains suggests the domain transfer is a learning curve, not a structural risk. It is the one area where the case rests on transfer rather than direct evidence.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "Walk us through a feature you took from ambiguous customer need to production: what did you decide, what did you defer, and how did you know it worked for real users?",
+      "How would you approach modeling learning-product data — learners, content, progress, outcomes — in a relational database, and what would you validate at the application boundary?",
+      "Tell us about a production failure that spanned your app and a third-party system. How did you find the cause and ship the fix without breaking existing behavior?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "zero-to-one-product-building",
+      "ambiguous-problem-to-working-system",
+      "product-interaction-judgment",
+      "data-state-modeling",
+      "integration-workflow-engineering",
+      "production-problem-solving",
+      "whole-system-reasoning",
+      "cross-boundary-execution"
+    ],
+    "evidenceSections": 20,
+    "evidenceCharacters": 15558,
+    "unmatchedRequirementIds": [
+      "req_8"
+    ]
+  }
+}

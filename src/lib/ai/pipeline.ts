@@ -50,6 +50,7 @@ export async function runTargeted(args: {
     return validateCandidateFit(fit, sources);
   });
   return {
+    successProfile: decision.successProfile,
     extractedJob: decision.extractedJob,
     validated,
     selection: {

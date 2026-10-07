@@ -65,3 +65,17 @@ Against the retained targeted run, total latency fell 76.0%, 75.4%, and 62.2%; s
 The [official Z.AI model documentation](https://docs.z.ai/guides/vlm/glm-5.3-flash) identifies `glm-5.3-flashx` as the same model family served at up to 200 tokens/second and supports JSON structured output, so it is now the default synthesis/matcher model. The public route keeps `maxDuration = 300`: the shared safety contract still permits three bounded 80-second provider calls (two primary calls and one repair), plus retrieval and persistence. Lowering the route limit below that worst-case bound would create an avoidable platform timeout before the application can fail closed.
 
 The optional Jev matcher follows TypeSafe's current [`/v1/systemone` OpenAPI contract](https://api.typesafe.ai/docs) and defaults to `jev-latest`. It uses one request containing narrow `noul` and `choice` questions, then converts answers into the same `Decision` contract. No TypeSafe credential was configured, so `performance-jev.json` records `configuration_unavailable`; there are no invented Jev latency or quality numbers. Z.AI remains the matcher default until Jev completes the same live comparison.
+
+## Success-profile iteration — October 7, 2026
+
+This iteration replaces the generated benchmark proposal registry with the fixed 12-capability ontology. Matching now returns a job-level mission, concrete work, success drivers, conservative hard constraints, per-requirement fit, and compact role relevance for at most eight capabilities. Application code builds 3–6 value themes from work needs and capability combinations. Explicitly not-required skills are removed, stated preferences are not promoted to hard constraints, and unmatched preferred items cannot turn a supported core theme into a gap.
+
+| Role | Previous final | Success-profile final | Matcher | Plan | Synthesis | Calls / repairs | Result |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Product | 14.008 s | 19.526 s | 7.729 s | 3 ms | 11.790 s | 3 / 1 | pass |
+| AI applications | 15.264 s | 16.349 s | 8.090 s | 3 ms | 8.255 s | 2 / 0 | pass |
+| Infrastructure | 20.775 s | 22.251 s | 7.919 s | 3 ms | 14.327 s | 3 / 1 | pass |
+
+The richer decision contract regressed total latency by 39.4% for Product and 7.1% for both AI and Infrastructure in this small sample. Planning remained effectively free. All three consolidated final results passed deterministic coverage and grounding; Product and Infrastructure used the one allowed structured-output repair. An additional full-run infrastructure attempt failed at `schema_validation`, demonstrating that the larger matcher contract remains less serialization-stable than the previous performance contract. The successful focused rerun is preserved rather than hiding that failure. See `success-profile-final-consolidated.json` and the source artifacts named inside it.
+
+The representative broader live subset is in `success-profile-broad-final.json`: forward-deployed technical 17.699 s, technical product manager 16.577 s, automation systems 15.266 s, deep infrastructure 24.047 s, credentialed profession 8.599 s, and emerging agent-workflow role 16.462 s. All six passed deterministic validation. The unfamiliar emerging title produced four strong value themes; the credentialed and deep-infrastructure roles remained overall gaps with blocking constraints. The 15-fixture human-authored expectation set remains a conceptual evaluation suite rather than a claim that six live samples establish production accuracy.

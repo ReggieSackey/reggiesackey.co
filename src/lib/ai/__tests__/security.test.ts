@@ -33,10 +33,18 @@ const extractedJob = {
   })),
 };
 const decision = {
+  successProfile: {
+    mission: "Deliver a useful product",
+    work: [{ id: "work_1", activity: "Turn customer needs into a working product", importance: "core" as const }],
+    successDrivers: [{ id: "driver_1", driver: "Product ownership", importance: "core" as const }],
+    hardConstraints: [],
+  },
   extractedJob,
   matches: [
     { capabilityId: "cap-real", requirementIds: ["req_1"], score: 0.9 },
   ],
+  requirementFits: extractedJob.requirements.map((requirement) => ({ requirementId: requirement.id, fit: requirement.id === "req_1" ? "direct" as const : "gap" as const })),
+  capabilityRelevance: [{ capabilityId: "cap-real", relevance: "central" as const, workIds: ["work_1"], successDriverIds: ["driver_1"] }],
 };
 const source = {
   sourceType: "caseStudy" as const,

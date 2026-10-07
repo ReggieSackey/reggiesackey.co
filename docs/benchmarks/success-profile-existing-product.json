@@ -1,0 +1,231 @@
+{
+  "job": "product",
+  "extractedJob": {
+    "jobTitle": "Senior Product Engineer",
+    "company": "Example Learning",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Build consumer web applications with React and TypeScript",
+        "importance": "core",
+        "category": "technical"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Own features from ambiguous customer needs through production delivery",
+        "importance": "core",
+        "category": "product"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Model application data",
+        "importance": "core",
+        "category": "technical"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Integrate external APIs",
+        "importance": "important",
+        "category": "technical"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Investigate production failures",
+        "importance": "important",
+        "category": "technical"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Relational database experience",
+        "importance": "important",
+        "category": "technical"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Rapid iteration",
+        "importance": "important",
+        "category": "way-of-working"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Collaborate with designers and engineers",
+        "importance": "important",
+        "category": "collaboration"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Familiarity with education products",
+        "importance": "preferred",
+        "category": "domain"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a product engineer whose value shows up at exactly the points this role's success depends on: taking an ambiguous customer need and getting a working feature into production, keeping external integrations healthy, and recovering quickly when things break. At CModel he owned an email-to-decision-intelligence workflow end to end and built a standalone Next.js/TypeScript strategic assistant; at MusicBreakr he ran multi-platform social API ingestion, Stripe Connect payments, and production debugging for a live marketplace with thousands of users. His direct evidence is strongest in TypeScript/Next.js applications with Supabase/Postgres and Postgres-class tooling, which aligns with the role's material constraints. The honest gap is depth: his React/TypeScript experience, while real and production-grade, is part of broader product ownership rather than a narrow front-end specialty, and relational database work is at the application level rather than deep database engineering."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Translate ambiguous customer needs into defined features and deliver them to production",
+        "fit": "strong",
+        "narrative": "Reg's core strength is shipping under ambiguity. He owned an email-to-decision-intelligence workflow at CModel from product definition through production, made the hard design call about which signals mattered rather than dumping raw inbox content into the system, and carried products across architecture transitions from Bubble prototypes into a conventional TypeScript/Supabase stack. At MusicBreakr he built and operated marketplace-critical systems while serving active customers, where changes had to preserve payments and ingestion behavior. This is exactly the profile of someone who can take a vague learner need and turn it into a feature that actually works in production.",
+        "requirementIds": [
+          "req_2",
+          "req_7",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Build consumer-facing web application features in React/TypeScript",
+        "fit": "relevant",
+        "narrative": "Reg builds consumer web applications in TypeScript, React, and Next.js — CModel's strategic assistant is a standalone Next.js application he built, and his strongest-area profile centers on frontend state, data movement, and system behavior across product surfaces. His route into conventional code-first stacks came through solving real product problems, and his track record shows fast productivity in unfamiliar environments. This is genuine, production-proven React/TypeScript capability, though as part of whole-product ownership rather than a dedicated front-end specialist's portfolio.",
+        "requirementIds": [
+          "req_1"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "learning-velocity"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "engineering-foundations"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Model application data and state",
+        "fit": "relevant",
+        "narrative": "Reg models data around the product's real structure. At Reaccord he designed a persistence layer separating durable domain relationships (goals, plans, actions, history) from rapidly changing generated state, with Zod contracts at application boundaries so the product could change fast without sacrificing correctness. At MusicBreakr he built the normalization layer mapping four social platforms' heterogeneous identifiers and schemas onto internal creator, promotion, and campaign models, and designed access patterns that held up as ingestion volume grew. His relational experience is at the application level — Supabase/Postgres, data modeling, permissions — which matches what consumer product feature work actually requires.",
+        "requirementIds": [
+          "req_3",
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "flexible-backend"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "behavior-model"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Integrate external APIs into the product",
+        "fit": "strong",
+        "narrative": "Integration engineering is one of Reg's demonstrated strengths. He has implemented and maintained OAuth-based integrations across Microsoft 365/Graph, SharePoint, Teams, DocuSign, HubSpot, and Google services, and built social attribution ingestion across Instagram, TikTok, YouTube, and Twitter/X under real quotas, rate limits, and scheduling constraints. Critically, he treats integrations as system-boundary problems — expired authorization, undocumented API behavior, local/remote state disagreement — not isolated API calls, which is how integrations stay reliable in real use.",
+        "requirementIds": [
+          "req_4"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "engineering-foundations"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Diagnose and resolve production failures",
+        "fit": "strong",
+        "narrative": "Reg has debugged production failures on live systems where the answers crossed boundaries: application state, backend workflows, Stripe, and third-party APIs all had to be compared to find the truth. At MusicBreakr he did this while the marketplace served active customers, so fixes had to preserve payment and ingestion behavior. This habit of reasoning across the whole system rather than treating a failure as one component's bug is what makes production recovery fast.",
+        "requirementIds": [
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_6",
+        "title": "Front-end web application development (React/TypeScript); Relational database experience",
+        "fit": "gap",
+        "narrative": "The material gap is depth of specialization: Reg's React/TypeScript and relational database experience is application-level and embedded in broad product ownership rather than deep front-end or database engineering focus. That tradeoff comes with a compensating strength — he can move across whatever boundary a problem requires — but teams should expect to pair him on highly specialized front-end performance or database-internals work initially, and he is explicit that infrastructure-scale engineering is not his strongest area.",
+        "requirementIds": [
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Front-end web application development (React/TypeScript); Relational database experience",
+        "narrative": "The material gap is depth of specialization: Reg's React/TypeScript and relational database experience is application-level and embedded in broad product ownership rather than deep front-end or database engineering focus. That tradeoff comes with a compensating strength — he can move across whatever boundary a problem requires — but teams should expect to pair him on highly specialized front-end performance or database-internals work initially, and he is explicit that infrastructure-scale engineering is not his strongest area.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "Walk us through a React/TypeScript feature you took from an ambiguous need to production: how did you decide what to build, and what did the data model look like?",
+      "Tell us about a production failure that crossed your application and an external system. How did you isolate the cause, and what did you change afterward?",
+      "In the Bubble-to-TypeScript transition at CModel, how did you decide what data structures and behaviors to preserve versus redesign, and what relational modeling choices did you make in Supabase?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "ambiguous-problem-to-working-system",
+      "whole-system-reasoning",
+      "data-state-modeling",
+      "integration-workflow-engineering",
+      "production-problem-solving",
+      "product-interaction-judgment",
+      "cross-boundary-execution",
+      "rapid-technical-adaptation"
+    ],
+    "evidenceSections": 21,
+    "evidenceCharacters": 15872,
+    "unmatchedRequirementIds": [
+      "req_9"
+    ]
+  }
+}

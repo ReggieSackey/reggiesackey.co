@@ -1,0 +1,108 @@
+{
+  "measuredAt": "2026-10-07T20:37:23.213Z",
+  "scope": "Live model + validation; in-memory proposed registry and canonical evidence, excludes HTTP/persistence/Convex targeted query. No registry approval performed.",
+  "corpusVersion": "076284c8c3be0bb2a6fadf05963c24828806fea1c85a5b8883855d6a5dd7ba24",
+  "results": [
+    {
+      "name": "product",
+      "match": 8003,
+      "retrieve": 0,
+      "plan": 3,
+      "synthesis": 9497,
+      "coverage": 0,
+      "citations": 0,
+      "totalMs": 17504,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 10663,
+      "outputTokens": 2622,
+      "modelMs": 17493.460708,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "zero-to-one-product-building",
+          "product-interaction-judgment",
+          "ambiguous-problem-to-working-system",
+          "data-state-modeling",
+          "integration-workflow-engineering",
+          "whole-system-reasoning",
+          "production-problem-solving",
+          "cross-boundary-execution"
+        ],
+        "evidenceSections": 20,
+        "evidenceCharacters": 15558,
+        "unmatchedRequirementIds": [
+          "req_10"
+        ],
+        "capabilities": [
+          "Zero-to-one product building",
+          "Product & interaction judgment",
+          "Ambiguous problem → working system",
+          "Data & state modeling",
+          "Integration & workflow engineering",
+          "Whole-system reasoning",
+          "Production problem solving",
+          "Cross-boundary execution"
+        ]
+      },
+      "failureStage": ""
+    },
+    {
+      "name": "ai",
+      "match": 8176,
+      "retrieve": 0,
+      "plan": 1,
+      "synthesis": 9041,
+      "coverage": 0,
+      "citations": 0,
+      "totalMs": 17219,
+      "calls": 2,
+      "repairs": 0,
+      "inputTokens": 10224,
+      "outputTokens": 2569,
+      "modelMs": 17213.122915999997,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "applied-ai-systems",
+          "whole-system-reasoning",
+          "integration-workflow-engineering",
+          "production-problem-solving",
+          "zero-to-one-product-building",
+          "data-state-modeling",
+          "product-interaction-judgment",
+          "cross-boundary-execution"
+        ],
+        "evidenceSections": 25,
+        "evidenceCharacters": 18647,
+        "unmatchedRequirementIds": [
+          "req_11"
+        ],
+        "capabilities": [
+          "Applied AI systems",
+          "Whole-system reasoning",
+          "Integration & workflow engineering",
+          "Production problem solving",
+          "Zero-to-one product building",
+          "Data & state modeling",
+          "Product & interaction judgment",
+          "Cross-boundary execution"
+        ]
+      },
+      "failureStage": ""
+    },
+    {
+      "name": "infrastructure",
+      "match": 8601,
+      "totalMs": 8601,
+      "calls": 1,
+      "repairs": 0,
+      "inputTokens": 1625,
+      "outputTokens": 1611,
+      "modelMs": 8598.042375000005,
+      "outcome": "failed",
+      "selection": null,
+      "failureStage": "schema_validation"
+    }
+  ]
+}

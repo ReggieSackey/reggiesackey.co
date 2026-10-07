@@ -27,8 +27,27 @@ export const capabilityProposalSchema = z
 export const proposalsSchema = z
   .object({ proposals: z.array(capabilityProposalSchema).min(1).max(40) })
   .strict();
+export const successProfileSchema = z.object({
+  mission: z.string().min(1).max(500),
+  work: z.array(z.object({
+    id: z.string().regex(/^work_\d+$/),
+    activity: z.string().min(1).max(500),
+    importance: z.enum(["core", "important", "secondary"]),
+  }).strict()).min(1).max(12),
+  successDrivers: z.array(z.object({
+    id: z.string().regex(/^driver_\d+$/),
+    driver: z.string().min(1).max(500),
+    importance: z.enum(["core", "important", "secondary"]),
+  }).strict()).min(1).max(12),
+  hardConstraints: z.array(z.object({
+    id: z.string().regex(/^constraint_\d+$/),
+    constraint: z.string().min(1).max(500),
+    severity: z.enum(["blocking", "material"]),
+  }).strict()).max(8),
+}).strict();
 export const decisionSchema = z
   .object({
+    successProfile: successProfileSchema.optional(),
     extractedJob: extractedJobSchema,
     matches: z
       .array(
@@ -48,9 +67,16 @@ export const decisionSchema = z
       requirementId: z.string().regex(/^req_\d+$/),
       fit: z.enum(["direct", "transferable", "gap"]),
     }).strict()).max(25).optional(),
+    capabilityRelevance: z.array(z.object({
+      capabilityId: z.string().min(1).max(100),
+      relevance: z.enum(["central", "useful", "incidental"]),
+      workIds: z.array(z.string().regex(/^work_\d+$/)).max(12),
+      successDriverIds: z.array(z.string().regex(/^driver_\d+$/)).max(12),
+    }).strict()).max(12).optional(),
   })
   .strict();
 export type Decision = z.infer<typeof decisionSchema>;
+export type SuccessProfile = z.infer<typeof successProfileSchema>;
 export type Capability = {
   id: string;
   slug: string;

@@ -1,0 +1,353 @@
+{
+  "job": "emerging-role",
+  "successProfile": {
+    "mission": "Find and operationalize high-value work that humans and AI agents can do together: turn fuzzy goals into agent-ready tasks, build and evaluate working human+AI workflows with proper review and control boundaries, and scale what succeeds into real organizational practice.",
+    "work": [
+      {
+        "id": "work_1",
+        "activity": "Translate ambiguous organizational goals into concrete, agent-ready task definitions with clear scope and success criteria",
+        "importance": "core"
+      },
+      {
+        "id": "work_2",
+        "activity": "Design human+AI collaboration processes including persistent context, task handoff, review loops, and verification",
+        "importance": "core"
+      },
+      {
+        "id": "work_3",
+        "activity": "Define evaluation criteria and human-control boundaries for agent-performed work",
+        "importance": "core"
+      },
+      {
+        "id": "work_4",
+        "activity": "Prototype and implement integrations connecting agents, internal systems, and external tools",
+        "importance": "core"
+      },
+      {
+        "id": "work_5",
+        "activity": "Identify and prioritize which organizational work is suitable for human+AI execution",
+        "importance": "important"
+      },
+      {
+        "id": "work_6",
+        "activity": "Operationalize successful prototypes into recurring, reliable workflows and carry them through real use",
+        "importance": "important"
+      },
+      {
+        "id": "work_7",
+        "activity": "Iterate on workflow behavior and user friction based on how people actually use the systems",
+        "importance": "important"
+      }
+    ],
+    "successDrivers": [
+      {
+        "id": "driver_1",
+        "driver": "Ability to make progress without a complete specification and create structure from ambiguity",
+        "importance": "core"
+      },
+      {
+        "id": "driver_2",
+        "driver": "Applied AI engineering skill: context, tools, validation, and trust boundaries in real workflows",
+        "importance": "core"
+      },
+      {
+        "id": "driver_3",
+        "driver": "Process design that keeps humans in control while agents do real work, with evaluation and review loops",
+        "importance": "core"
+      },
+      {
+        "id": "driver_4",
+        "driver": "Ability to build end-to-end working systems (integrations, APIs, workflows), not just designs or proposals",
+        "importance": "core"
+      },
+      {
+        "id": "driver_5",
+        "driver": "Judgment about what should be built and how it should behave for the people using it",
+        "importance": "important"
+      },
+      {
+        "id": "driver_6",
+        "driver": "Reliability in production: diagnosing failures across systems and sustaining workflows in actual use",
+        "importance": "important"
+      },
+      {
+        "id": "driver_7",
+        "driver": "Operating across technical, product, and organizational boundaries in a novel role",
+        "importance": "important"
+      }
+    ],
+    "hardConstraints": [
+      {
+        "id": "constraint_1",
+        "constraint": "Must be able to build working prototypes/integrations, not only advise or design processes",
+        "severity": "material"
+      }
+    ]
+  },
+  "extractedJob": {
+    "jobTitle": "Human + AI Agent Workflow Builder (new title)",
+    "company": null,
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Translate ambiguous goals into well-specified, agent-ready tasks",
+        "importance": "core",
+        "category": "problem-definition"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Design persistent context and review loops for human+AI collaboration",
+        "importance": "core",
+        "category": "ai-process-design"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Define evaluation criteria and human-control boundaries for agent work",
+        "importance": "core",
+        "category": "ai-process-design"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Prototype integrations between agents, internal systems, and external tools",
+        "importance": "core",
+        "category": "engineering"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Operationalize successful workflows into recurring, reliable processes",
+        "importance": "core",
+        "category": "delivery"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Identify high-value work suitable for human+AI execution",
+        "importance": "important",
+        "category": "product-judgment"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Build working systems end-to-end from an idea (definition through real use)",
+        "importance": "core",
+        "category": "building"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Reason across system layers: data, APIs, workflows, permissions, failure modes",
+        "importance": "important",
+        "category": "systems"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Design data and state representations for agents, generated content, and workflow state",
+        "importance": "important",
+        "category": "engineering"
+      },
+      {
+        "id": "req_10",
+        "requirement": "Diagnose and fix failures in real workflows across application and external systems",
+        "importance": "important",
+        "category": "operations"
+      },
+      {
+        "id": "req_11",
+        "requirement": "Bridge technical implementation, product decisions, and organizational needs",
+        "importance": "important",
+        "category": "cross-functional"
+      },
+      {
+        "id": "req_12",
+        "requirement": "Judge what should be built and how it should behave for users",
+        "importance": "important",
+        "category": "product-judgment"
+      },
+      {
+        "id": "req_13",
+        "requirement": "Become productive in unfamiliar technical environments as the role is new",
+        "importance": "preferred",
+        "category": "adaptability"
+      },
+      {
+        "id": "req_14",
+        "requirement": "Demonstrated ability matters more than conventional background; no specific credentials required",
+        "importance": "preferred",
+        "category": "background"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a rare match for this role because he has already done the job in production: at CModel he built an AI strategic assistant end-to-end, owned an email-to-decision-intelligence workflow from definition through live use, and initiated an agentic development process with persistent shared context, engineer review, automated validation, and evals. At Reaccord he designed persistent, selectively assembled AI context and model-independent workflow architecture. He builds working systems himself — integrations, OAuth, structured generation, validation, production debugging — which directly satisfies the hard constraint that this role cannot be advisory-only. His profile is breadth with product ownership across technical, product, and organizational boundaries, which is exactly the shape of a novel human+AI workflow role."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Translate ambiguous organizational goals into concrete, agent-ready task definitions with clear scope and success criter",
+        "fit": "relevant",
+        "narrative": "Reg turns ambiguity into executable structure rather than waiting for complete specifications. At CModel he initiated an agentic development process where goals are defined with constraints, executable acceptance criteria, and designed agent context, and he contributed task decomposition and evals where deterministic tests fall short. He carried a product across two architectures (Bubble to TypeScript/Supabase) by separating product behavior from implementation — evidence he can create structure from an underspecified problem and sustain it into real use.",
+        "requirementIds": [
+          "req_1",
+          "req_5",
+          "req_13",
+          "req_14"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "agentic-engineering"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "structured-generation"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Design human+AI collaboration processes including persistent context, task handoff, review loops, and verification",
+        "fit": "strong",
+        "narrative": "This is Reg's strongest theme. He built persistent, task-specific context assembly at Reaccord, where the application owns context selection rather than dumping user history into every request, and he designed CModel's agentic process so non-engineers could implement with coding agents while engineers retained control of architecture, validation, and release — a real human+AI review loop with documentation authored for both human and agent consumption. His schema-constrained generation pattern draws an explicit boundary between probabilistic model output and deterministic application state, which is precisely the handoff-and-verification design this role needs.",
+        "requirementIds": [
+          "req_2"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "agentic-engineering"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "structured-generation"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Define evaluation criteria and human-control boundaries for agent-performed work",
+        "fit": "strong",
+        "narrative": "Reg has operational experience defining control boundaries for agent work: engineers hold architecture, validation, and release authority in CModel's agentic workflow; schema validation with accept/retry/repair/reject governs what model output becomes application state; and evals cover AI behavior where tests can't. His email-signals workflow shows the judgment involved — selecting relevant signals from authorized data instead of treating raw content as model context. He treats trust as an engineering control, not a prompt afterthought.",
+        "requirementIds": [
+          "req_3"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "agentic-engineering"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "structured-generation"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Prototype and implement integrations connecting agents, internal systems, and external tools",
+        "fit": "strong",
+        "narrative": "Reg clears the 'must build, not just advise' bar decisively. He built CModel's strategic assistant as a standalone Next.js/Vercel AI SDK application with tool calling against internal and external data, owned OAuth/API integrations across Microsoft 365, SharePoint, Teams, and many other systems, and at MusicBreakr operated recurring ingestion workflows under real API quotas with Stripe Connect payments. He reasons across the full stack — data models, permissions, API behavior, frontend state, failure modes — and debugs production failures that cross system boundaries.",
+        "requirementIds": [
+          "req_4",
+          "req_7",
+          "req_8",
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "strategic-assistant"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "structured-generation"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Identify and prioritize which organizational work is suitable for human+AI execution",
+        "fit": "strong",
+        "narrative": "Reg chooses what to build, not just how. At CModel he selected the implementation boundary per problem (prototyping cheaply in Bubble, migrating to a conventional stack, making the assistant a standalone app connected to existing data) and designed signal selection for the email workflow by asking what actually helps a strategic decision. His consumer work on Reaccord shows he iterates on what should exist based on how people actually use it, having repeatedly reshaped information hierarchy and removed friction from his own daily use.",
+        "requirementIds": [
+          "req_6",
+          "req_11",
+          "req_12"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_6",
+        "title": "Must be able to build working prototypes/integrations, not only advise or design processes",
+        "fit": "gap",
+        "narrative": "The identified gap — diagnosing and fixing failures across application and external systems — is well covered by direct production evidence. At MusicBreakr Reg debugged live failures spanning application state, backend workflows, payment systems, and third-party APIs while serving active customers; at CModel he maintains integrations where failures arise from expired authorization, undocumented API behavior, or local/remote state disagreement. He is candid that deep infrastructure engineering (Kubernetes, SRE-scale systems) is not his strength, but that discipline is distinct from the application-level production debugging this role requires.",
+        "requirementIds": [
+          "req_10"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Must be able to build working prototypes/integrations, not only advise or design processes",
+        "narrative": "The identified gap — diagnosing and fixing failures across application and external systems — is well covered by direct production evidence. At MusicBreakr Reg debugged live failures spanning application state, backend workflows, payment systems, and third-party APIs while serving active customers; at CModel he maintains integrations where failures arise from expired authorization, undocumented API behavior, or local/remote state disagreement. He is candid that deep infrastructure engineering (Kubernetes, SRE-scale systems) is not his strength, but that discipline is distinct from the application-level production debugging this role requires.",
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "Walk through a specific agent-assisted workflow you operationalized at CModel: how did you decide which steps the agent could do autonomously versus which required human review, and how did that boundary change over time?",
+      "Your email-signals workflow had to decide what counts as useful signal versus noise. How did you define and evaluate that selection, and how did you catch it when the system picked the wrong signals?",
+      "Tell us about a production failure that crossed system boundaries — application state, backend, and a third-party API — where the root cause was not where you first looked."
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "ai-enabled-process-design",
+      "applied-ai-systems",
+      "ambiguous-problem-to-working-system",
+      "zero-to-one-product-building",
+      "integration-workflow-engineering",
+      "product-interaction-judgment",
+      "whole-system-reasoning",
+      "production-problem-solving",
+      "data-state-modeling",
+      "cross-boundary-execution",
+      "rapid-technical-adaptation"
+    ],
+    "evidenceSections": 28,
+    "evidenceCharacters": 21164,
+    "unmatchedRequirementIds": [
+      "req_14"
+    ]
+  }
+}

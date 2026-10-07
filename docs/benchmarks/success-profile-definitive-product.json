@@ -1,0 +1,301 @@
+{
+  "job": "product",
+  "successProfile": {
+    "mission": "Ship reliable consumer web features end-to-end for an education-focused product, from ambiguous customer needs through production, at rapid iteration speed.",
+    "work": [
+      {
+        "id": "work_1",
+        "activity": "Own features from ambiguous customer needs through production delivery",
+        "importance": "core"
+      },
+      {
+        "id": "work_2",
+        "activity": "Build consumer web applications with React and TypeScript",
+        "importance": "core"
+      },
+      {
+        "id": "work_3",
+        "activity": "Model application data and work with relational databases",
+        "importance": "important"
+      },
+      {
+        "id": "work_4",
+        "activity": "Integrate external APIs into the product",
+        "importance": "important"
+      },
+      {
+        "id": "work_5",
+        "activity": "Investigate and resolve production failures",
+        "importance": "important"
+      },
+      {
+        "id": "work_6",
+        "activity": "Collaborate with designers and engineers",
+        "importance": "important"
+      }
+    ],
+    "successDrivers": [
+      {
+        "id": "driver_1",
+        "driver": "Turning vague customer needs into shippable product behavior without waiting for complete specs",
+        "importance": "core"
+      },
+      {
+        "id": "driver_2",
+        "driver": "Frontend quality and delivery velocity in React/TypeScript",
+        "importance": "core"
+      },
+      {
+        "id": "driver_3",
+        "driver": "Coherent data models and reliable API integrations",
+        "importance": "important"
+      },
+      {
+        "id": "driver_4",
+        "driver": "Fast diagnosis of production issues to protect user experience",
+        "importance": "important"
+      },
+      {
+        "id": "driver_5",
+        "driver": "Effective collaboration across design, engineering, and product",
+        "importance": "important"
+      }
+    ],
+    "hardConstraints": []
+  },
+  "extractedJob": {
+    "jobTitle": "Senior Product Engineer",
+    "company": "Example Learning",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Build consumer web applications with React",
+        "importance": "core",
+        "category": "frontend"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Build with TypeScript",
+        "importance": "core",
+        "category": "frontend"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Own features from ambiguous customer needs through production delivery",
+        "importance": "core",
+        "category": "product delivery"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Collaborate with designers and engineers",
+        "importance": "important",
+        "category": "collaboration"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Model application data",
+        "importance": "important",
+        "category": "data"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Integrate external APIs",
+        "importance": "important",
+        "category": "integration"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Investigate production failures",
+        "importance": "important",
+        "category": "operations"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Experience with relational databases",
+        "importance": "important",
+        "category": "data"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Rapid iteration",
+        "importance": "important",
+        "category": "ways of working"
+      },
+      {
+        "id": "req_10",
+        "requirement": "Familiarity with education products",
+        "importance": "preferred",
+        "category": "domain"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a product engineer whose value maps directly onto how this role succeeds: turning vague customer needs into shippable behavior, building consumer web products in React and TypeScript, and keeping features reliable in production. He has repeatedly owned whole products end to end — a behavior-change consumer app built across Next.js and React Native, and an AI decision-intelligence product shipped from prototype to production — while carrying the integration, data, and debugging work that usually gets split across multiple hires. His gap is domain: no direct education-product experience, which is a preference rather than a core requirement, and his track record of fast mental-model formation in new product areas mitigates it. For a team shipping consumer features quickly, he offers rare breadth with genuine product ownership attached."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Own features from ambiguous customer needs through production delivery",
+        "fit": "relevant",
+        "narrative": "Reg's defining strength is owning features from ambiguity through production. At CModel he owned an email-to-decision-intelligence workflow from product definition through production, defining what signal mattered as much as how it was built, and he helped determine what to build — not just how — across a product that matured from Bubble prototypes into a TypeScript/Supabase stack. As the solo builder of Reaccord, an independent consumer behavior-change product, he designed the interaction model, onboarding, and daily-use workflows himself. This is exactly the profile of an engineer who doesn't wait for complete specs, and who can work fluidly with design and product because he's done those jobs on real products.",
+        "requirementIds": [
+          "req_1",
+          "req_3",
+          "req_4",
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Build consumer web applications with React and TypeScript",
+        "fit": "strong",
+        "narrative": "This is his strongest technical fit. He built a standalone TypeScript/Next.js AI assistant with the Vercel AI SDK at CModel, architected Reaccord as a Turborepo monorepo with separate Next.js web and Expo/React Native clients over shared TypeScript and Zod contracts, and moved CModel's product from Bubble onto a conventional TypeScript stack. Critically, his React/TypeScript experience is consumer-facing and product-defining — personalized daily interfaces, onboarding, analytics across surfaces — not internal-tool work, which matches the velocity and quality bar of consumer feature delivery.",
+        "requirementIds": [
+          "req_2"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "overview"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Model application data and work with relational databases",
+        "fit": "relevant",
+        "narrative": "Reg models data as a product problem, not just a schema exercise. On Reaccord he deliberately separated durable domain relationships (goals, plans, actions, history) from fast-changing AI-generated state, using validation contracts at the boundaries where correctness matters — a judgment that lets product structures evolve quickly without breaking. At MusicBreakr he designed a normalization layer mapping heterogeneous social-platform data onto internal creator, promotion, and campaign models, with access patterns built for growing reporting volume. He works with Supabase and Postgres and reasons about data from the whole-system level, which supports coherent models and fast failure diagnosis.",
+        "requirementIds": [
+          "req_5",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "flexible-backend"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "behavior-model"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Integrate external APIs into the product",
+        "fit": "strong",
+        "narrative": "Integration work is a clear strength with production depth. He has implemented and maintained OAuth flows, token lifecycle, and API integrations across Microsoft 365/Graph, SharePoint, Teams, DocuSign, HubSpot, and others at CModel, and built MusicBreakr's social attribution across Instagram, TikTok, YouTube, and Twitter/X — including rate-limit-aware recurring ingestion under quota and cost constraints, plus Stripe Connect for marketplace payments. He treats integration failures as boundary problems across two systems, which is the right mental model for keeping third-party-dependent features reliable.",
+        "requirementIds": [
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Investigate and resolve production failures",
+        "fit": "strong",
+        "narrative": "Reg has debugged production failures on live systems where mistakes had real consequences — a marketplace serving thousands of users, processing hundreds of thousands of dollars in transactions, with active customers on payment, ingestion, and workflow systems. His approach is whole-system: comparing application state, backend workflow state, and external-service state (Stripe, social APIs) rather than treating failures in isolation. That diagnostic breadth means fewer escalations and faster restoration of user experience when production breaks.",
+        "requirementIds": [
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_6",
+        "title": "Familiarity with education products",
+        "fit": "gap",
+        "narrative": "This is the one material gap: Reg has no direct experience building education products, and the evidence doesn't claim any. What transfers is his demonstrated pattern of entering unfamiliar product domains and forming working mental models quickly — he moved from no-code prototypes into conventional engineering and built consumer products in behavior change and decision intelligence from scratch. For a preferred rather than core requirement, the risk is bounded and worth probing in interviews rather than disqualifying.",
+        "requirementIds": [
+          "req_10"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Familiarity with education products",
+        "narrative": "This is the one material gap: Reg has no direct experience building education products, and the evidence doesn't claim any. What transfers is his demonstrated pattern of entering unfamiliar product domains and forming working mental models quickly — he moved from no-code prototypes into conventional engineering and built consumer products in behavior change and decision intelligence from scratch. For a preferred rather than core requirement, the risk is bounded and worth probing in interviews rather than disqualifying.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "Tell us about a feature you shipped from an ambiguous customer need — how did you decide what to build before the spec was complete?",
+      "How did you approach debugging the most complex production failure you've owned that crossed application, backend, and third-party system boundaries?",
+      "You haven't worked on education products before — how would you go about building domain knowledge quickly, and how would you validate product instincts with learners and educators?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "zero-to-one-product-building",
+      "product-interaction-judgment",
+      "ambiguous-problem-to-working-system",
+      "data-state-modeling",
+      "integration-workflow-engineering",
+      "whole-system-reasoning",
+      "production-problem-solving",
+      "cross-boundary-execution"
+    ],
+    "evidenceSections": 20,
+    "evidenceCharacters": 15558,
+    "unmatchedRequirementIds": [
+      "req_10"
+    ]
+  }
+}

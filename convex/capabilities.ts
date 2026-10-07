@@ -12,6 +12,7 @@ import {
   sourceKey,
   sourceValidator,
 } from "./evidence";
+import { CANONICAL_CAPABILITIES } from "./canonicalCapabilities";
 
 const proposal = v.object({
   ...capabilityFields,
@@ -190,6 +191,27 @@ export const saveProposals = mutation({
       });
     }
     return null;
+  },
+});
+export const stageCanonicalBootstrap = mutation({
+  args: {},
+  returns: v.object({ staged: v.number(), skipped: v.number() }),
+  handler: async (ctx) => {
+    await requireAdmin(ctx);
+    const sources = await publishedSources(ctx);
+    const version = corpusVersion(sources);
+    const pending = await ctx.db.query("capabilityProposals").withIndex("by_status", (q) => q.eq("status", "pending")).take(101);
+    const pendingSlugs = new Set(pending.map((item) => item.slug));
+    if (pending.length + CANONICAL_CAPABILITIES.length > 100) throw new Error("Review pending proposals before staging the canonical registry");
+    let staged = 0, skipped = 0;
+    for (const capability of CANONICAL_CAPABILITIES) {
+      validateProposal(capability);
+      validateRefs(capability.evidence, sources);
+      if (pendingSlugs.has(capability.slug)) { skipped++; continue; }
+      await ctx.db.insert("capabilityProposals", { ...capability, corpusVersion: version, status: "pending", createdAt: Date.now(), updatedAt: Date.now() });
+      staged++;
+    }
+    return { staged, skipped };
   },
 });
 export const review = mutation({

@@ -1,0 +1,287 @@
+{
+  "job": "technical-product-manager",
+  "successProfile": {
+    "mission": "Create and launch a new workflow automation product that solves validated customer needs, from problem definition through product behavior, technical feasibility, and launch execution.",
+    "work": [
+      {
+        "id": "work_1",
+        "activity": "Define the new workflow automation product: determine what it should do and how it should behave",
+        "importance": "core"
+      },
+      {
+        "id": "work_2",
+        "activity": "Investigate customer needs and translate them into product decisions",
+        "importance": "core"
+      },
+      {
+        "id": "work_3",
+        "activity": "Shape product behavior and interaction design, including prototype evaluation",
+        "importance": "core"
+      },
+      {
+        "id": "work_4",
+        "activity": "Reason about APIs and data constraints to ground product decisions in technical reality",
+        "importance": "core"
+      },
+      {
+        "id": "work_5",
+        "activity": "Coordinate engineering and design toward a shared outcome",
+        "importance": "important"
+      },
+      {
+        "id": "work_6",
+        "activity": "Carry decisions through launch and real use",
+        "importance": "important"
+      }
+    ],
+    "successDrivers": [
+      {
+        "id": "driver_1",
+        "driver": "The product solves a real, validated customer problem rather than a guessed one",
+        "importance": "core"
+      },
+      {
+        "id": "driver_2",
+        "driver": "Product decisions are technically sound given API and data constraints",
+        "importance": "core"
+      },
+      {
+        "id": "driver_3",
+        "driver": "A coherent product ships rather than a stack of disconnected features",
+        "importance": "important"
+      },
+      {
+        "id": "driver_4",
+        "driver": "Engineering and design stay aligned with product intent through launch",
+        "importance": "important"
+      }
+    ],
+    "hardConstraints": [
+      {
+        "id": "constraint_1",
+        "constraint": "Five years in this exact title is preferred, not mandatory — not a blocking constraint",
+        "severity": "material"
+      }
+    ]
+  },
+  "extractedJob": {
+    "jobTitle": "Product Lead / Product Manager — Workflow Automation (new product)",
+    "company": null,
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Define a new workflow automation product from scratch",
+        "importance": "core",
+        "category": "product definition"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Investigate and validate customer needs",
+        "importance": "core",
+        "category": "customer discovery"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Shape product behavior and how the product works for users",
+        "importance": "core",
+        "category": "product design"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Reason about APIs and technical/data constraints",
+        "importance": "core",
+        "category": "technical reasoning"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Coordinate engineering and design collaboratively",
+        "importance": "core",
+        "category": "cross-functional execution"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Evaluate prototypes against customer needs",
+        "importance": "important",
+        "category": "prototyping/evaluation"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Carry decisions through to launch",
+        "importance": "important",
+        "category": "delivery"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Five years in this exact title (preferred, not mandatory)",
+        "importance": "preferred",
+        "category": "experience"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a product engineer who has repeatedly taken ambiguous ideas from problem definition through designed behavior, technical implementation, and real production use — exactly the arc this role demands. At CModel, he owned workflows from product definition through production, including an email-to-decision-intelligence pipeline and an AI strategic assistant, while maintaining deep integrations across Microsoft 365 and other third-party systems. As the solo builder of Reaccord, he designed the entire interaction model, behavior model, and architecture of a cross-platform product, then refined it through repeated daily use. This combination — customer-grounded product judgment, rigorous API and data reasoning, and hands-on delivery — makes him unusually well suited to define and launch a new workflow automation product, and his title history should not overshadow the direct evidence that he does this work end to end."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Define the new workflow automation product: determine what it should do and how it should behave",
+        "fit": "relevant",
+        "narrative": "Reg has repeatedly defined products from scratch and carried them to launch. At CModel he owned an email-to-decision-intelligence workflow from product definition through production and built the strategic assistant as a standalone product; independently, he designed, architected, and shipped Reaccord end to end, including its interaction model, onboarding, and daily-use workflows. His strength is turning ambiguous requirements into a coherent working system rather than a pile of features — the core driver of success for a new product.",
+        "requirementIds": [
+          "req_1",
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "overview"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Investigate customer needs and translate them into product decisions",
+        "fit": "strong",
+        "narrative": "Reg's product decisions are grounded in real use rather than guesses. On Reaccord, he uses the product himself daily, which surfaces defects conventional testing misses — interactions that work but are too slow, repetitive, or confusing — and he has repeatedly changed information hierarchy, reduced input friction, and adjusted daily composition based on that evidence. At CModel, his work translating messy organizational email into strategic context required the same discipline of deciding what actually matters to the customer.",
+        "requirementIds": [
+          "req_2"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "overview"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Shape product behavior and interaction design, including prototype evaluation",
+        "fit": "strong",
+        "narrative": "Reg shapes product behavior with unusual depth because he thinks from whole-system behavior first: what the user is trying to do, where data moves, and what can fail. Reaccord's adaptive daily interface — a UI derived from the user's evolving state rather than a fixed dashboard — shows genuine interaction-design judgment, including the hard state-management problems of temporal logic, derived state, and personalization. He evaluates prototypes the same way: at CModel, prototypes in Bubble were chosen for cheap behavior testing, and he worked through the transition deciding what product behavior to preserve versus redesign.",
+        "requirementIds": [
+          "req_3",
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "adaptive-interface"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "consumer-product-engineering"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Reason about APIs and data constraints to ground product decisions in technical reality",
+        "fit": "strong",
+        "narrative": "This is where Reg is strongest relative to most product candidates: he reasons natively about APIs, data constraints, and system boundaries. He has built and maintained production integrations across Microsoft Graph, SharePoint, Teams, DocuSign, HubSpot, Stripe Connect, and four social platforms, handling OAuth lifecycle, rate limits, pagination, and mapping heterogeneous external schemas onto internal models. He designed recurring ingestion workflows around quota, scheduling, and cost constraints, and debugs failures across systems rather than treating API calls as isolated units — the exact reasoning that keeps a workflow automation product technically grounded.",
+        "requirementIds": [
+          "req_4"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Coordinate engineering and design toward a shared outcome",
+        "fit": "strong",
+        "narrative": "Reg keeps product intent aligned across engineering and design because he has operated at the intersection himself — across product behavior, AI behavior, data, integrations, and frontend implementation. At CModel he initiated an agentic development process combining shared technical context, team-wide AI-assisted development, engineer review, automated testing, and CI/CD controls, showing he can create the structures that keep a team moving toward a shared outcome, not just coordinate within them.",
+        "requirementIds": [
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "overview"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_6",
+        "title": "Five years in this exact title is preferred, not mandatory — not a blocking constraint",
+        "fit": "gap",
+        "narrative": "Reg's title history differs from five years in an exact Product Manager title — that is the material gap. But the work this title describes is demonstrably what he has done: defining products, shaping behavior, reasoning about APIs, and shipping to production across CModel, MusicBreakr, and Reaccord. The constraint is explicitly non-blocking, and the evidence suggests the gap is in metadata, not capability.",
+        "requirementIds": [
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Five years in this exact title is preferred, not mandatory — not a blocking constraint",
+        "narrative": "Reg's title history differs from five years in an exact Product Manager title — that is the material gap. But the work this title describes is demonstrably what he has done: defining products, shaping behavior, reasoning about APIs, and shipping to production across CModel, MusicBreakr, and Reaccord. The constraint is explicitly non-blocking, and the evidence suggests the gap is in metadata, not capability.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "Walk through how you defined the email-to-decision-intelligence workflow at CModel: how did you decide what the product should do, and how did customer input change that definition?",
+      "Tell me about a time an external API's real behavior diverged from what you expected. How did you adapt the product design to the constraint?",
+      "How did you decide what to preserve versus redesign when moving CModel from Bubble prototypes to the TypeScript/Supabase stack?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "zero-to-one-product-building",
+      "product-interaction-judgment",
+      "cross-boundary-execution",
+      "integration-workflow-engineering",
+      "whole-system-reasoning",
+      "ambiguous-problem-to-working-system",
+      "data-state-modeling"
+    ],
+    "evidenceSections": 19,
+    "evidenceCharacters": 15207,
+    "unmatchedRequirementIds": [
+      "req_8"
+    ]
+  }
+}

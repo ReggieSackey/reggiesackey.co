@@ -1,0 +1,212 @@
+{
+  "job": "ai",
+  "extractedJob": {
+    "jobTitle": "AI Application Engineer",
+    "company": "Example Tools",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Build AI product experiences using language model APIs",
+        "importance": "core",
+        "category": "AI engineering"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Design structured generation pipelines",
+        "importance": "core",
+        "category": "AI engineering"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Validate model output",
+        "importance": "core",
+        "category": "AI engineering"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Implement secure backend APIs",
+        "importance": "core",
+        "category": "Backend"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Implement retrieval grounded in source documents",
+        "importance": "core",
+        "category": "AI engineering"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Build observable production systems",
+        "importance": "important",
+        "category": "Production"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Own frontend integration in TypeScript and React",
+        "importance": "core",
+        "category": "Frontend"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Collaborate with product teams",
+        "importance": "important",
+        "category": "Collaboration"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Evaluate latency and cost of AI features",
+        "importance": "important",
+        "category": "Production"
+      },
+      {
+        "id": "req_10",
+        "requirement": "Turn product needs into working end-to-end systems",
+        "importance": "core",
+        "category": "Delivery"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a product-minded AI application engineer who has shipped language-model features end to end across three real products: an enterprise strategic assistant, a consumer AI planning app, and a social-data marketplace. He pairs applied AI engineering (tool calling, schema-constrained generation, context selection, validation) with full-stack delivery in TypeScript, React, Next.js, and secure backend/API work including OAuth and third-party integrations — exactly the boundary-spanning the mission requires. His defining strength is treating model output as a probabilistic input to deterministic application state, with validation, contracts, and production ownership at every boundary, which maps directly to your success drivers of trustworthy output, end-to-end shipping, and observable, cost-aware systems."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Build AI product features using language model APIs with structured generation and output validation",
+        "fit": "strong",
+        "narrative": "Reg builds AI features the way this role needs them built: as application systems, not chat wrappers. At CModel he delivered a strategic assistant on Next.js with selective context and tool-call retrieval, and used schema-constrained generation — define the structure, generate, validate, then accept, retry, repair, or reject — so model output becomes reliable application state rather than free text. At Reaccord he went further, separating provider/model configuration from prompt construction, output shape, validation, persistence, and downstream UI so workflows survive model switching as quality, latency, and cost shift. That combination of structured generation, explicit validation boundaries, and whole-system judgment directly serves the mission's demand for AI experiences users can trust.",
+        "requirementIds": [
+          "req_1",
+          "req_3",
+          "req_10"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "strategic-assistant"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "structured-generation"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Implement retrieval grounded in source documents so model responses are accurate and attributable",
+        "fit": "strong",
+        "narrative": "Reg treats grounding and context selection as first-class engineering problems. On CModel's assistant he split runtime context into provided application state plus on-demand tool-call retrieval, so responses draw on relevant organizational data without flooding prompts; his email-signals workflow similarly extracts only useful strategic signals from authorized email instead of treating raw inbox contents as model context. At Reaccord, AI interactions operate against persistent, relational product state — goals, plans, actions, reflections — with the application owning what the model sees for each operation. His persistence design (stable domain objects vs. flexible generated structures, validated with shared Zod contracts) keeps generated content attributable to source data without sacrificing iteration speed.",
+        "requirementIds": [
+          "req_2",
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "strategic-assistant"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "structured-generation"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Build secure backend APIs supporting AI features",
+        "fit": "strong",
+        "narrative": "Reg has built and operated the secure backend machinery AI features depend on. At CModel he implemented OAuth flows, token lifecycle, and integrations across Microsoft Graph, SharePoint, Teams, DocuSign, HubSpot, and more, mapping external state into the application model and debugging failures at system boundaries like expired authorization and divergent remote state. At MusicBreakr he shipped Stripe Connect onboarding, payments, and delegated account access alongside rate-limit-aware, quota-constrained recurring ingestion at marketplace scale, and carried CModel through a Bubble-to-TypeScript/Supabase migration that required rethinking permissions, data ownership, and implementation boundaries. He reasons about where data moves, what can fail, and which system owns which responsibility — the foundation of secure APIs for AI features.",
+        "requirementIds": [
+          "req_4"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Integrate AI experiences into frontend applications using TypeScript and React",
+        "fit": "relevant",
+        "narrative": "Reg's frontend integration experience is real and TypeScript-native, anchored in Next.js/React: he built the CModel strategic assistant as a standalone Next.js application, and Reaccord is a Turborepo monorepo with a Next.js web app and an Expo/React Native mobile client sharing TypeScript and Zod contracts over one product model. His adaptive daily interface — derived from persistent user state rather than a fixed dashboard — shows he can render AI-generated, personalized state predictably while managing derived state, synchronization, and temporal logic. He is candid that breadth with product ownership is his profile rather than frontend specialization in every nuance, but the constraint is satisfied directly: he has shipped consumer AI experiences in TypeScript and React that he uses daily and iterates on from real repeated use.",
+        "requirementIds": [
+          "req_7",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "engineering-foundations"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Make AI systems observable in production and evaluate latency and cost tradeoffs",
+        "fit": "strong",
+        "narrative": "Reg has run production systems serving active customers and treated cost, latency, and failure modes as design inputs rather than afterthoughts. At MusicBreakr he designed recurring ingestion workflows around third-party quotas, execution limits, scheduling, and compute cost, and debugged cross-boundary production failures spanning application state, backend workflows, payments, and external APIs while preserving live behavior. At Reaccord, model choice is deliberately configuration — precisely because model quality, latency, cost, and availability change quickly — and daily self-use surfaces defects like interactions that work but are too slow or intrusive. His whole-system reasoning about tradeoffs and his aggressive-but-accountable use of AI tooling make him well suited to keeping AI features observable, performant, and cost-efficient in production.",
+        "requirementIds": [
+          "req_6",
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "engineering-foundations"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [],
+    "interviewQuestions": [
+      "Walk me through a time a schema-constrained generation workflow failed in production — how did validation, retry/repair logic, and observability catch it, and what did you change?",
+      "In Reaccord you made model choice configuration rather than architecture. How did you evaluate latency and cost tradeoffs when switching or recommending models, and what metrics guided those decisions?",
+      "Your background spans Bubble, Convex, and Supabase backends rather than a conventional API framework. How would you approach designing and securing a new backend API for AI features in our stack?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "applied-ai-systems",
+      "integration-workflow-engineering",
+      "whole-system-reasoning",
+      "production-problem-solving",
+      "product-interaction-judgment",
+      "cross-boundary-execution",
+      "data-state-modeling",
+      "ambiguous-problem-to-working-system",
+      "ai-enabled-process-design"
+    ],
+    "evidenceSections": 25,
+    "evidenceCharacters": 20076,
+    "unmatchedRequirementIds": [
+      "req_7"
+    ]
+  }
+}

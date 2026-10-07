@@ -2,7 +2,7 @@
 export const candidate = {
   name: "Reg Sackey-Addo",
   shortName: "Reg",
-  headline: "Product Engineer",
+  headline: "Builder",
   siteUrl: "https://reggiesackey.co",
   contactEmail: "",
   pronouns: { subject: "he", object: "him", possessive: "his" },

@@ -1,0 +1,289 @@
+{
+  "job": "infrastructure",
+  "successProfile": {
+    "mission": "Keep large-scale Kubernetes and AWS infrastructure reliable, secure, and well-provisioned so production services meet their service-level objectives.",
+    "work": [
+      {
+        "id": "work_1",
+        "activity": "Own and operate Kubernetes clusters and AWS infrastructure at large scale",
+        "importance": "core"
+      },
+      {
+        "id": "work_2",
+        "activity": "Design Terraform modules for reproducible infrastructure provisioning",
+        "importance": "core"
+      },
+      {
+        "id": "work_3",
+        "activity": "Build and operate distributed streaming infrastructure on Kafka",
+        "importance": "core"
+      },
+      {
+        "id": "work_4",
+        "activity": "Lead incident response, on-call rotations, capacity planning, and SLO definition",
+        "importance": "core"
+      },
+      {
+        "id": "work_5",
+        "activity": "Apply Linux networking expertise and security hardening",
+        "importance": "important"
+      },
+      {
+        "id": "work_6",
+        "activity": "Support application engineering needs as a secondary skill",
+        "importance": "secondary"
+      }
+    ],
+    "successDrivers": [
+      {
+        "id": "driver_1",
+        "driver": "Reliable production infrastructure with minimal downtime and fast incident resolution",
+        "importance": "core"
+      },
+      {
+        "id": "driver_2",
+        "driver": "Scalable, codified infrastructure (Kubernetes, AWS, Terraform) that grows with demand",
+        "importance": "core"
+      },
+      {
+        "id": "driver_3",
+        "driver": "Secure, well-hardened systems and sound capacity/SLO planning",
+        "importance": "important"
+      },
+      {
+        "id": "driver_4",
+        "driver": "Deep infrastructure specialization from years of direct production ownership",
+        "importance": "core"
+      }
+    ],
+    "hardConstraints": [
+      {
+        "id": "constraint_1",
+        "constraint": "Five years of direct production infrastructure ownership",
+        "severity": "blocking"
+      }
+    ]
+  },
+  "extractedJob": {
+    "jobTitle": "Senior Infrastructure Engineer",
+    "company": "Example Cloud",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Own and operate Kubernetes clusters at large scale",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Own and operate AWS infrastructure at large scale",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Design Terraform modules for infrastructure as code",
+        "importance": "core",
+        "category": "automation"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Design and operate distributed streaming infrastructure using Kafka",
+        "importance": "core",
+        "category": "data-infrastructure"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Lead incident response and on-call rotations",
+        "importance": "core",
+        "category": "reliability"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Capacity planning and service-level objective ownership",
+        "importance": "core",
+        "category": "reliability"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Linux networking expertise",
+        "importance": "important",
+        "category": "systems"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Security hardening of infrastructure",
+        "importance": "important",
+        "category": "security"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Five years of direct production infrastructure ownership",
+        "importance": "core",
+        "category": "experience"
+      },
+      {
+        "id": "req_10",
+        "requirement": "Application engineering as a secondary skill",
+        "importance": "preferred",
+        "category": "secondary"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "gap",
+      "narrative": "Reg Sackey-Addo is an application-side engineer whose real strength is whole-system production ownership: he has built, run, and debugged live systems serving thousands of customers — including payment flows, delegated permissions, and recurring ingestion under rate limits — where failures crossed application, backend, and third-party boundaries. That production problem-solving and rapid adaptation to unfamiliar layers are genuine assets for a Senior Infrastructure Engineer. The candid gap is that his evidence shows no direct history owning Kubernetes, AWS at scale, Terraform, Kafka, Linux networking, or security hardening, and the five-year direct production infrastructure ownership requirement is a blocking constraint; he is best positioned as an unusually adaptable engineer with strong production instincts, not as a ready-made infrastructure specialist."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Own and operate Kubernetes clusters and AWS infrastructure at large scale",
+        "fit": "gap",
+        "narrative": "Reg has not owned Kubernetes or AWS clusters at large scale, and his production ownership history is in application and integration layers rather than infrastructure, so the five-year direct infrastructure ownership requirement is not met by his evidence. What he does bring is a track record of operating live, customer-facing systems — a marketplace with thousands of users and hundreds of thousands of dollars in transactions — where he debugged production failures spanning application state, backend workflows, payments, and external APIs, and had to make changes without breaking existing behavior. His self-described path of learning from abstractions downward, plus demonstrated fast ramp-up in unfamiliar stacks like C++/JUCE, supports genuine adaptability, but the infrastructure-specific experience must be built on the job.",
+        "requirementIds": [
+          "req_1",
+          "req_8",
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Design Terraform modules for reproducible infrastructure provisioning",
+        "fit": "relevant",
+        "narrative": "While the evidence shows no Terraform work, Reg repeatedly does the underlying thing Terraform exists for: turning ambiguous requirements into working, repeatable systems. He moved CModel from Bubble prototypes to a conventional TypeScript/Supabase stack, decided what to preserve versus redesign, and chose implementation boundaries deliberately — the same judgment needed to design modules others can reuse. He also stood up an agentic development process with shared technical context, review, automated testing, and CI/CD controls, showing he codifies practices rather than solving problems one-off.",
+        "requirementIds": [
+          "req_3"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Build and operate distributed streaming infrastructure on Kafka",
+        "fit": "gap",
+        "narrative": "There is no Kafka or large-scale AWS experience in the evidence, and this is a real gap for streaming infrastructure ownership. The transferable strength is architectural: Reg designs data movement end to end — he built recurring ingestion workflows constrained by quotas, execution limits, scheduling, and compute cost, and designed data structures and access patterns that held up as ingestion volume grew. He reasons about which system owns which responsibility and what can fail at boundaries, which is the right mindset for distributed streaming, but the specific platform depth would be new.",
+        "requirementIds": [
+          "req_2",
+          "req_4"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Lead incident response, on-call rotations, capacity planning, and SLO definition",
+        "fit": "relevant",
+        "narrative": "This is where Reg is most credible. He has carried real production responsibility for live marketplaces and decision-intelligence products serving active customers, debugging failures that crossed application state, backend workflows, payment systems, and third-party APIs — exactly the boundary-spanning diagnosis incident response demands. He designed quota- and cost-aware recurring workloads, which requires the same capacity-thinking behind SLO ownership, and he shipped changes under the constraint of preserving existing customer behavior. Formal on-call rotation leadership is not evidenced, but the production instincts are.",
+        "requirementIds": [
+          "req_5",
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Apply Linux networking expertise and security hardening",
+        "fit": "gap",
+        "narrative": "Reg has no demonstrated Linux networking or security-hardening depth, and this theme is a gap rather than a strength. The adjacent evidence is real though: he implemented OAuth flows, token lifecycle, delegated account access, and authorization models across many third-party systems, and learned security and system boundaries from the application layer downward. Combined with rapid mental-model formation in unfamiliar environments, he is likely to close this gap faster than most, but it should be hired for as growth potential, not existing expertise.",
+        "requirementIds": [
+          "req_7",
+          "req_10"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Own and operate Kubernetes clusters and AWS infrastructure at large scale",
+        "narrative": "Reg has not owned Kubernetes or AWS clusters at large scale, and his production ownership history is in application and integration layers rather than infrastructure, so the five-year direct infrastructure ownership requirement is not met by his evidence. What he does bring is a track record of operating live, customer-facing systems — a marketplace with thousands of users and hundreds of thousands of dollars in transactions — where he debugged production failures spanning application state, backend workflows, payments, and external APIs, and had to make changes without breaking existing behavior. His self-described path of learning from abstractions downward, plus demonstrated fast ramp-up in unfamiliar stacks like C++/JUCE, supports genuine adaptability, but the infrastructure-specific experience must be built on the job.",
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          }
+        ]
+      },
+      {
+        "title": "Build and operate distributed streaming infrastructure on Kafka",
+        "narrative": "There is no Kafka or large-scale AWS experience in the evidence, and this is a real gap for streaming infrastructure ownership. The transferable strength is architectural: Reg designs data movement end to end — he built recurring ingestion workflows constrained by quotas, execution limits, scheduling, and compute cost, and designed data structures and access patterns that held up as ingestion volume grew. He reasons about which system owns which responsibility and what can fail at boundaries, which is the right mindset for distributed streaming, but the specific platform depth would be new.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      },
+      {
+        "title": "Apply Linux networking expertise and security hardening",
+        "narrative": "Reg has no demonstrated Linux networking or security-hardening depth, and this theme is a gap rather than a strength. The adjacent evidence is real though: he implemented OAuth flows, token lifecycle, delegated account access, and authorization models across many third-party systems, and learned security and system boundaries from the application layer downward. Combined with rapid mental-model formation in unfamiliar environments, he is likely to close this gap faster than most, but it should be hired for as growth potential, not existing expertise.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "Walk through a production failure you owned end to end: how did you diagnose across boundaries, what did you change, and how did you protect existing customer behavior?",
+      "You've learned unfamiliar technical layers quickly before — what would your first 90 days of building real Kubernetes and AWS operational depth look like, concretely?",
+      "How would you approach designing an ingestion or streaming workflow's capacity, quotas, and failure handling when you don't yet know the platform's internal limits?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "production-problem-solving",
+      "whole-system-reasoning",
+      "ambiguous-problem-to-working-system",
+      "rapid-technical-adaptation",
+      "cross-boundary-execution"
+    ],
+    "evidenceSections": 16,
+    "evidenceCharacters": 12399,
+    "unmatchedRequirementIds": []
+  }
+}

@@ -35,8 +35,10 @@ describe("jev-v1", () => {
 describe("typed synthesis plan", () => {
   it("allocates every requirement once and rejects prose outside the planned theme set", () => {
     const decision = {
+      successProfile: { mission: "Deliver a product", work: [{ id: "work_1", activity: "Deliver the product", importance: "core" as const }], successDrivers: [{ id: "driver_1", driver: "Delivery", importance: "core" as const }], hardConstraints: [] },
       extractedJob: { jobTitle: null, company: null, requirements: [1, 2, 3].map((n) => ({ id: `req_${n}`, requirement: `Requirement ${n}`, importance: "core" as const, category: "product" })) },
       matches: [{ capabilityId: "cap_delivery", requirementIds: ["req_1"], score: 0.9 }],
+      capabilityRelevance: [{ capabilityId: "cap_delivery", relevance: "central" as const, workIds: ["work_1"], successDriverIds: ["driver_1"] }],
     };
     const plan = buildSynthesisPlan(decision, capabilities, [source]);
     expect(plan.themes.flatMap((theme) => theme.requirementIds).sort()).toEqual(["req_1", "req_2", "req_3"]);

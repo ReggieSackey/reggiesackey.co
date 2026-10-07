@@ -12,7 +12,7 @@ export async function generateCapabilities(
     caller,
     "capabilities",
     proposalsSchema,
-    "Propose a compact registry of durable professional capabilities demonstrated in the supplied published sources. Aim for 8–20 concepts that employers hire for, not a technology inventory. Consolidate synonymous concepts. Existing concepts may be proposed for an explicit reviewed merge; never silently rename them. Each proposal needs 1–4 strongest canonical source section references; use exact supplied identifiers. Descriptions are interpretation, not new facts. Body text must never be copied into relationships. Description <=800 characters, note <=500, title <=120, tags <=8. " +
+    "Review newly published evidence against the existing reviewed capability registry. Propose only when the evidence establishes a durable demonstrated pattern not represented in the registry, or materially strengthens an existing capability. Strongly prefer a proposal intended for explicit merge into an existing capability over creating a new capability when the underlying pattern already exists. Do not reinvent the career ontology, generate an engineering taxonomy, or turn technologies, platforms, domains, or artifacts into top-level capabilities. Return only proposals that need administrator review; each needs 1–4 strongest canonical source references using exact identifiers. Descriptions are interpretation, not new facts. Body text must never be copied into relationships. Description <=800 characters, note <=500, title <=120, tags <=8. " +
       shape,
     JSON.stringify({ existing }) + "\n" + renderCorpusForModel(sources),
     { shapeDescription: shape },

@@ -1,0 +1,253 @@
+{
+  "job": "automation-systems",
+  "successProfile": {
+    "mission": "Convert repetitive operational work into reliable internal automations and integrations that run in production, connecting third-party systems with correctly modeled state and permissions.",
+    "work": [
+      {
+        "id": "work_1",
+        "activity": "Observe repetitive operational work and map the underlying process into a defined workflow",
+        "importance": "core"
+      },
+      {
+        "id": "work_2",
+        "activity": "Build internal tools and automations using TypeScript and low-code platforms",
+        "importance": "core"
+      },
+      {
+        "id": "work_3",
+        "activity": "Integrate and connect third-party systems and APIs into coherent operational flows",
+        "importance": "core"
+      },
+      {
+        "id": "work_4",
+        "activity": "Model application state and permissions for the automated systems",
+        "importance": "important"
+      },
+      {
+        "id": "work_5",
+        "activity": "Maintain and debug automations in production over time",
+        "importance": "important"
+      }
+    ],
+    "successDrivers": [
+      {
+        "id": "driver_1",
+        "driver": "Ability to work from fuzzy operational problems without a complete specification",
+        "importance": "core"
+      },
+      {
+        "id": "driver_2",
+        "driver": "Ability to connect external systems reliably, including auth, data translation, and failure behavior",
+        "importance": "core"
+      },
+      {
+        "id": "driver_3",
+        "driver": "Ability to deliver working end-to-end tools rather than operate a predetermined task",
+        "importance": "important"
+      },
+      {
+        "id": "driver_4",
+        "driver": "Ability to keep automations healthy in real use and diagnose production failures",
+        "importance": "important"
+      },
+      {
+        "id": "driver_5",
+        "driver": "Flexibility across TypeScript and low-code stacks with equivalent experience accepted",
+        "importance": "secondary"
+      }
+    ],
+    "hardConstraints": []
+  },
+  "extractedJob": {
+    "jobTitle": null,
+    "company": null,
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Identify repetitive operational work and map the underlying process",
+        "importance": "core",
+        "category": "process analysis"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Build internal tools",
+        "importance": "core",
+        "category": "development"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Build integrations between systems",
+        "importance": "core",
+        "category": "integrations"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Connect third-party systems and APIs",
+        "importance": "core",
+        "category": "integrations"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Model state and permissions",
+        "importance": "core",
+        "category": "data modeling"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Maintain automations in production",
+        "importance": "important",
+        "category": "operations"
+      },
+      {
+        "id": "req_7",
+        "requirement": "TypeScript experience",
+        "importance": "important",
+        "category": "technical"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Low-code platform experience (or equivalent accepted)",
+        "importance": "preferred",
+        "category": "technical"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "relevant",
+      "narrative": "Reg Sackey-Addo is a product-minded automation and integration engineer whose career is essentially the mission statement in practice: he has repeatedly turned fuzzy operational work into production systems that connect third-party services. He owned an email-to-decision-intelligence pipeline end to end at CModel, maintained OAuth/API integrations across Microsoft 365, SharePoint, DocuSign, HubSpot, and others, and ran rate-limit-aware recurring ingestion across four social platforms at MusicBreakr while serving live customers. He works fluently across both low-code (Bubble, extended with JavaScript and external services) and conventional TypeScript stacks (Next.js, Supabase, Convex), including leading the migration between them. That combination — ownership of the whole system, real production debugging of integration failures at boundaries, and comfort modeling state and delegated access — makes him unusually likely to deliver working, durable automations rather than partial artifacts."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Observe repetitive operational work and map the underlying process into a defined workflow",
+        "fit": "strong",
+        "narrative": "Reg's core strength is turning ambiguous operational problems into defined, working systems. At CModel he owned an email-to-decision-intelligence workflow from product definition through production, where the hard problem was mapping noisy operational input (organizational email) into exactly the relevant context a downstream system needed — a direct instance of observing messy work and extracting a defined workflow. He explicitly describes 0-to-1 product engineering under ambiguity as his strongest area, deciding what should be built as well as how.",
+        "requirementIds": [
+          "req_1"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Build internal tools and automations using TypeScript and low-code platforms",
+        "fit": "relevant",
+        "narrative": "Reg builds internal tools across the full low-code-to-code spectrum. He was a production Bubble engineer at marketplace scale — payments, delegated access, background workflows — and extended the platform with JavaScript and external services where its abstractions ran out. At CModel he led the migration from Bubble prototypes to a TypeScript/Supabase stack and shipped a standalone Next.js strategic assistant, and he independently built Reaccord end to end as a Turborepo monorepo with Next.js web and Expo mobile clients. He can pick the right implementation boundary for the job rather than being locked to one stack.",
+        "requirementIds": [
+          "req_2",
+          "req_7",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Integrate and connect third-party systems and APIs into coherent operational flows",
+        "fit": "strong",
+        "narrative": "This is Reg's strongest evidence area. At CModel he implemented and maintained integrations with Microsoft Graph (M365/Outlook), SharePoint, Teams, DocuSign, HubSpot, Monday, Harvest, Freshdesk, and Google services, covering OAuth flows, token lifecycle, pagination, error handling, and mapping external state into the application model. At MusicBreakr he built and operated recurring ingestion workflows across Instagram, TikTok, YouTube, and Twitter/X under real API quotas and rate limits. He understands that integration failures live at system boundaries and debugs across both sides rather than treating an API call in isolation.",
+        "requirementIds": [
+          "req_3",
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Model application state and permissions for the automated systems",
+        "fit": "strong",
+        "narrative": "Reg has repeatedly designed the state and permission models beneath automated flows. At MusicBreakr he built a normalization layer mapping heterogeneous platform identifiers and schemas onto internal creator, promotion, and campaign models, plus delegated account access for managers and labels. At Reaccord he designed persistence that separates durable domain relationships (goals, actions, completions) from rapidly changing generated state, with validated contracts at the application boundary. He frames authorization, data modeling, and permissions as core strengths learned from the system level down.",
+        "requirementIds": [
+          "req_5"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "flexible-backend"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "reaccord",
+            "sectionId": "behavior-model"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Maintain and debug automations in production over time",
+        "fit": "strong",
+        "narrative": "Reg has run automations in production with real consequences and debugged them over time. At MusicBreakr he operated social attribution and payment systems while serving active customers, debugging failures that crossed application state, backend workflows, Stripe, and social APIs. At CModel he maintains live integrations where failure modes include expired authorization, undocumented API behavior, and local/remote state disagreement. His maintenance posture is whole-system: reason about which system owns which responsibility and what can fail, not just patch the visible symptom.",
+        "requirementIds": [
+          "req_4"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [],
+    "interviewQuestions": [
+      "Walk me through an integration failure you debugged in production where the cause spanned two systems — how did you isolate it and what did you change to prevent recurrence?",
+      "Tell me about a time you mapped a fuzzy, repetitive manual process into an automated workflow. How did you decide what to automate and where the boundaries were?",
+      "You've worked in both Bubble and conventional TypeScript stacks. How do you decide which implementation boundary is right for a given internal tool, and when do you migrate?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "ambiguous-problem-to-working-system",
+      "integration-workflow-engineering",
+      "data-state-modeling",
+      "production-problem-solving",
+      "zero-to-one-product-building",
+      "whole-system-reasoning",
+      "platform-extension-abstraction-escape",
+      "rapid-technical-adaptation"
+    ],
+    "evidenceSections": 22,
+    "evidenceCharacters": 16495,
+    "unmatchedRequirementIds": []
+  }
+}

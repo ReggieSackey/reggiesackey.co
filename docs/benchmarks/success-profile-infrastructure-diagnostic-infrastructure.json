@@ -1,0 +1,315 @@
+{
+  "job": "infrastructure",
+  "successProfile": {
+    "mission": "Own and reliably operate large-scale Kubernetes and AWS infrastructure, ensuring capacity, security, and service-level commitments are met while leading response to production incidents.",
+    "work": [
+      {
+        "id": "work_1",
+        "activity": "Operate and scale Kubernetes clusters and AWS infrastructure",
+        "importance": "core"
+      },
+      {
+        "id": "work_2",
+        "activity": "Design Terraform modules and infrastructure-as-code",
+        "importance": "core"
+      },
+      {
+        "id": "work_3",
+        "activity": "Build and run distributed streaming infrastructure with Kafka",
+        "importance": "important"
+      },
+      {
+        "id": "work_4",
+        "activity": "Lead incident response, on-call rotations, capacity planning, and SLOs",
+        "importance": "core"
+      },
+      {
+        "id": "work_5",
+        "activity": "Apply Linux networking expertise and security hardening",
+        "importance": "important"
+      }
+    ],
+    "successDrivers": [
+      {
+        "id": "driver_1",
+        "driver": "Reliability of large-scale production infrastructure under failure conditions",
+        "importance": "core"
+      },
+      {
+        "id": "driver_2",
+        "driver": "Sustainable operations through capacity planning, SLOs, and rotation leadership",
+        "importance": "core"
+      },
+      {
+        "id": "driver_3",
+        "driver": "Scalable, maintainable infrastructure defined as code",
+        "importance": "important"
+      },
+      {
+        "id": "driver_4",
+        "driver": "Secure, well-networked Linux systems at scale",
+        "importance": "important"
+      }
+    ],
+    "hardConstraints": [
+      {
+        "id": "constraint_1",
+        "constraint": "Five years of direct production infrastructure ownership",
+        "severity": "blocking"
+      }
+    ]
+  },
+  "extractedJob": {
+    "jobTitle": "Senior Infrastructure Engineer",
+    "company": "Example Cloud",
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Own Kubernetes clusters at large scale",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Own AWS infrastructure at large scale",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Design Terraform modules",
+        "importance": "core",
+        "category": "infrastructure-as-code"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Design distributed streaming infrastructure using Kafka",
+        "importance": "important",
+        "category": "distributed-systems"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Lead incident response",
+        "importance": "core",
+        "category": "operations"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Run on-call rotations",
+        "importance": "important",
+        "category": "operations"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Capacity planning and service-level objectives",
+        "importance": "core",
+        "category": "reliability"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Linux networking expertise",
+        "importance": "important",
+        "category": "systems"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Security hardening",
+        "importance": "important",
+        "category": "security"
+      },
+      {
+        "id": "req_10",
+        "requirement": "Five years of direct production infrastructure ownership",
+        "importance": "core",
+        "category": "experience"
+      },
+      {
+        "id": "req_11",
+        "requirement": "Application engineering as a secondary skill",
+        "importance": "preferred",
+        "category": "software"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "gap",
+      "narrative": "Reg Sackey-Addo is not a traditional infrastructure hire, and this application should be evaluated with that stated openly: the evidence explicitly says large-scale Kubernetes, cloud-platform engineering, SRE, and Kafka are not his strongest areas, and he does not meet the five-year direct production infrastructure ownership requirement, which is a blocking constraint. What he does bring is unusually strong production ownership at the application layer — debugging failures across application state, backend workflows, payments, and third-party APIs while serving live customers — plus demonstrated ability to build a mental model quickly in unfamiliar technical environments. If Example Cloud can accommodate the experience constraint, the case for him rests on whole-system reasoning and learning velocity applied to infrastructure work, not on direct precedent."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Operate and scale Kubernetes clusters and AWS infrastructure",
+        "fit": "gap",
+        "narrative": "Reg has not operated large-scale Kubernetes clusters or AWS infrastructure, and his own evidence says infrastructure is not his strongest discipline. What he does bring is genuine whole-system reasoning — thinking about where data moves, what owns which responsibility, what can fail, and what tradeoffs an implementation creates — plus a demonstrated ability to become productive in unfamiliar technical environments quickly, as his recent C++/JUCE work illustrates. That combination suggests he could learn cluster and cloud operations faster than most application engineers, though this would be a growth trajectory rather than proven capability.",
+        "requirementIds": [
+          "req_1",
+          "req_8",
+          "req_11"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Design Terraform modules and infrastructure-as-code",
+        "fit": "relevant",
+        "narrative": "Reg has not written Terraform, but the underlying skill the requirement tests — turning an ambiguous problem into a working, maintainable system with clearly owned responsibilities — is well evidenced. He has owned workflows from product definition through production, moved CModel from prototypes to a conventional TypeScript/Supabase stack, and chosen implementation boundaries deliberately rather than by habit. Translating infrastructure intent into composable, reviewable modules is a natural extension of that discipline rather than a stretch.",
+        "requirementIds": [
+          "req_3"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Build and run distributed streaming infrastructure with Kafka",
+        "fit": "gap",
+        "narrative": "Reg has no direct Kafka or large-scale distributed streaming experience, and his own materials flag distributed systems as outside his strongest areas. His transferable strengths are designing recurring ingestion workflows under real quotas, execution limits, and compute cost at MusicBreakr, and reasoning across system boundaries — the mental discipline needed to understand producer/consumer behavior and failure modes in a streaming system. This is a material gap that would require deliberate ramp-up.",
+        "requirementIds": [
+          "req_2",
+          "req_4"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Lead incident response, on-call rotations, capacity planning, and SLOs",
+        "fit": "relevant",
+        "narrative": "Reg has real, live production ownership: he built and ran marketplace payments, social ingestion, and delegated access systems serving customers, and debugged failures that crossed application state, backend workflows, and external services like Stripe while those systems were under load. His instinct for comparing state across systems rather than treating an error as an isolated unit is exactly the disposition incident response demands. Formal incident command and on-call rotation leadership are less evidenced, but the production judgment underneath them is demonstrated.",
+        "requirementIds": [
+          "req_5",
+          "req_6",
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Apply Linux networking expertise and security hardening",
+        "fit": "relevant",
+        "narrative": "Reg does not claim deep Linux networking or security hardening expertise, but his history shows security-relevant production work: OAuth flows and token lifecycle, permissions and authorization, delegated account access, and debugging failures that occur at authentication boundaries. Combined with a documented record of building competence in unfamiliar low-level environments quickly, there is a credible path to hardening and networking fluency — though direct Linux kernel/networking depth remains to be developed.",
+        "requirementIds": [
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "learning-velocity"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "engineering-foundations"
+          }
+        ]
+      },
+      {
+        "id": "theme_6",
+        "title": "Five years of direct production infrastructure ownership",
+        "fit": "gap",
+        "narrative": "This is the decisive gap: Reg does not have five years of direct production infrastructure ownership, and his own evidence is candid that he is not primarily an infrastructure engineer. He does have meaningful production ownership at the application and backend level — API design, data modeling, background workflows, authentication, payments, and live-customer debugging — but that is a different discipline from building and operating underlying infrastructure. Unless Example Cloud can treat this as a coachable candidate with exceptional learning velocity rather than a hard gate, this requirement alone argues against the hire.",
+        "requirementIds": [
+          "req_10"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Operate and scale Kubernetes clusters and AWS infrastructure",
+        "narrative": "Reg has not operated large-scale Kubernetes clusters or AWS infrastructure, and his own evidence says infrastructure is not his strongest discipline. What he does bring is genuine whole-system reasoning — thinking about where data moves, what owns which responsibility, what can fail, and what tradeoffs an implementation creates — plus a demonstrated ability to become productive in unfamiliar technical environments quickly, as his recent C++/JUCE work illustrates. That combination suggests he could learn cluster and cloud operations faster than most application engineers, though this would be a growth trajectory rather than proven capability.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      },
+      {
+        "title": "Build and run distributed streaming infrastructure with Kafka",
+        "narrative": "Reg has no direct Kafka or large-scale distributed streaming experience, and his own materials flag distributed systems as outside his strongest areas. His transferable strengths are designing recurring ingestion workflows under real quotas, execution limits, and compute cost at MusicBreakr, and reasoning across system boundaries — the mental discipline needed to understand producer/consumer behavior and failure modes in a streaming system. This is a material gap that would require deliberate ramp-up.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      },
+      {
+        "title": "Five years of direct production infrastructure ownership",
+        "narrative": "This is the decisive gap: Reg does not have five years of direct production infrastructure ownership, and his own evidence is candid that he is not primarily an infrastructure engineer. He does have meaningful production ownership at the application and backend level — API design, data modeling, background workflows, authentication, payments, and live-customer debugging — but that is a different discipline from building and operating underlying infrastructure. Unless Example Cloud can treat this as a coachable candidate with exceptional learning velocity rather than a hard gate, this requirement alone argues against the hire.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "Walk me through a production failure you owned end-to-end: how did you compare state across systems, mitigate impact, and prevent recurrence?",
+      "You learned engineering from high-level abstractions downward. How would you approach building a working mental model of a Kubernetes cluster and its failure modes in your first 60 days?",
+      "Given that your background is application engineering rather than infrastructure operations, how would you structure your own ramp-up in capacity planning, SLOs, and on-call leadership?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "production-problem-solving",
+      "whole-system-reasoning",
+      "ambiguous-problem-to-working-system",
+      "rapid-technical-adaptation",
+      "cross-boundary-execution"
+    ],
+    "evidenceSections": 16,
+    "evidenceCharacters": 12399,
+    "unmatchedRequirementIds": [
+      "req_9",
+      "req_10",
+      "req_11"
+    ]
+  }
+}

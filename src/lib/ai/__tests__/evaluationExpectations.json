@@ -1,0 +1,17 @@
+{
+  "product-engineer": { "broadResult": "strong candidate", "likelyAlignment": ["ambiguous-problem-to-working-system", "zero-to-one-product-building", "product-interaction-judgment", "data-state-modeling"], "materialConstraints": [] },
+  "ai-application-engineer": { "broadResult": "strong candidate", "likelyAlignment": ["applied-ai-systems", "whole-system-reasoning", "integration-workflow-engineering"], "materialConstraints": [] },
+  "forward-deployed-technical": { "broadResult": "strong candidate", "likelyAlignment": ["ambiguous-problem-to-working-system", "integration-workflow-engineering", "cross-boundary-execution", "applied-ai-systems"], "materialConstraints": ["required travel may need confirmation"] },
+  "ai-solutions": { "broadResult": "strong candidate", "likelyAlignment": ["applied-ai-systems", "integration-workflow-engineering", "ambiguous-problem-to-working-system", "cross-boundary-execution"], "materialConstraints": ["depth of formal consulting experience may need confirmation"] },
+  "technical-product-manager": { "broadResult": "plausible candidate", "likelyAlignment": ["product-interaction-judgment", "ambiguous-problem-to-working-system", "whole-system-reasoning"], "materialConstraints": ["formal product-management operating experience may differ"] },
+  "ai-transformation": { "broadResult": "plausible candidate", "likelyAlignment": ["ai-enabled-process-design", "applied-ai-systems", "cross-boundary-execution"], "materialConstraints": ["organization-scale change leadership"] },
+  "product-operations": { "broadResult": "plausible candidate", "likelyAlignment": ["integration-workflow-engineering", "production-problem-solving", "cross-boundary-execution"], "materialConstraints": ["people-management scale if treated as mandatory"] },
+  "automation-systems": { "broadResult": "strong candidate", "likelyAlignment": ["integration-workflow-engineering", "platform-extension-abstraction-escape", "data-state-modeling", "production-problem-solving"], "materialConstraints": [] },
+  "innovation-prototyping": { "broadResult": "strong candidate", "likelyAlignment": ["zero-to-one-product-building", "rapid-technical-adaptation", "product-interaction-judgment"], "materialConstraints": [] },
+  "technical-chief-of-staff": { "broadResult": "plausible candidate", "likelyAlignment": ["ambiguous-problem-to-working-system", "cross-boundary-execution", "whole-system-reasoning"], "materialConstraints": ["executive communication and organizational influence depth"] },
+  "research-builder": { "broadResult": "plausible candidate", "likelyAlignment": ["ambiguous-problem-to-working-system", "data-state-modeling", "applied-ai-systems"], "materialConstraints": ["formal research-method depth may differ"] },
+  "deep-infrastructure": { "broadResult": "poor fit", "likelyAlignment": ["production-problem-solving", "rapid-technical-adaptation"], "materialConstraints": ["role-defining Kubernetes, AWS, Terraform, Kafka, Linux networking, and SRE depth"] },
+  "people-management": { "broadResult": "poor fit", "likelyAlignment": ["cross-boundary-execution"], "materialConstraints": ["required executive people-management history and organizational scale"] },
+  "credentialed-profession": { "broadResult": "poor fit", "likelyAlignment": [], "materialConstraints": ["active California CPA license"] },
+  "emerging-role": { "broadResult": "strong candidate", "likelyAlignment": ["ai-enabled-process-design", "applied-ai-systems", "ambiguous-problem-to-working-system", "integration-workflow-engineering"], "materialConstraints": [] }
+}

@@ -1,8 +1,7 @@
 import { safeFailureCode } from "../failures";
 import { test } from "vitest";
-import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
+import { writeFileSync, mkdirSync } from "node:fs";
 import { getPublicSourceCorpus } from "../corpus";
-import { generateCapabilities } from "../generateCapabilities";
 import { runTargeted } from "../pipeline";
 import { modelRun, newMetrics, Timings } from "../telemetry";
 import {
@@ -11,7 +10,9 @@ import {
   corpusVersion,
 } from "../../../../convex/evidence";
 import { benchmarkJobs } from "./benchmarkJobs";
-import { proposalsSchema } from "../capabilitySchemas";
+import { evaluationJobs } from "./evaluationJobs";
+import { CANONICAL_CAPABILITIES } from "../../../../convex/canonicalCapabilities";
+import { StructuredOutputParseError } from "../json";
 
 test.skipIf(process.env.LIVE_TARGETED !== "1")(
   "live targeted benchmark with a reviewable proposal registry",
@@ -20,29 +21,17 @@ test.skipIf(process.env.LIVE_TARGETED !== "1")(
     mkdirSync("docs/benchmarks", { recursive: true });
     const sources = await getPublicSourceCorpus();
     const version = corpusVersion(sources);
-    let generated;
-    try {
-      const saved = JSON.parse(
-        readFileSync("docs/benchmarks/capability-proposals.json", "utf8"),
-      );
-      if (saved.corpusVersion !== version) throw new Error("stale");
-      generated = proposalsSchema.parse({ proposals: saved.proposals });
-    } catch {
-      generated = await modelRun.run(newMetrics(), () =>
-        generateCapabilities(sources, []),
-      );
-      for (const p of generated.proposals) validateRefs(p.evidence, sources);
-      writeFileSync(
-        "docs/benchmarks/capability-proposals.json",
-        JSON.stringify({ ...generated, corpusVersion: version }, null, 2),
-      );
+    for (const capability of CANONICAL_CAPABILITIES) {
+      try { validateRefs(capability.evidence, sources); }
+      catch { throw new Error(`Invalid canonical references for ${capability.slug}: ${capability.evidence.map(sourceKey).filter((key) => !new Set(sources.map(sourceKey)).has(key)).join(", ")}`); }
     }
-    const caps = generated.proposals.map((p, n) => ({
-      ...p,
-      id: `benchmark-${n + 1}`,
-    }));
+    const caps = CANONICAL_CAPABILITIES.map((capability) => ({ ...capability, id: capability.slug }));
+    const selectedJobs = process.env.BROAD_EVALUATION === "1"
+      ? evaluationJobs.filter((job) => ["forward-deployed-technical", "technical-product-manager", "automation-systems", "deep-infrastructure", "credentialed-profession", "emerging-role"].includes(job.name))
+      : benchmarkJobs;
+    const jobs = process.env.BENCHMARK_JOB ? selectedJobs.filter((job) => job.name === process.env.BENCHMARK_JOB) : selectedJobs;
     const results: unknown[] = [];
-    for (const job of benchmarkJobs) {
+    for (const job of jobs) {
       await modelRun.run(newMetrics(), async () => {
         const timing = new Timings();
         let outcome = "complete",
@@ -89,6 +78,16 @@ test.skipIf(process.env.LIVE_TARGETED !== "1")(
         } catch (error) {
           outcome = "failed";
           failureStage = safeFailureCode(error);
+          const issues = error instanceof StructuredOutputParseError && Array.isArray(error.issues)
+            ? (error.issues as Array<{ code: string; path: PropertyKey[]; message: string }>).slice(0, 3)
+            : [];
+          const failureDetail = error instanceof StructuredOutputParseError
+            ? { stage: error.failureStage, issues: issues.map((issue) => ({ code: issue.code, path: issue.path.join("."), message: issue.message })) }
+            : { code: failureStage };
+          writeFileSync(
+            `docs/benchmarks/${process.env.ANALYSIS_OUTPUT_PREFIX ?? "analysis"}-${job.name}.json`,
+            JSON.stringify({ job: job.name, outcome, failureStage, failureDetail }, null, 2),
+          );
         }
         results.push({
           name: job.name,
@@ -103,7 +102,7 @@ test.skipIf(process.env.LIVE_TARGETED !== "1")(
           {
             measuredAt: new Date().toISOString(),
             scope:
-              "Live model + validation; in-memory proposed registry and canonical evidence, excludes HTTP/persistence/Convex targeted query. No registry approval performed.",
+              "Live model + validation; fixed canonical capability registry and canonical evidence, excludes HTTP/persistence/Convex targeted query. No registry approval performed.",
             corpusVersion: version,
             results,
           },

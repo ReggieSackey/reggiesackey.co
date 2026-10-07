@@ -1,0 +1,47 @@
+{
+  "measuredAt": "2026-10-07T20:40:18.218Z",
+  "scope": "Live model + validation; in-memory proposed registry and canonical evidence, excludes HTTP/persistence/Convex targeted query. No registry approval performed.",
+  "corpusVersion": "076284c8c3be0bb2a6fadf05963c24828806fea1c85a5b8883855d6a5dd7ba24",
+  "results": [
+    {
+      "name": "infrastructure",
+      "match": 7919,
+      "retrieve": 0,
+      "plan": 3,
+      "synthesis": 14327,
+      "coverage": 0,
+      "citations": 1,
+      "totalMs": 22251,
+      "calls": 3,
+      "repairs": 1,
+      "inputTokens": 11918,
+      "outputTokens": 3407,
+      "modelMs": 22233.421208,
+      "outcome": "complete",
+      "selection": {
+        "capabilityIds": [
+          "production-problem-solving",
+          "whole-system-reasoning",
+          "ambiguous-problem-to-working-system",
+          "rapid-technical-adaptation",
+          "cross-boundary-execution"
+        ],
+        "evidenceSections": 16,
+        "evidenceCharacters": 12399,
+        "unmatchedRequirementIds": [
+          "req_9",
+          "req_10",
+          "req_11"
+        ],
+        "capabilities": [
+          "Production problem solving",
+          "Whole-system reasoning",
+          "Ambiguous problem → working system",
+          "Rapid technical adaptation",
+          "Cross-boundary execution"
+        ]
+      },
+      "failureStage": ""
+    }
+  ]
+}

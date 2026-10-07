@@ -14,6 +14,8 @@ export function safeFailureCode(error: unknown): string {
       "AI call limit": "call_limit",
       "Invalid capability decision": "invalid_match",
       "Invalid requirement fit decision": "invalid_requirement_fit",
+      "Invalid capability relevance": "invalid_capability_relevance",
+      "Incomplete success profile decision": "incomplete_success_profile",
       "Synthesis theme contract mismatch": "synthesis_theme_contract",
       "Forged planned citation": "forged_planned_citation",
       "Unexpected material gap": "unexpected_material_gap",

@@ -1,0 +1,9 @@
+{
+  "measuredAt": "2026-10-07",
+  "scope": "Consolidated from live GLM-5.3-FlashX runs against the fixed 12-capability registry and canonical development evidence. Product and AI are from success-profile-final.json; infrastructure is from success-profile-infrastructure-diagnostic.json after the same contract changes. Excludes HTTP admission, persistence, and rendering.",
+  "results": [
+    { "name": "product", "source": "success-profile-final.json", "match": 7729, "plan": 3, "synthesis": 11790, "totalMs": 19526, "inputTokens": 10561, "outputTokens": 3203, "calls": 3, "repairs": 1, "outcome": "complete", "validationFailure": "" },
+    { "name": "ai", "source": "success-profile-final.json", "match": 8090, "plan": 3, "synthesis": 8255, "totalMs": 16349, "inputTokens": 9387, "outputTokens": 2440, "calls": 2, "repairs": 0, "outcome": "complete", "validationFailure": "" },
+    { "name": "infrastructure", "source": "success-profile-infrastructure-diagnostic.json", "match": 7919, "plan": 3, "synthesis": 14327, "totalMs": 22251, "inputTokens": 11918, "outputTokens": 3407, "calls": 3, "repairs": 1, "outcome": "complete", "validationFailure": "" }
+  ]
+}

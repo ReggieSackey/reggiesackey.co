@@ -1,0 +1,309 @@
+{
+  "job": "deep-infrastructure",
+  "successProfile": {
+    "mission": "Keep large-scale Kubernetes and AWS production infrastructure reliable, scalable, and hardened by owning reliability end-to-end: provisioning via Terraform, operating Kafka, defining SLOs and capacity, leading on-call and incident response, and debugging Linux networking under real failure conditions.",
+    "work": [
+      {
+        "id": "work_1",
+        "activity": "Own and operate large-scale Kubernetes and AWS infrastructure in production",
+        "importance": "core"
+      },
+      {
+        "id": "work_2",
+        "activity": "Lead on-call rotation and incident response for production failures",
+        "importance": "core"
+      },
+      {
+        "id": "work_3",
+        "activity": "Author and maintain Terraform modules for infrastructure provisioning",
+        "importance": "core"
+      },
+      {
+        "id": "work_4",
+        "activity": "Define SLOs, capacity plans, and reliability targets",
+        "importance": "important"
+      },
+      {
+        "id": "work_5",
+        "activity": "Operate Kafka and debug Linux networking and systems issues",
+        "importance": "important"
+      },
+      {
+        "id": "work_6",
+        "activity": "Harden production infrastructure against failure and security risks",
+        "importance": "important"
+      }
+    ],
+    "successDrivers": [
+      {
+        "id": "driver_1",
+        "driver": "High availability and reliability of critical production systems",
+        "importance": "core"
+      },
+      {
+        "id": "driver_2",
+        "driver": "Fast, competent diagnosis and resolution of production incidents",
+        "importance": "core"
+      },
+      {
+        "id": "driver_3",
+        "driver": "Reproducible, well-structured infrastructure-as-code",
+        "importance": "important"
+      },
+      {
+        "id": "driver_4",
+        "driver": "Proactive capacity planning and reliability targets before failures occur",
+        "importance": "important"
+      },
+      {
+        "id": "driver_5",
+        "driver": "Deep systems-level debugging ability across Linux networking and distributed infrastructure",
+        "importance": "important"
+      }
+    ],
+    "hardConstraints": [
+      {
+        "id": "constraint_1",
+        "constraint": "Seven years of direct SRE ownership experience",
+        "severity": "blocking"
+      }
+    ]
+  },
+  "extractedJob": {
+    "jobTitle": "Site Reliability Engineer",
+    "company": null,
+    "requirements": [
+      {
+        "id": "req_1",
+        "requirement": "Own large-scale Kubernetes infrastructure in production",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_2",
+        "requirement": "Own large-scale AWS infrastructure",
+        "importance": "core",
+        "category": "infrastructure"
+      },
+      {
+        "id": "req_3",
+        "requirement": "Author Terraform modules for infrastructure-as-code",
+        "importance": "core",
+        "category": "infrastructure-as-code"
+      },
+      {
+        "id": "req_4",
+        "requirement": "Operate Kafka in production",
+        "importance": "important",
+        "category": "data infrastructure"
+      },
+      {
+        "id": "req_5",
+        "requirement": "Lead on-call rotation and incident response",
+        "importance": "core",
+        "category": "reliability"
+      },
+      {
+        "id": "req_6",
+        "requirement": "Define SLOs and capacity plans",
+        "importance": "important",
+        "category": "reliability"
+      },
+      {
+        "id": "req_7",
+        "requirement": "Debug Linux networking issues",
+        "importance": "important",
+        "category": "systems"
+      },
+      {
+        "id": "req_8",
+        "requirement": "Harden production infrastructure",
+        "importance": "important",
+        "category": "security/reliability"
+      },
+      {
+        "id": "req_9",
+        "requirement": "Seven years of direct SRE ownership experience",
+        "importance": "core",
+        "category": "experience"
+      }
+    ]
+  },
+  "validated": {
+    "overallAssessment": {
+      "fit": "gap",
+      "narrative": "Reg Sackey-Addo is a strong product/platform engineer with genuine production ownership — building and operating payment, integration, and ingestion systems serving thousands of live users and hundreds of thousands of dollars in transactions — and a demonstrated ability to reason across whole systems rather than isolated layers. That said, this role centers on large-scale Kubernetes, AWS, Terraform, and Kafka operations with a blocking requirement of seven years of direct SRE ownership, and Reg's own profile states plainly that infrastructure engineering at that scale is not his strongest area. He is worth interviewing if the team can pair his production debugging instincts, systems-level reasoning, and fast learning velocity with Kubernetes/infrastructure depth already in house — but he is not a candidate who satisfies the core infrastructure and experience requirements on paper today."
+    },
+    "themes": [
+      {
+        "id": "theme_1",
+        "title": "Own and operate large-scale Kubernetes and AWS infrastructure in production",
+        "fit": "gap",
+        "narrative": "Reg does not have evidence of owning large-scale Kubernetes or AWS infrastructure, and his profile explicitly lists Kubernetes and deep cloud-platform engineering as not among his strongest areas. What he does bring is the underlying habit that makes infrastructure operators effective: reasoning about the whole system — where data moves, which component owns which responsibility, what can fail — and forming working mental models of unfamiliar technologies quickly, as shown by his rapid ramp into C++/JUCE audio work. He is a bet on transferable systems reasoning and learning velocity, not on direct Kubernetes production experience.",
+        "requirementIds": [
+          "req_1",
+          "req_7"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      },
+      {
+        "id": "theme_2",
+        "title": "Lead on-call rotation and incident response for production failures",
+        "fit": "relevant",
+        "narrative": "Reg has real production ownership under live customers: at MusicBreakr he built and operated social attribution, Stripe Connect marketplace payments, and quota-constrained ingestion workflows while the product served thousands of users, and he debugged production failures that crossed application state, backend workflows, and external systems like payment and social APIs. His strength is diagnosing failures at system boundaries — expired authorizations, unexpected external state, disagreements between local and remote data — which is exactly the cross-boundary reasoning incident response demands. The honest caveat is that this was application-level production debugging, not formal on-call rotation leadership or hardened-infrastructure incident command.",
+        "requirementIds": [
+          "req_5",
+          "req_8"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "integrations"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "musicbreakr",
+            "sectionId": "responsibilities"
+          }
+        ]
+      },
+      {
+        "id": "theme_3",
+        "title": "Author and maintain Terraform modules for infrastructure provisioning",
+        "fit": "relevant",
+        "narrative": "Reg has no direct Terraform experience in the evidence, so this theme rests on adjacent strengths rather than like-for-like capability. His track record shows he can take an ambiguous problem and drive it to a well-structured working system with clear ownership boundaries — moving CModel from Bubble prototypes to a conventional TypeScript/Supabase architecture, structuring Reaccord as a monorepo with shared contracts to prevent drift, and initiating a disciplined agentic development process with review, testing, and CI/CD controls. Those are the habits infrastructure-as-code discipline is built on, but he would be learning Terraform itself on the job.",
+        "requirementIds": [
+          "req_3"
+        ],
+        "citations": [
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "email-signals"
+          },
+          {
+            "sourceType": "caseStudy",
+            "sourceId": "cmodel-strategic-assistant",
+            "sectionId": "architecture-evolution"
+          }
+        ]
+      },
+      {
+        "id": "theme_4",
+        "title": "Define SLOs, capacity plans, and reliability targets",
+        "fit": "relevant",
+        "narrative": "Reg has not defined formal SLOs or capacity plans, but he has repeatedly done the underlying engineering: designing MusicBreakr's ingestion and reporting data structures against third-party API quotas, execution limits, scheduling constraints, and compute cost as volume grew, and redesigning workflows and data models when small-scale choices hit performance or cost walls. He thinks proactively about what can fail and what tradeoffs an implementation creates before failures occur — the mindset capacity planning requires — though his evidence is product-scale engineering tradeoffs, not reliability-target frameworks at infrastructure scale.",
+        "requirementIds": [
+          "req_2",
+          "req_6"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          },
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "engineering-foundations"
+          }
+        ]
+      },
+      {
+        "id": "theme_5",
+        "title": "Operate Kafka and debug Linux networking and systems issues",
+        "fit": "gap",
+        "narrative": "Reg has no evidence of operating Kafka or debugging Linux networking in production; his profile acknowledges Kafka-scale event infrastructure is not a strength. What transfers is pattern-level experience: he built recurring, quota-bound ingestion pipelines at MusicBreakr and debugged cross-system data-flow failures at CModel, where he had to reason about what happens when moving data between systems misbehaves. His documented learning velocity means he could likely become productive on Kafka quickly, but he should not be hired on the assumption he can operate it on day one.",
+        "requirementIds": [
+          "req_4"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      },
+      {
+        "id": "theme_6",
+        "title": "Seven years of direct SRE ownership experience",
+        "fit": "gap",
+        "narrative": "Reg does not meet the blocking requirement of seven years of direct SRE ownership, and he says so himself: he is not primarily an infrastructure engineer, and large-scale distributed systems, SRE, and Kafka-scale event infrastructure are explicitly not his strongest areas. This is the decisive gap for the role as specified. His seven-plus-figure production experience is at the application/backend layer — meaningful, but a different discipline from owning infrastructure reliability end-to-end — so the team would need to treat him as a strong engineer moving toward SRE, not an SRE hire.",
+        "requirementIds": [
+          "req_9"
+        ],
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "materialGaps": [
+      {
+        "title": "Own and operate large-scale Kubernetes and AWS infrastructure in production",
+        "narrative": "Reg does not have evidence of owning large-scale Kubernetes or AWS infrastructure, and his profile explicitly lists Kubernetes and deep cloud-platform engineering as not among his strongest areas. What he does bring is the underlying habit that makes infrastructure operators effective: reasoning about the whole system — where data moves, which component owns which responsibility, what can fail — and forming working mental models of unfamiliar technologies quickly, as shown by his rapid ramp into C++/JUCE audio work. He is a bet on transferable systems reasoning and learning velocity, not on direct Kubernetes production experience.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      },
+      {
+        "title": "Operate Kafka and debug Linux networking and systems issues",
+        "narrative": "Reg has no evidence of operating Kafka or debugging Linux networking in production; his profile acknowledges Kafka-scale event infrastructure is not a strength. What transfers is pattern-level experience: he built recurring, quota-bound ingestion pipelines at MusicBreakr and debugged cross-system data-flow failures at CModel, where he had to reason about what happens when moving data between systems misbehaves. His documented learning velocity means he could likely become productive on Kafka quickly, but he should not be hired on the assumption he can operate it on day one.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "strongest-areas"
+          }
+        ]
+      },
+      {
+        "title": "Seven years of direct SRE ownership experience",
+        "narrative": "Reg does not meet the blocking requirement of seven years of direct SRE ownership, and he says so himself: he is not primarily an infrastructure engineer, and large-scale distributed systems, SRE, and Kafka-scale event infrastructure are explicitly not his strongest areas. This is the decisive gap for the role as specified. His seven-plus-figure production experience is at the application/backend layer — meaningful, but a different discipline from owning infrastructure reliability end-to-end — so the team would need to treat him as a strong engineer moving toward SRE, not an SRE hire.",
+        "citations": [
+          {
+            "sourceType": "profile",
+            "sourceId": "technical",
+            "sectionId": "limited-experience"
+          }
+        ]
+      }
+    ],
+    "interviewQuestions": [
+      "Walk me through the hardest production failure you debugged at MusicBreakr that crossed application state, payment systems, and an external API — how did you isolate the boundary where the failure actually lived?",
+      "You describe learning unfamiliar systems quickly, like C++/JUCE. If you had 90 days to become the operator of a Kubernetes cluster you'd never touched, what would your concrete learning and risk-mitigation plan look like?",
+      "Given that your production evidence is application-level rather than infrastructure-level, what would you need from the team in your first six months to own reliability end-to-end safely?"
+    ],
+    "duplicateThemeIds": []
+  },
+  "selection": {
+    "capabilityIds": [
+      "production-problem-solving",
+      "whole-system-reasoning",
+      "ambiguous-problem-to-working-system",
+      "cross-boundary-execution",
+      "rapid-technical-adaptation"
+    ],
+    "evidenceSections": 16,
+    "evidenceCharacters": 12399,
+    "unmatchedRequirementIds": [
+      "req_9"
+    ]
+  }
+}

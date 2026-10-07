@@ -13,6 +13,7 @@ export default function CapabilitiesPage() {
   );
   const review = useMutation(api.capabilities.review);
   const deactivate = useMutation(api.capabilities.deactivate);
+  const stageCanonical = useMutation(api.capabilities.stageCanonicalBootstrap);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
@@ -52,6 +53,23 @@ export default function CapabilitiesPage() {
         className="rounded bg-neutral-900 px-4 py-2 text-white disabled:opacity-50"
       >
         Generate proposals
+      </button>
+      <button
+        disabled={busy}
+        onClick={async () => {
+          setBusy(true);
+          try {
+            const result = await stageCanonical({});
+            setMessage(`${result.staged} canonical capabilities staged for review; ${result.skipped} already pending.`);
+          } catch {
+            setMessage("Unable to stage the canonical registry. Verify published evidence references.");
+          } finally {
+            setBusy(false);
+          }
+        }}
+        className="ml-3 rounded border border-neutral-300 px-4 py-2 disabled:opacity-50"
+      >
+        Stage canonical registry
       </button>
       <p role="status" className="text-sm">
         {message}
