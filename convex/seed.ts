@@ -12,11 +12,9 @@ import { CASE_STUDIES, PROFILE_DOCUMENTS } from "./seedData";
  * Run with:
  *   npx convex run seed:seedDevContent
  *
- * The seed upserts by slug/type. Section handling: for the seeded case
- * study (by slug) and the seeded profile document (by type), existing
- * sections are replaced wholesale — this makes the seed idempotent AND
- * prunes obsolete seeded sections so no duplicate/contradictory source
- * material survives an update. Unrelated case studies / profile docs
+ * The seed upserts by slug/type. Matching sections are patched in place and
+ * obsolete sections are removed only from that document, preserving section
+ * identities used by citations. Unrelated case studies / profile docs
  * (anything not named here) are never touched.
  *
  * To remove the content, delete rows by slug in the dashboard; nothing
@@ -69,20 +67,19 @@ export const seedDevContent = internalMutation({
         });
       }
 
-      // Replace sections of this seeded case study: delete existing
-      // (prunes obsolete seeded sections), insert canonical sections.
-      // Scoped to this case study only — unrelated data is untouched.
       const existingSections = await ctx.db
         .query("caseStudySections")
         .withIndex("by_caseStudyId_and_order", (q) =>
           q.eq("caseStudyId", caseStudyId),
         )
         .take(200);
-      for (const s of existingSections) {
-        await ctx.db.delete(s._id);
+      const desiredSlugs = new Set(cs.sections.map((section) => section.slug));
+      for (const existing of existingSections) {
+        if (!desiredSlugs.has(existing.slug)) await ctx.db.delete(existing._id);
       }
       for (const section of cs.sections) {
-        await ctx.db.insert("caseStudySections", {
+        const existing = existingSections.find((candidate) => candidate.slug === section.slug);
+        const values = {
           caseStudyId,
           slug: section.slug,
           heading: section.heading,
@@ -90,7 +87,9 @@ export const seedDevContent = internalMutation({
           order: section.order,
           ...(section.summary !== undefined ? { summary: section.summary } : {}),
           ...(section.tags !== undefined ? { tags: section.tags } : {}),
-        });
+        };
+        if (existing) await ctx.db.patch(existing._id, values);
+        else await ctx.db.insert("caseStudySections", values);
       }
       results.caseStudies += 1;
     }

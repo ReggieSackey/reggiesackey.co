@@ -159,7 +159,12 @@ export async function POST(request: Request) {
       outcome = "complete";
       return Response.json({ id });
     } catch (error) {
-      outcome = safeFailureCode(error);
+      const code = safeFailureCode(error);
+      outcome = code;
+      console.error(
+        "[analyze:failure]",
+        JSON.stringify({ code, ...timing.stages }),
+      );
       if (id)
         await fetchMutation(api.jobAnalyses.markAnalysisFailed, {
           secret: analysisSecret(),

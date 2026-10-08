@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { CANONICAL_CAPABILITIES } from "../../../../convex/canonicalCapabilities";
 import { CASE_STUDIES, PROFILE_DOCUMENTS } from "../../../../convex/seedData";
-import { buildSynthesisPlan, mergeSynthesis, proseSchema } from "../synthesisPlan";
+import { buildSynthesisPlan, mergeSynthesis, proseSchema, proseSchemaForPlan, publicStyleIssues } from "../synthesisPlan";
 import type { Decision, Capability } from "../capabilitySchemas";
 import type { SourceSection } from "../corpus";
 import { createZaiMatcher } from "../matcher";
@@ -189,11 +189,30 @@ describe("public prose contract", () => {
     expect(proseSchema.safeParse(valid).success).toBe(true);
     expect(proseSchema.safeParse({ ...valid, interviewQuestions: ["Can I use my product-building approach in this setting?"] }).success).toBe(true);
   });
-  it("rejects third person, em dashes, URLs, internal IDs, duplicates, and multiple questions", () => {
-    for (const text of ["Reg built this.", "He built this.", "I built this — quickly.", "I used https://example.test.", "I handled req_1."])
+  it("does not make cosmetic prose style a fatal validation error", () => {
+    for (const text of [
+      "I worked with a founder, and he reviewed the result.",
+      "I built this — quickly.",
+      "The candidate built this system.",
+    ])
+      expect(proseSchema.safeParse({ ...valid, overallNarrative: text }).success).toBe(true);
+    expect(publicStyleIssues({ ...valid, overallNarrative: "The candidate built this — quickly." })).toEqual(
+      expect.arrayContaining(["third_person_candidate_wording", "em_dash", "missing_first_person"]),
+    );
+  });
+  it("still rejects model-generated URLs, internal IDs, and multiple questions", () => {
+    for (const text of ["I used https://example.test.", "I handled req_1.", "I handled theme_1."])
       expect(proseSchema.safeParse({ ...valid, overallNarrative: text }).success).toBe(false);
-    expect(proseSchema.safeParse({ ...valid, themeNarratives: { theme_1: valid.overallNarrative } }).success).toBe(false);
     expect(proseSchema.safeParse({ ...valid, interviewQuestions: ["Can I do this?", "Can I do that?"] }).success).toBe(false);
+  });
+  it("rejects leaked capability IDs for the active synthesis plan", () => {
+    const plan = buildSynthesisPlan(decision(), capabilities, sources);
+    const leaked = {
+      overallNarrative: `I used ${plan.themes[0].capabilityIds[0]} here.`,
+      themeNarratives: Object.fromEntries(plan.themes.map((theme) => [theme.id, "I built a grounded system."])),
+      interviewQuestions: [],
+    };
+    expect(proseSchemaForPlan(plan).safeParse(leaked).success).toBe(false);
   });
 });
 

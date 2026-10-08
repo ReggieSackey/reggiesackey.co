@@ -3,16 +3,22 @@ import type { CaseStudySeed } from "./seedData";
 /** Candidate content. Keep claims aligned with shipped code; no unmeasured latency claims. */
 export const portfolioCaseStudy: CaseStudySeed = {
   slug: "reggiesackey-co",
-  title: "reggiesackey.co — Evidence-grounded AI job-fit analysis",
+  title: "reggiesackey.co — Evidence-grounded AI Job Analysis",
   companyOrProject: "reggiesackey.co",
   summary:
-    "A portfolio that turns a job description into an evidence-backed hiring narrative, with reviewed capability relationships, targeted retrieval, deterministic validation, and shared abuse controls.",
+    "I built a portfolio that can analyze a job description and explain where my experience is useful. The system compares what an organization needs with a reviewed set of capabilities drawn from my actual work. It uses AI to interpret the job and write the explanation, while application code controls the evidence, fit assessment, citations, and validation.",
   sections: [
     {
       slug: "context",
       heading: "Context",
       order: 0,
-      body: "A portfolio and application system where a hiring manager can paste a job description and receive an evidence-backed explanation of how my demonstrated experience maps to the role. The product makes the strongest truthful case for the candidate while keeping factual claims anchored to published case-study and profile sections.",
+      body: `A conventional portfolio leaves much of the work to the reader. Someone has to read several projects, understand what I did, and decide which parts matter to their organization.
+
+I wanted to make that comparison easier.
+
+The result is a portfolio where a visitor can paste a job description and receive a short, first-person explanation of where I fit and where I'm less proven.
+
+The system is deliberately not limited to software engineering roles. It looks at the work an organization needs done rather than relying primarily on job titles or technology keywords.`,
     },
     {
       slug: "responsibilities",

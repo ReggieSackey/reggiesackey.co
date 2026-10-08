@@ -1,4 +1,5 @@
 import { portfolioCaseStudy } from "./portfolioCaseStudy";
+import { audioPluginCaseStudy, nationCaseStudy } from "./additionalCaseStudies";
 /**
  * Canonical dev-seed content: the CModel case study, the MusicBreakr case
  * study, and the Technical Profile. Plain module — no convex runtime
@@ -73,6 +74,8 @@ export type ProfileDocumentSeed = {
 
 export const CASE_STUDIES: CaseStudySeed[] = [
   portfolioCaseStudy,
+  nationCaseStudy,
+  audioPluginCaseStudy,
   // ==================================================================
   // CMODEL
   // ==================================================================

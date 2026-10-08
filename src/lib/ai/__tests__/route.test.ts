@@ -98,15 +98,21 @@ test("provider failure releases lease and persists only a fixed safe error", asy
     new Error("PRIVATE_JD SECRET_PROVIDER_BODY"),
   );
   const log = vi.spyOn(console, "info").mockImplementation(() => {});
+  const errorLog = vi.spyOn(console, "error").mockImplementation(() => {});
   const response = await POST(validRequest());
   expect(response.status).toBe(503);
   const serialized = JSON.stringify([
     await response.json(),
     log.mock.calls,
+    errorLog.mock.calls,
     calls.mutation.mock.calls.map((c) => c[1]),
   ]);
   expect(serialized).not.toMatch(
     /PRIVATE_JD|SECRET_PROVIDER_BODY|rawJobDescription/,
+  );
+  expect(errorLog).toHaveBeenCalledWith(
+    "[analyze:failure]",
+    expect.stringContaining('"code":"provider_or_service_failure"'),
   );
   expect(
     calls.mutation.mock.calls.some(

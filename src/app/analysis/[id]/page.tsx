@@ -4,12 +4,12 @@ import { notFound } from "next/navigation";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import { SiteHeader } from "@/components/SiteHeader";
 import { CitationRow } from "@/components/CitationRow";
 import { AutoRefresh } from "@/components/AutoRefresh";
 import { buildCitationContext } from "@/lib/citationContext";
 import { DEV_ANALYSIS } from "@/lib/devAnalysis";
 import type { Citation, FitLabel } from "@/lib/analysis";
+import { AnalysisToolbar } from "@/components/AnalysisToolbar";
 
 export const metadata: Metadata = {
   title: "Fit analysis",
@@ -122,9 +122,8 @@ export default async function AnalysisPage({
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col">
-      <SiteHeader />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-6 pb-24 pt-16">
+    <div className="analysis-frame">
+      <main className="analysis-card">
         {children}
       </main>
     </div>
@@ -134,6 +133,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 function ProcessingState() {
   return (
     <Shell>
+      <AnalysisToolbar />
       <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
         Analyzing…
       </h1>
@@ -149,6 +149,7 @@ function ProcessingState() {
 function FailedState() {
   return (
     <Shell>
+      <AnalysisToolbar />
       <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
         Analysis failed
       </h1>
@@ -181,7 +182,9 @@ async function AnalysisBody({
 
   return (
     <Shell>
-      <h1 className="text-3xl font-semibold tracking-tight text-neutral-900">
+      <AnalysisToolbar />
+      <div id="analysis-content">
+      <h1 className="analysis-title text-3xl font-semibold tracking-tight text-neutral-900">
         {analysis.jobTitle ?? "Role"}
       </h1>
       {analysis.company ? <p className="mt-2 text-[13px] text-neutral-500">{analysis.company}</p> : null}
@@ -283,6 +286,7 @@ async function AnalysisBody({
           </p>
         </section>
       ) : null}
+      </div>
     </Shell>
   );
 }

@@ -40,8 +40,20 @@ const proseShape = z.object({
   themeNarratives: z.record(z.string(), z.string().min(1).max(2000)),
   interviewQuestions: z.array(z.string().min(1).max(500)).max(1),
 }).strict();
-const forbiddenPublicProse = /\bReg(?: Sackey(?:-Addo)?)?(?:'s)?\b|\bthe (?:candidate|applicant)\b|\b(?:he|him|his)\b|—|https?:\/\/|www\.|\b(?:req|theme|ev|work|driver|constraint)_\d+\b/i;
-function validatePublicProse(
+const forbiddenPublicStructure = /https?:\/\/|www\.|\b(?:req|theme|ev|work|driver|constraint)_\d+\b/i;
+export function publicStyleIssues(value: z.infer<typeof proseShape>): string[] {
+  const narratives = [value.overallNarrative, ...Object.values(value.themeNarratives)];
+  const issues = new Set<string>();
+  if (narratives.some((text) => /\bReg(?: Sackey(?:-Addo)?)?(?:'s)?\b|\bthe (?:candidate|applicant)\b/i.test(text)))
+    issues.add("third_person_candidate_wording");
+  if (narratives.some((text) => text.includes("—"))) issues.add("em_dash");
+  if (narratives.some((text) => !/\b(?:I|me|my|I've|I'm)\b/i.test(text)))
+    issues.add("missing_first_person");
+  if (new Set(narratives.map((text) => text.trim())).size !== narratives.length)
+    issues.add("duplicate_narrative");
+  return [...issues];
+}
+function validatePublicStructure(
   value: z.infer<typeof proseShape>,
   ctx: z.RefinementCtx,
   capabilityIds: string[] = [],
@@ -51,20 +63,15 @@ function validatePublicProse(
     ...Object.entries(value.themeNarratives),
     ...value.interviewQuestions.map((question, index) => [`interviewQuestions.${index}`, question] as const),
   ];
-  const narratives = [value.overallNarrative, ...Object.values(value.themeNarratives)].map((text) => text.trim());
-  if (new Set(narratives).size !== narratives.length)
-    ctx.addIssue({ code: "custom", message: "Duplicate public narrative" });
   for (const [key, text] of entries) {
-    if (forbiddenPublicProse.test(text) || capabilityIds.some((id) => id && text.includes(id)))
-      ctx.addIssue({ code: "custom", path: [key], message: "Public prose contains forbidden third-person language, punctuation, URL, or internal ID" });
-    if (!key.startsWith("interviewQuestions.") && !/\b(?:I|me|my|I've|I'm)\b/i.test(text))
-      ctx.addIssue({ code: "custom", path: [key], message: "Public prose must use first person" });
+    if (forbiddenPublicStructure.test(text) || capabilityIds.some((id) => id && text.includes(id)))
+      ctx.addIssue({ code: "custom", path: [key], message: "Public prose contains a URL or internal ID" });
   }
 }
-const proseSchema = proseShape.superRefine((value, ctx) => validatePublicProse(value, ctx));
+const proseSchema = proseShape.superRefine((value, ctx) => validatePublicStructure(value, ctx));
 export const proseSchemaForPlan = (plan: SynthesisPlan) =>
   proseShape.superRefine((value, ctx) =>
-    validatePublicProse(value, ctx, plan.themes.flatMap((theme) => theme.capabilityIds)),
+    validatePublicStructure(value, ctx, plan.themes.flatMap((theme) => theme.capabilityIds)),
   );
 export type SynthesisProse = z.infer<typeof proseSchema>;
 export { proseSchema };

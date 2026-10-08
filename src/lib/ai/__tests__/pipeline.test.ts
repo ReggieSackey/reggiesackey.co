@@ -24,6 +24,7 @@ import {
 import { resolveCitationUrl } from "@/lib/citations";
 import {
   validateCandidateFit,
+  assertGroundedFit,
   validateThemeCoverage,
   quoteVerified,
   normalizeWhitespace,
@@ -992,7 +993,7 @@ describe("seed content integrity", () => {
   // runtime import) so tests can assert its shape without env gates.
   it("imports the canonical seed data", async () => {
     const mod = await import("@convex/seedData");
-    expect(mod.CASE_STUDIES.length).toBe(4);
+    expect(mod.CASE_STUDIES.length).toBe(6);
     expect(mod.PROFILE_DOCUMENTS.length).toBe(1);
   });
 
@@ -1740,6 +1741,29 @@ describe("validateCandidateFit (themes)", () => {
     );
     const result = validateCandidateFit(fit, SOURCES);
     expect(result.materialGaps[0].citations).toHaveLength(0);
+  });
+});
+
+describe("hard grounding validation", () => {
+  const groundAllPositiveThemes = (fit: ReturnType<typeof parseFit>) => {
+    fit.themes[2].citations = [{
+      sourceType: "caseStudy",
+      sourceId: "cmodel-strategic-assistant",
+      sectionId: "strategic-assistant",
+    }];
+  };
+  it("still rejects forged citations", () => {
+    const fit = parseFit(fitWith({}));
+    groundAllPositiveThemes(fit);
+    fit.themes[1].citations[0].sectionId = "forged-section";
+    expect(() => assertGroundedFit(fit, SOURCES)).toThrow("Forged citation");
+  });
+
+  it("still rejects ungrounded positive themes", () => {
+    const fit = parseFit(fitWith({}));
+    groundAllPositiveThemes(fit);
+    fit.themes[0].citations = [];
+    expect(() => assertGroundedFit(fit, SOURCES)).toThrow("Ungrounded theme");
   });
 });
 
