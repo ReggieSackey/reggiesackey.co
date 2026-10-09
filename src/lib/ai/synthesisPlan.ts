@@ -211,7 +211,12 @@ export function buildSynthesisPlan(decision: Decision, capabilities: Capability[
   const coreDriverIds = new Set(decision.successProfile.successDrivers.filter((item) => item.importance === "core").map((item) => item.id));
   const centralThemes = themes.filter((theme) => theme.workIds.some((id) => coreWorkIds.has(id)) || theme.successDriverIds.some((id) => coreDriverIds.has(id)));
   const centralGapRatio = centralThemes.length ? centralThemes.filter((theme) => theme.fit === "gap").length / centralThemes.length : 0;
-  const overallFit: Fit = blocking || centralGapRatio >= 0.5 ? "gap" : centralThemes.length > 0 && centralThemes.every((theme) => theme.fit === "strong") && !themes.some((theme) => theme.fit === "gap") ? "strong" : "relevant";
+  const centralSupported = centralThemes.filter((theme) => theme.fit !== "gap");
+  const overallFit: Fit = blocking || centralGapRatio >= 0.5
+    ? "gap"
+    : centralThemes.length > 0 && centralSupported.length === centralThemes.length && centralSupported.every((theme) => theme.fit === "strong")
+      ? "strong"
+      : "relevant";
   return synthesisPlanSchema.parse({
     overallFit,
     roleContext: {

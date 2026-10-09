@@ -1,4 +1,5 @@
 import { callStructured, type CallModel } from "./modelCalls";
+import { candidate } from "@/config/candidate";
 import {
   decisionSchema,
   type Capability,
@@ -47,6 +48,14 @@ export function validateDecision(
   return decision;
 }
 function normalizeDecision(decision: Decision, jd: string): Decision {
+  const administrative = (text: string) => /remote|onsite|on-site|hybrid|location|located|time zone|timezone|travel|relocat|work authorization|authorized to work|visa|citizenship|clearance/i.test(text);
+  const geography = (text: string) => /remote|oakland|bay area|san francisco|california|united states|u\.s\.|usa/i.test(text);
+  const geographyStatus = (text: string): "satisfied" | "incompatible" | "unknown" => {
+    if (!geography(text)) return "unknown";
+    if (/remote.*(?:united states|u\.s\.|usa)|(?:united states|u\.s\.|usa).*remote|bay area|oakland|san francisco|(?:based|located|within)\s+(?:in\s+)?california/i.test(text)) return "satisfied";
+    if (/onsite|on-site|located in|must be in|required.*(?:new york|seattle|austin|london|denver)/i.test(text) && !/remote/i.test(text)) return /oakland|bay area|san francisco|california/i.test(candidate.location) && /(?:new york|seattle|austin|london|denver)/i.test(text) ? "incompatible" : "unknown";
+    return "unknown";
+  };
   const mandatorySentences = jd
     .split(/(?<=[.!?])\s+|\n+/)
     .filter((sentence) => /\b(required|mandatory|must|legally|license|licensed|clearance|fluen|travel)\b/i.test(sentence))
@@ -61,6 +70,8 @@ function normalizeDecision(decision: Decision, jd: string): Decision {
     });
   }).map((requirement) => requirement.id));
   const hardConstraints = decision.successProfile?.hardConstraints.filter((constraint) => {
+    if (/work authorization|authorized to work|visa|citizenship/i.test(constraint.constraint)) return false;
+    if (geographyStatus(constraint.constraint) === "satisfied") return false;
     const words = tokens(constraint.constraint);
     return mandatorySentences.some((sentence) => {
       const sourceWords = tokens(sentence);
@@ -77,7 +88,14 @@ function normalizeDecision(decision: Decision, jd: string): Decision {
     extractedJob: { ...decision.extractedJob, requirements: decision.extractedJob.requirements.filter((requirement) => !excludedRequirements.has(requirement.id)) },
     successProfile: decision.successProfile ? { ...decision.successProfile, hardConstraints } : undefined,
     capabilityRelevance,
-    requirementFits: decision.requirementFits?.filter((item) => !excludedRequirements.has(item.requirementId)),
+    requirementFits: decision.requirementFits?.map((item) => {
+      const requirement = decision.extractedJob.requirements.find((candidateRequirement) => candidateRequirement.id === item.requirementId);
+      if (excludedRequirements.has(item.requirementId)) return null;
+      if (!requirement || !administrative(requirement.requirement)) return item;
+      if (geographyStatus(requirement.requirement) === "satisfied") return { ...item, fit: "direct" as const };
+      if (/work authorization|authorized to work|visa|citizenship/i.test(requirement.requirement) && item.fit === "gap") return { ...item, fit: "transferable" as const };
+      return item;
+    }).filter((item): item is NonNullable<typeof item> => item !== null),
     matches: decision.matches
       .filter((match) => selected.has(match.capabilityId))
       .map((match) => ({ ...match, requirementIds: match.requirementIds.filter((id) => !excludedRequirements.has(id)) }))

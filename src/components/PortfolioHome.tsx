@@ -4,12 +4,16 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { candidate } from "@/config/candidate";
 import { MAX_JD_LENGTH } from "@/lib/ai/jd";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useQuery } from "convex/react";
 import { api } from "@convex/_generated/api";
 import { SectionBody } from "@/components/SectionBody";
+import { AnalysisToolbar } from "@/components/AnalysisToolbar";
+import { AnalysisContent, type DisplayAnalysis } from "@/components/AnalysisContent";
+import type { Id } from "@convex/_generated/dataModel";
 
 const MAX_LENGTH = MAX_JD_LENGTH;
+const SHELL_TRANSITION_MS = 220;
 const loadingMessages = [
   "Contacting language model…",
   "Interpreting requirements…",
@@ -19,29 +23,32 @@ const loadingMessages = [
 ];
 
 type Phase = "idle" | "expanding" | "loading" | "error";
-type ShellView = "home" | "caseStudies" | "caseStudyDetail" | "howIWork" | "downloads";
+type ShellView = "home" | "caseStudies" | "caseStudyDetail" | "howIWork" | "downloads" | "analysis";
 
-export function PortfolioHome({ initialView = "home", initialSlug, initialProfile }: { initialView?: ShellView; initialSlug?: string; initialProfile?: ProfileData }) {
+export function PortfolioHome({ initialView = "home", initialSlug, initialProfile, initialAnalysisId }: { initialView?: ShellView; initialSlug?: string; initialProfile?: ProfileData; initialAnalysisId?: string }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [value, setValue] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
   const [error, setError] = useState<string | null>(null);
   const [messageIndex, setMessageIndex] = useState(0);
   const requestRef = useRef<AbortController | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const routeView: ShellView = pathname === "/work" ? "caseStudies" : pathname.startsWith("/work/") ? "caseStudyDetail" : pathname === "/how-i-work" ? "howIWork" : pathname === "/downloads" ? "downloads" : initialView;
+  const routeView: ShellView = pathname.startsWith("/analysis/") ? "analysis" : pathname === "/work" ? "caseStudies" : pathname.startsWith("/work/") ? "caseStudyDetail" : pathname === "/how-i-work" ? "howIWork" : pathname === "/downloads" ? "downloads" : initialView;
   const [view, setView] = useState<ShellView>(routeView);
   const detailSlug = pathname.startsWith("/work/") ? pathname.split("/").pop() : initialSlug;
   const caseStudies = useQuery(api.caseStudies.getPublishedCaseStudies);
   const detail = useQuery(api.caseStudies.getCaseStudyWithSections, detailSlug ? { slug: detailSlug } : "skip");
   const publishedProfile = useQuery(api.profileDocuments.getProfileDocumentWithSections, view === "howIWork" ? { type: "how-i-work" } : "skip");
   const profile = publishedProfile ?? initialProfile;
+  const routeAnalysisId = pathname.startsWith("/analysis/") ? pathname.split("/").pop() : initialAnalysisId;
+  const [analysisId, setAnalysisId] = useState<string | null>(routeAnalysisId ?? null);
+  const validAnalysisId = analysisId && /^[a-z0-9]{22,32}$/i.test(analysisId) ? analysisId : null;
+  const analysis = useQuery(api.jobAnalyses.getCompletedAnalysis, validAnalysisId ? { id: validAnalysisId as Id<"jobAnalyses"> } : "skip");
+  const analysisStatus = useQuery(api.jobAnalyses.getAnalysisStatus, validAnalysisId ? { id: validAnalysisId as Id<"jobAnalyses"> } : "skip");
   const [overlayView, setOverlayView] = useState<ShellView | null>(routeView === "home" ? null : routeView);
   const [overlayDirection, setOverlayDirection] = useState<"left" | "right">("left");
-  const [overlayActive, setOverlayActive] = useState(false);
+  const [overlayActive, setOverlayActive] = useState(routeView !== "home");
   const [isLeaving, setIsLeaving] = useState(false);
-  const [analysisTarget, setAnalysisTarget] = useState<string | null>(null);
   const transitionTimer = useRef<number | null>(null);
   const historyIndexRef = useRef(0);
   const currentViewRef = useRef(view);
@@ -68,15 +75,16 @@ export function PortfolioHome({ initialView = "home", initialSlug, initialProfil
     const syncHistoryNavigation = () => {
       const previous = currentViewRef.current;
       const path = window.location.pathname;
-      const destination: ShellView = path === "/work" ? "caseStudies" : path.startsWith("/work/") ? "caseStudyDetail" : path === "/how-i-work" ? "howIWork" : path === "/downloads" ? "downloads" : "home";
+      const destination: ShellView = path.startsWith("/analysis/") ? "analysis" : path === "/work" ? "caseStudies" : path.startsWith("/work/") ? "caseStudyDetail" : path === "/how-i-work" ? "howIWork" : path === "/downloads" ? "downloads" : "home";
       if (previous === destination) return;
       const state = window.history.state as { portfolioShellIndex?: number } | null;
       const nextIndex = state?.portfolioShellIndex ?? historyIndexRef.current;
       const movingForward = nextIndex > historyIndexRef.current;
       historyIndexRef.current = nextIndex;
       setView(destination);
+      if (destination === "analysis") setAnalysisId(path.split("/").pop() ?? null);
       setOverlayView(movingForward ? destination : previous);
-      setOverlayDirection("left");
+      setOverlayDirection(previous === "analysis" || destination === "analysis" ? "right" : "left");
       setIsLeaving(false);
       setOverlayActive(!movingForward);
       requestAnimationFrame(() => {
@@ -89,7 +97,7 @@ export function PortfolioHome({ initialView = "home", initialSlug, initialProfil
           setOverlayView(null);
           setOverlayActive(false);
           setIsLeaving(false);
-        }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : 240);
+        }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : SHELL_TRANSITION_MS);
       }
     };
     window.addEventListener("popstate", syncHistoryNavigation);
@@ -118,7 +126,7 @@ export function PortfolioHome({ initialView = "home", initialSlug, initialProfil
       transitionTimer.current = window.setTimeout(() => {
         setOverlayView(null);
         setIsLeaving(false);
-      }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : 240);
+      }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : SHELL_TRANSITION_MS);
       return;
     }
     const href = nextView === "caseStudies" ? "/work" : nextView === "caseStudyDetail" ? `/work/${slug}` : nextView === "howIWork" ? "/how-i-work" : "/downloads";
@@ -131,6 +139,24 @@ export function PortfolioHome({ initialView = "home", initialSlug, initialProfil
     if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
   }
 
+  function openAnalysisBack() {
+    if (isLeaving || view !== "analysis") return;
+    setOverlayDirection("right");
+    setOverlayActive(true);
+    setIsLeaving(false);
+    setView("home");
+    historyIndexRef.current += 1;
+    window.history.pushState({ portfolioShellIndex: historyIndexRef.current }, "", "/");
+    requestAnimationFrame(() => setIsLeaving(true));
+    transitionTimer.current = window.setTimeout(() => {
+      setOverlayView(null);
+      setOverlayActive(false);
+      setIsLeaving(false);
+      setAnalysisId(null);
+      setPhase("idle");
+    }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : SHELL_TRANSITION_MS);
+  }
+
   useEffect(() => () => { if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current); }, []);
 
   async function submit(event: React.FormEvent) {
@@ -139,6 +165,12 @@ export function PortfolioHome({ initialView = "home", initialSlug, initialProfil
     setError(null);
     setMessageIndex(0);
     setPhase("expanding");
+    setView("analysis");
+    setOverlayView("analysis");
+    setOverlayDirection("right");
+    setOverlayActive(false);
+    setIsLeaving(false);
+    requestAnimationFrame(() => setOverlayActive(true));
     const controller = new AbortController();
     requestRef.current = controller;
 
@@ -150,26 +182,25 @@ export function PortfolioHome({ initialView = "home", initialSlug, initialProfil
         signal: controller.signal,
       });
       const data = (await response.json()) as { id?: string; error?: string };
-      if (!response.ok || !data.id) {
+      if ((!response.ok && response.status !== 202) || !data.id) {
         setError(data.error ?? "Analysis failed. Please try again.");
         setPhase("error");
         return;
       }
+      setAnalysisId(data.id);
       setPhase("loading");
-      setOverlayDirection("right");
-    setOverlayView("home");
-      setOverlayActive(false);
-      setIsLeaving(false);
-      setAnalysisTarget(`/analysis/${data.id}`);
-      requestAnimationFrame(() => requestAnimationFrame(() => setOverlayActive(true)));
-      if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
-      transitionTimer.current = window.setTimeout(() => router.push(`/analysis/${data.id}`), 240);
     } catch (caught) {
       if ((caught as Error).name === "AbortError") return;
       setError("Something went wrong. Check your connection and try again.");
       setPhase("error");
     }
   }
+
+  useEffect(() => {
+    if (!analysis || !analysisId || pathname.startsWith("/analysis/")) return;
+    historyIndexRef.current += 1;
+    window.history.pushState({ portfolioShellIndex: historyIndexRef.current }, "", `/analysis/${analysisId}`);
+  }, [analysis, analysisId, pathname, view]);
 
   return (
     <main className="portfolio-frame">
@@ -201,11 +232,17 @@ export function PortfolioHome({ initialView = "home", initialSlug, initialProfil
             </form>
         </section>
         {overlayView ? <div className={`shell-transition-layer from-${overlayDirection} ${overlayActive ? "is-active" : ""} ${isLeaving ? "is-leaving" : ""}`}>
-          {analysisTarget ? <LoadingState message={loadingMessages[messageIndex]} /> : <ExpandedView view={overlayView} caseStudies={caseStudies} detail={detail} profile={profile} onBack={() => openView(overlayView === "caseStudyDetail" ? "caseStudies" : "home")} onOpenDetail={(slug) => openView("caseStudyDetail", slug)} />}
+          {overlayView === "analysis" ? <AnalysisWorkspace analysis={analysis} status={analysisStatus?.status} phase={phase} message={loadingMessages[messageIndex]} onBack={openAnalysisBack} onRetry={() => { setPhase("idle"); setAnalysisId(null); setOverlayView(null); setOverlayActive(false); setView("home"); }} /> : <ExpandedView view={overlayView} caseStudies={caseStudies} detail={detail} profile={profile} onBack={() => openView(overlayView === "caseStudyDetail" ? "caseStudies" : "home")} onOpenDetail={(slug) => openView("caseStudyDetail", slug)} />}
         </div> : null}
       </div>
     </main>
   );
+}
+
+function AnalysisWorkspace({ analysis, status, phase, message, onBack, onRetry }: { analysis: DisplayAnalysis | null | undefined; status?: string; phase: Phase; message: string; onBack: () => void; onRetry: () => void }) {
+  return <section className="portfolio-expanded-content analysis-workspace">
+    {analysis ? <><AnalysisToolbar onBack={onBack} /><AnalysisContent analysis={analysis} /></> : status === "failed" || phase === "error" ? <><AnalysisToolbar onBack={onBack} /><div className="analysis-state"><h1>Analysis failed</h1><p>Something went wrong while analyzing this job description.</p><button type="button" onClick={onRetry}>Try again</button></div></> : <div className="analysis-loading-shell"><LoadingState message={message} /></div>}
+  </section>;
 }
 
 function PortfolioNav({ onNavigate }: { onNavigate: (view: ShellView, slug?: string) => void }) {

@@ -4,6 +4,7 @@ export const candidate = {
   shortName: "Reg",
   headline: "Builder",
   siteUrl: "https://reggiesackey.co",
+  location: "Oakland, California, United States",
   contactEmail: "",
   pronouns: { subject: "he", object: "him", possessive: "his" },
 };

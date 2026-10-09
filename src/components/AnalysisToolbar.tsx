@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-export function AnalysisToolbar() {
+export function AnalysisToolbar({ onBack }: { onBack?: () => void } = {}) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -39,7 +39,7 @@ export function AnalysisToolbar() {
 
   return (
     <div className="analysis-toolbar">
-      <Link href="/" className="toolbar-button">← <span>Back to home</span></Link>
+      {onBack ? <button type="button" onClick={onBack} className="toolbar-button">← <span>Back to home</span></button> : <Link href="/" className="toolbar-button">← <span>Back to home</span></Link>}
       <div className="toolbar-actions">
         <button type="button" className="toolbar-button" onClick={() => window.print()}>▧ <span>Download PDF</span></button>
         <button type="button" className="toolbar-button" onClick={copyAnalysis}>▣ <span>{copied ? "Copied" : "Copy analysis"}</span></button>
