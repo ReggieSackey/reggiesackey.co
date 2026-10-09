@@ -217,8 +217,8 @@ async function syncCanonical(ctx: MutationCtx) {
       throw new Error("Duplicate canonical capability slug");
     canonicalSlugs.add(capability.slug);
   }
-  if (canonicalSlugs.size !== 12)
-    throw new Error("Canonical registry must contain exactly 12 capabilities");
+  if (canonicalSlugs.size !== 15)
+    throw new Error("Canonical registry must contain exactly 15 capabilities");
 
   const existingBySlug = new Map<string, Doc<"capabilities">>();
   for (const capability of CANONICAL_CAPABILITIES) {

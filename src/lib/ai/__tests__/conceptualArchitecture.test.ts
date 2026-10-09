@@ -42,9 +42,9 @@ function decision(overrides: Partial<Decision> = {}): Decision {
 }
 
 describe("canonical capability ontology", () => {
-  it("contains exactly the approved 12 capabilities and only real canonical references", () => {
+  it("contains exactly the approved 15 capabilities and only real canonical references", () => {
     expect(CANONICAL_CAPABILITIES.map((item) => item.slug)).toEqual([
-      "ambiguous-problem-to-working-system", "zero-to-one-product-building", "whole-system-reasoning", "integration-workflow-engineering", "applied-ai-systems", "rapid-technical-adaptation", "product-interaction-judgment", "platform-extension-abstraction-escape", "production-problem-solving", "data-state-modeling", "ai-enabled-process-design", "cross-boundary-execution",
+      "ambiguous-problem-to-working-system", "zero-to-one-product-building", "whole-system-reasoning", "integration-workflow-engineering", "applied-ai-systems", "rapid-technical-adaptation", "product-interaction-judgment", "platform-extension-abstraction-escape", "production-problem-solving", "data-state-modeling", "ai-enabled-process-design", "cross-boundary-execution", "interdisciplinary-synthesis", "organizational-initiative", "accountability-process-improvement",
     ]);
     const identities = new Set(sources.map((source) => `${source.sourceType}:${source.sourceId}:${source.sectionId}`));
     for (const capability of CANONICAL_CAPABILITIES) for (const evidence of capability.evidence)

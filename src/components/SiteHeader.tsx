@@ -7,7 +7,7 @@ import Link from "next/link";
  */
 export function SiteHeader() {
   return (
-    <header className="border-b border-neutral-200">
+    <header className="site-header border-b border-neutral-200">
       <div className="mx-auto flex max-w-5xl items-start justify-between px-6 py-5">
         <Link href="/" className="group block">
           <span className="block text-[15px] font-semibold tracking-tight text-neutral-900">
@@ -24,6 +24,12 @@ export function SiteHeader() {
             className="text-[13px] text-neutral-600 hover:text-neutral-900"
           >
             Work
+          </Link>
+          <Link
+            href="/how-i-work"
+            className="text-[13px] text-neutral-600 hover:text-neutral-900"
+          >
+            How I work
           </Link>
           <Link
             href="/about"

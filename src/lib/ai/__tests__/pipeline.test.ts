@@ -994,7 +994,7 @@ describe("seed content integrity", () => {
   it("imports the canonical seed data", async () => {
     const mod = await import("@convex/seedData");
     expect(mod.CASE_STUDIES.length).toBe(6);
-    expect(mod.PROFILE_DOCUMENTS.length).toBe(1);
+    expect(mod.PROFILE_DOCUMENTS.length).toBe(2);
   });
 
   it("no duplicate case study slugs", async () => {

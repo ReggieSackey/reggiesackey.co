@@ -266,27 +266,27 @@ test("canonical registry sync validates evidence and is exact and idempotent", a
 
   const first = await admin.mutation(api.capabilities.syncCanonicalRegistry, {});
   expect(first).toMatchObject({
-    inserted: 12,
+    inserted: 15,
     updated: 0,
     unchanged: 0,
     deactivated: 1,
-    activeCount: 12,
+    activeCount: 15,
   });
   const second = await admin.mutation(api.capabilities.syncCanonicalRegistry, {});
   expect(second).toMatchObject({
     inserted: 0,
     updated: 0,
-    unchanged: 12,
+    unchanged: 15,
     deactivated: 0,
-    activeCount: 12,
+    activeCount: 15,
   });
 
   const active = (await admin.query(api.capabilities.adminList, {})).capabilities;
-  expect(active).toHaveLength(12);
+  expect(active).toHaveLength(15);
   expect(active.map(({ slug }) => slug).sort()).toEqual(
     CANONICAL_CAPABILITIES.map(({ slug }) => slug).sort(),
   );
-  expect(new Set(active.map(({ slug }) => slug)).size).toBe(12);
+  expect(new Set(active.map(({ slug }) => slug)).size).toBe(15);
   for (const capability of active) {
     const canonical = CANONICAL_CAPABILITIES.find(
       ({ slug }) => slug === capability.slug,

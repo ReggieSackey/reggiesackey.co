@@ -2,6 +2,7 @@ type Evidence = { sourceType: "caseStudy" | "profile"; sourceId: string; section
 export type CanonicalCapability = { slug: string; title: string; description: string; tags: string[]; evidence: Evidence[] };
 const cs = (sourceId: string, sectionId: string, note: string): Evidence => ({ sourceType: "caseStudy", sourceId, sectionId, note });
 const profile = (sectionId: string, note: string): Evidence => ({ sourceType: "profile", sourceId: "technical", sectionId, note });
+const how = (sectionId: string, note: string): Evidence => ({ sourceType: "profile", sourceId: "how-i-work", sectionId, note });
 
 /** Reviewed ontology. Changes are staged as proposals and still require administrator approval. */
 export const CANONICAL_CAPABILITIES: CanonicalCapability[] = [
@@ -9,7 +10,7 @@ export const CANONICAL_CAPABILITIES: CanonicalCapability[] = [
     slug: "ambiguous-problem-to-working-system", title: "Ambiguous problem → working system",
     description: "Takes loosely defined needs, determines what should exist, and turns them into an operational system. Use when work requires progress without a complete specification, translating fuzzy goals into concrete behavior, defining the implementation path, or creating structure where none exists. Do not reduce this to requirements gathering.",
     tags: ["ambiguity", "definition", "delivery"],
-    evidence: [cs("cmodel-strategic-assistant", "email-signals", "Owned a loosely defined workflow from product definition through production."), cs("cmodel-strategic-assistant", "architecture-evolution", "Adapted implementation boundaries as product needs evolved."), cs("cmodel-strategic-assistant", "responsibilities", "Defined and delivered product behavior across systems."), cs("musicbreakr", "responsibilities", "Owned product and technical responsibilities across a live marketplace."), profile("strongest-areas", "Identifies shipping under ambiguity as a demonstrated strength.")],
+    evidence: [cs("cmodel-strategic-assistant", "email-signals", "Owned a loosely defined workflow from product definition through production."), cs("cmodel-strategic-assistant", "architecture-evolution", "Adapted implementation boundaries as product needs evolved."), cs("cmodel-strategic-assistant", "responsibilities", "Defined and delivered product behavior across systems."), cs("musicbreakr", "responsibilities", "Owned product and technical responsibilities across a live marketplace."), how("demo-day", "Identified an organizational bottleneck and created a working team practice rather than leaving the problem at the level of discussion."), profile("strongest-areas", "Identifies shipping under ambiguity as a demonstrated strength.")],
   },
   {
     slug: "zero-to-one-product-building", title: "Zero-to-one product building",
@@ -21,7 +22,7 @@ export const CANONICAL_CAPABILITIES: CanonicalCapability[] = [
     slug: "whole-system-reasoning", title: "Whole-system reasoning",
     description: "Reasons across users, workflows, data, interfaces, APIs, permissions, backend behavior, external systems, and failure modes rather than treating each layer independently. Relevant whenever success requires understanding how multiple parts of a system affect one another.",
     tags: ["systems", "architecture", "failure-modes", "frontend", "backend", "APIs"],
-    evidence: [profile("strongest-areas", "Documents reasoning across product, data, APIs, permissions, and workflows."), profile("engineering-foundations", "Explains a whole-system mental model and implementation tradeoffs."), cs("cmodel-strategic-assistant", "integrations", "Connects application state and external systems."), cs("cmodel-strategic-assistant", "architecture-evolution", "Shows decisions across changing architectural boundaries."), cs("musicbreakr", "responsibilities", "Spans product, application, payment, and external-system behavior."), cs("reaccord", "cross-platform-architecture", "Coordinates state and behavior across platforms.")],
+    evidence: [profile("strongest-areas", "Documents reasoning across product, data, APIs, permissions, and workflows."), profile("engineering-foundations", "Explains a whole-system mental model and implementation tradeoffs."), how("interdisciplinary-thinking", "Treats political institutions, incentives, territory, development, and stability as interacting parts of a system rather than isolated concepts."), cs("cmodel-strategic-assistant", "integrations", "Connects application state and external systems."), cs("cmodel-strategic-assistant", "architecture-evolution", "Shows decisions across changing architectural boundaries."), cs("musicbreakr", "responsibilities", "Spans product, application, payment, and external-system behavior."), cs("reaccord", "cross-platform-architecture", "Coordinates state and behavior across platforms.")],
   },
   {
     slug: "integration-workflow-engineering", title: "Integration & workflow engineering",
@@ -39,7 +40,7 @@ export const CANONICAL_CAPABILITIES: CanonicalCapability[] = [
     slug: "rapid-technical-adaptation", title: "Rapid technical adaptation",
     description: "Becomes productive in unfamiliar technical environments by forming a useful mental model, learning the necessary layer, using documentation and modern tools effectively, and validating the implementation. Supports transferability but never erases genuine specialization gaps.",
     tags: ["learning", "adaptation", "transferability"],
-    evidence: [profile("learning-velocity", "Documents entering unfamiliar systems and validating implementations."), profile("engineering-foundations", "Shows progressive learning across abstraction boundaries."), cs("cmodel-strategic-assistant", "architecture-evolution", "Worked productively across successive architectures."), profile("developing-experience", "Recent C++ and JUCE work demonstrates range without claiming specialization.")],
+    evidence: [profile("learning-velocity", "Documents entering unfamiliar systems and validating implementations."), profile("engineering-foundations", "Shows progressive learning across abstraction boundaries."), how("learning-by-building", "Documents a repeatable approach to entering unfamiliar technical environments and becoming productive through mental-model formation, documentation, AI assistance, implementation, and validation."), cs("nation-rts", "unfamiliar-engine", "Learned how an unfamiliar game engine's templates, components, and progression systems interact."), cs("audio-plugin-development", "real-time-audio", "Learned real-time audio constraints and separated visualization work from the audio-processing path."), cs("cmodel-strategic-assistant", "architecture-evolution", "Worked productively across successive architectures."), profile("developing-experience", "Recent C++ and JUCE work demonstrates range without claiming specialization.")],
   },
   {
     slug: "product-interaction-judgment", title: "Product & interaction judgment",
@@ -76,5 +77,23 @@ export const CANONICAL_CAPABILITIES: CanonicalCapability[] = [
     description: "Operates across technical implementation, product decisions, customer or user needs, and operational realities when solving a problem requires crossing those boundaries. Useful where traditionally separated functions must connect; it is not a claim of being good at everything.",
     tags: ["cross-functional", "execution", "operations"],
     evidence: [cs("cmodel-strategic-assistant", "overview", "Worked across product, AI, integrations, and operations."), cs("cmodel-strategic-assistant", "responsibilities", "Owned decisions and implementation across multiple boundaries."), cs("musicbreakr", "overview", "Combined marketplace product and operational ownership."), cs("musicbreakr", "responsibilities", "Crossed customer, product, payment, and technical concerns."), cs("reaccord", "responsibilities", "Owned product and architecture across surfaces."), profile("strongest-areas", "Documents comfort moving across technical boundaries.")],
+  },
+  {
+    slug: "interdisciplinary-synthesis", title: "Interdisciplinary synthesis",
+    description: "Connects ideas from different domains and turns them into a usable model, product, experiment, or system. Relevant when work requires research across unfamiliar subject matter, combining technical and non-technical perspectives, reframing a problem, or translating abstract ideas into something concrete. This is not a claim of formal academic expertise in every domain involved.",
+    tags: ["interdisciplinary", "synthesis", "research", "systems", "creativity"],
+    evidence: [how("interdisciplinary-thinking", "Political-science and historical questions are translated into interactive systems and game mechanics."), cs("nation-rts", "political-development", "Turns ideas about political development, sovereignty, institutions, and territory into gameplay rules."), how("overview", "Career and independent work repeatedly cross political science, history, design, music, games, and software.")],
+  },
+  {
+    slug: "organizational-initiative", title: "Organizational initiative",
+    description: "Notices when a team process is preventing useful work and creates a practical mechanism that helps people act. Relevant to experimentation, collaboration, internal innovation, change management, facilitation, and environments where progress depends on more than individual technical execution.",
+    tags: ["initiative", "collaboration", "experimentation", "organizational-design", "leadership"],
+    evidence: [how("demo-day", "Created CModel Demo Day to turn prolonged discussion into concrete experiments and pitches; the practice remains in use and made the team more decentralized and collaborative."), cs("cmodel-strategic-assistant", "agentic-engineering", "Helped redesign how a broader team can participate in implementation using coding agents while engineers retain review and quality controls.")],
+  },
+  {
+    slug: "accountability-process-improvement", title: "Accountability & process improvement",
+    description: "Responds to mistakes by owning the immediate failure, correcting it, examining the surrounding process, and changing conditions that make similar failures more likely. Relevant to judgment, reliability, self-management, operational maturity, and learning from failure.",
+    tags: ["accountability", "quality", "process-improvement", "reliability", "judgment"],
+    evidence: [how("accountability-and-quality", "Owned a payment bug, fixed it immediately, successfully advocated for additional QA resources, and changed personal working practices to protect decision quality."), cs("musicbreakr", "production-ownership", "Worked through production failures in a live revenue-producing marketplace.")],
   },
 ];

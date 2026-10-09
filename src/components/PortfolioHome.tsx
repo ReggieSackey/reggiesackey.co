@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { candidate } from "@/config/candidate";
 import { MAX_JD_LENGTH } from "@/lib/ai/jd";
+import { usePathname, useRouter } from "next/navigation";
+import { useQuery } from "convex/react";
+import { api } from "@convex/_generated/api";
+import { SectionBody } from "@/components/SectionBody";
 
 const MAX_LENGTH = MAX_JD_LENGTH;
 const loadingMessages = [
@@ -16,14 +19,36 @@ const loadingMessages = [
 ];
 
 type Phase = "idle" | "expanding" | "loading" | "error";
+type ShellView = "home" | "caseStudies" | "caseStudyDetail" | "howIWork" | "downloads";
 
-export function PortfolioHome() {
+export function PortfolioHome({ initialView = "home", initialSlug, initialProfile }: { initialView?: ShellView; initialSlug?: string; initialProfile?: ProfileData }) {
+  const pathname = usePathname();
   const router = useRouter();
   const [value, setValue] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
   const [error, setError] = useState<string | null>(null);
   const [messageIndex, setMessageIndex] = useState(0);
   const requestRef = useRef<AbortController | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const routeView: ShellView = pathname === "/work" ? "caseStudies" : pathname.startsWith("/work/") ? "caseStudyDetail" : pathname === "/how-i-work" ? "howIWork" : pathname === "/downloads" ? "downloads" : initialView;
+  const [view, setView] = useState<ShellView>(routeView);
+  const detailSlug = pathname.startsWith("/work/") ? pathname.split("/").pop() : initialSlug;
+  const caseStudies = useQuery(api.caseStudies.getPublishedCaseStudies);
+  const detail = useQuery(api.caseStudies.getCaseStudyWithSections, detailSlug ? { slug: detailSlug } : "skip");
+  const publishedProfile = useQuery(api.profileDocuments.getProfileDocumentWithSections, view === "howIWork" ? { type: "how-i-work" } : "skip");
+  const profile = publishedProfile ?? initialProfile;
+  const [overlayView, setOverlayView] = useState<ShellView | null>(routeView === "home" ? null : routeView);
+  const [overlayDirection, setOverlayDirection] = useState<"left" | "right">("left");
+  const [overlayActive, setOverlayActive] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
+  const [analysisTarget, setAnalysisTarget] = useState<string | null>(null);
+  const transitionTimer = useRef<number | null>(null);
+  const historyIndexRef = useRef(0);
+  const currentViewRef = useRef(view);
+
+  useEffect(() => {
+    currentViewRef.current = view;
+  }, [view]);
 
   useEffect(() => {
     if (phase !== "loading" && phase !== "expanding") return;
@@ -35,6 +60,78 @@ export function PortfolioHome() {
   }, [phase]);
 
   useEffect(() => () => requestRef.current?.abort(), []);
+
+  useEffect(() => {
+    const initialState = window.history.state as { portfolioShellIndex?: number } | null;
+    historyIndexRef.current = initialState?.portfolioShellIndex ?? 0;
+    window.history.replaceState({ ...initialState, portfolioShellIndex: historyIndexRef.current }, "", window.location.href);
+    const syncHistoryNavigation = () => {
+      const previous = currentViewRef.current;
+      const path = window.location.pathname;
+      const destination: ShellView = path === "/work" ? "caseStudies" : path.startsWith("/work/") ? "caseStudyDetail" : path === "/how-i-work" ? "howIWork" : path === "/downloads" ? "downloads" : "home";
+      if (previous === destination) return;
+      const state = window.history.state as { portfolioShellIndex?: number } | null;
+      const nextIndex = state?.portfolioShellIndex ?? historyIndexRef.current;
+      const movingForward = nextIndex > historyIndexRef.current;
+      historyIndexRef.current = nextIndex;
+      setView(destination);
+      setOverlayView(movingForward ? destination : previous);
+      setOverlayDirection("left");
+      setIsLeaving(false);
+      setOverlayActive(!movingForward);
+      requestAnimationFrame(() => {
+        if (movingForward) setOverlayActive(true);
+        else setIsLeaving(true);
+      });
+      if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
+      if (!movingForward) {
+        transitionTimer.current = window.setTimeout(() => {
+          setOverlayView(null);
+          setOverlayActive(false);
+          setIsLeaving(false);
+        }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : 240);
+      }
+    };
+    window.addEventListener("popstate", syncHistoryNavigation);
+    return () => window.removeEventListener("popstate", syncHistoryNavigation);
+  }, []);
+
+  useEffect(() => {
+    if (window.matchMedia("(min-width: 821px)").matches) inputRef.current?.focus();
+  }, []);
+
+  function openView(nextView: ShellView, slug?: string, direction: "left" | "right" = "left") {
+    if (isLeaving) return;
+    setOverlayDirection(direction);
+    if (nextView === "home" || nextView === "caseStudies" && view === "caseStudyDetail") {
+      if (view === "home") return;
+      const target: ShellView = nextView === "home" ? "home" : "caseStudies";
+      const href = target === "home" ? "/" : "/work";
+      setOverlayView(view);
+      setOverlayActive(true);
+      setIsLeaving(false);
+      setView(target);
+      historyIndexRef.current += 1;
+      window.history.pushState({ portfolioShellIndex: historyIndexRef.current }, "", href);
+      requestAnimationFrame(() => setIsLeaving(true));
+      if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
+      transitionTimer.current = window.setTimeout(() => {
+        setOverlayView(null);
+        setIsLeaving(false);
+      }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : 240);
+      return;
+    }
+    const href = nextView === "caseStudies" ? "/work" : nextView === "caseStudyDetail" ? `/work/${slug}` : nextView === "howIWork" ? "/how-i-work" : "/downloads";
+    setOverlayView(nextView);
+    setOverlayActive(false);
+    setView(nextView);
+    historyIndexRef.current += 1;
+    window.history.pushState({ portfolioShellIndex: historyIndexRef.current }, "", href);
+    requestAnimationFrame(() => setOverlayActive(true));
+    if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
+  }
+
+  useEffect(() => () => { if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current); }, []);
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
@@ -59,7 +156,14 @@ export function PortfolioHome() {
         return;
       }
       setPhase("loading");
-      window.setTimeout(() => router.push(`/analysis/${data.id}`), 700);
+      setOverlayDirection("right");
+    setOverlayView("home");
+      setOverlayActive(false);
+      setIsLeaving(false);
+      setAnalysisTarget(`/analysis/${data.id}`);
+      requestAnimationFrame(() => requestAnimationFrame(() => setOverlayActive(true)));
+      if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
+      transitionTimer.current = window.setTimeout(() => router.push(`/analysis/${data.id}`), 240);
     } catch (caught) {
       if ((caught as Error).name === "AbortError") return;
       setError("Something went wrong. Check your connection and try again.");
@@ -67,51 +171,67 @@ export function PortfolioHome() {
     }
   }
 
-  const expanded = phase !== "idle";
-  const showLoading = phase === "expanding" || phase === "loading";
-
   return (
     <main className="portfolio-frame">
-      <div className={`portfolio-card ${expanded ? "is-expanded" : ""}`}>
+      <div className="portfolio-card">
+        <div className="mobile-portfolio-nav"><PortfolioNav onNavigate={openView} /></div>
         <aside className="portfolio-sidebar">
           <Link href="/" className="portfolio-name">{candidate.name}</Link>
           <p className="portfolio-bio">
-            Non-traditional, self-taught product developer and builder.
+            I&apos;m a self-taught product engineer and multidisciplinary builder. I&apos;ve spent most of my career at startups, turning loose ideas into real products and figuring out whatever I need to learn along the way.
             <br /><br />
-            I use AI and software to turn ideas into real products, learn new domains quickly, and solve practical problems.
+            My interests have taken me across AI, open-source development, game design, audio software, and design, with a liberal arts background that shapes how I think about all of it.
           </p>
           <div className="portfolio-rule" />
-          <nav className="portfolio-nav" aria-label="Primary">
-            <Link href="/">Home</Link>
-            <Link href="/work">Case Studies</Link>
-            <a href="https://github.com/reggiesackey">GitHub</a>
-            <a href="/downloads">Downloads</a>
-            {candidate.contactEmail ? <a className="mail-link" href={`mailto:${candidate.contactEmail}`} aria-label="Email Reg"><span aria-hidden="true">✉</span></a> : null}
-          </nav>
+          <div className="desktop-portfolio-nav"><PortfolioNav onNavigate={openView} /></div>
         </aside>
 
-        <section className={`portfolio-takeover ${expanded ? "is-active" : ""}`} aria-live="polite">
-          {showLoading ? (
-            <LoadingState message={loadingMessages[messageIndex]} />
-          ) : (
-            <div className="portfolio-form-wrap">
-              <h1>Paste a job description</h1>
-              <p>Get a clear, honest analysis of how my experience fits this role, based on real work I’ve done.</p>
-              <form onSubmit={submit} className="job-form">
-                <div className="job-textarea-wrap">
-                  <label htmlFor="job-description" className="sr-only">Job description</label>
-                  <textarea id="job-description" value={value} onChange={(event) => setValue(event.target.value)} maxLength={MAX_LENGTH} placeholder="Paste the job description here…" rows={8} />
-                  <span>{value.length}/{MAX_LENGTH}</span>
-                </div>
+        <section className="portfolio-takeover" aria-live="polite">
+            <form onSubmit={submit} className="job-form">
+              <div className="job-input-region">
+                <label htmlFor="job-description" className="sr-only">Job description</label>
+                <textarea ref={inputRef} id="job-description" aria-label="Job description" value={value} onChange={(event) => setValue(event.target.value)} maxLength={MAX_LENGTH} placeholder="" />
+                {!value ? <div className="job-placeholder" aria-hidden="true"><span className="job-placeholder-primary">Paste a job description...</span><span className="job-placeholder-secondary">I’ll compare it to my work and tell you where I fit.</span></div> : null}
+                <span>{value.length}/{MAX_LENGTH}</span>
+              </div>
+              <div className="input-footer">
                 {error ? <div className="form-error" role="alert"><span>{error}</span><button type="button" onClick={() => setPhase("idle")}>Try again</button></div> : null}
                 <button className="analyze-button" type="submit" disabled={!value.trim() || phase !== "idle"}>Analyze Fit</button>
-              </form>
-            </div>
-          )}
+              </div>
+            </form>
         </section>
+        {overlayView ? <div className={`shell-transition-layer from-${overlayDirection} ${overlayActive ? "is-active" : ""} ${isLeaving ? "is-leaving" : ""}`}>
+          {analysisTarget ? <LoadingState message={loadingMessages[messageIndex]} /> : <ExpandedView view={overlayView} caseStudies={caseStudies} detail={detail} profile={profile} onBack={() => openView(overlayView === "caseStudyDetail" ? "caseStudies" : "home")} onOpenDetail={(slug) => openView("caseStudyDetail", slug)} />}
+        </div> : null}
       </div>
     </main>
   );
+}
+
+function PortfolioNav({ onNavigate }: { onNavigate: (view: ShellView, slug?: string) => void }) {
+  return (
+    <nav className="portfolio-nav" aria-label="Primary">
+      <button type="button" onClick={() => onNavigate("home")}>Home</button>
+      <button type="button" onClick={() => onNavigate("caseStudies")}>Case Studies</button>
+      <button type="button" onClick={() => onNavigate("howIWork")}>How I work</button>
+      <a href="https://github.com/ReggieSackey" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <button type="button" onClick={() => onNavigate("downloads")}>Downloads</button>
+      {candidate.contactEmail ? <a className="mail-link" href={`mailto:${candidate.contactEmail}`} aria-label="Email Reg"><span aria-hidden="true">✉</span></a> : null}
+    </nav>
+  );
+}
+
+type PublishedStudy = { _id: string; slug: string; title: string; companyOrProject: string; summary: string };
+type DetailData = { caseStudy: { title: string; companyOrProject: string; summary: string }; sections: Array<{ _id: string; slug: string; heading: string; body: string }> } | null | undefined;
+type ProfileData = { document: { title: string }; sections: Array<{ _id: string; slug: string; heading: string; body: string }> } | null | undefined;
+
+function ExpandedView({ view, caseStudies, detail, profile, onBack, onOpenDetail }: { view: ShellView; caseStudies: PublishedStudy[] | undefined; detail: DetailData; profile: ProfileData; onBack: () => void; onOpenDetail: (slug: string) => void }) {
+  const title = view === "caseStudyDetail" ? detail?.caseStudy.title ?? "Case study" : view === "howIWork" ? profile?.document.title ?? "How I Work" : view === "downloads" ? "Downloads" : "Case Studies";
+  const sections = view === "caseStudyDetail" ? detail?.sections : view === "howIWork" ? profile?.sections : null;
+  return <section className="portfolio-expanded-content" aria-labelledby="expanded-title">
+    <div className="expanded-toolbar"><h1 id="expanded-title">{title}</h1><button type="button" onClick={onBack}>← Back</button></div>
+    {view === "caseStudies" ? <div className="case-study-grid">{caseStudies?.map((study) => <button type="button" key={study._id} className="case-study-card" onClick={() => onOpenDetail(study.slug)}><h2>{study.title}</h2><span>{study.companyOrProject}</span><p>{study.summary}</p></button>)}</div> : view === "downloads" ? <div className="expanded-copy"><p>Downloadable materials will be available here.</p></div> : <div className="expanded-sections">{detail?.caseStudy ? <><p className="expanded-meta">{detail.caseStudy.companyOrProject}</p><p className="expanded-summary">{detail.caseStudy.summary}</p></> : null}{sections?.map((section) => <article key={section._id} id={section.slug}><h2>{section.heading}</h2><SectionBody body={section.body} /></article>)}</div>}
+  </section>;
 }
 
 function LoadingState({ message }: { message: string }) {

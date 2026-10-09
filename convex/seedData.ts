@@ -760,6 +760,58 @@ I build consumer applications in my spare time because I enjoy taking an idea th
 
 export const PROFILE_DOCUMENTS: ProfileDocumentSeed[] = [
   {
+    type: "how-i-work",
+    title: "How I Work",
+    sections: [
+      { slug: "overview", heading: "How I work", order: 1, body: `My career has been shaped more by following interesting problems than by staying inside one discipline. I studied political science, taught myself to build software, and spend a lot of my free time on history, music, design, games, and new technical tools.
+
+Those interests tend to bleed into one another. I like taking an unfamiliar system apart, figuring out what actually matters, and making an idea concrete enough to test.` },
+      { slug: "interdisciplinary-thinking", heading: "Connecting ideas across disciplines", order: 2, body: `My political science background is part of how I approach Nation.
+
+I am not just changing units and artwork in an existing strategy game. I am trying to translate questions about state formation, sovereignty, institutions, development, foreign influence, and political stability into rules a player can interact with.
+
+That requires both historical interpretation and system design. I have to decide which ideas matter, what can be abstracted without becoming meaningless, and how those abstractions should interact once they become software.
+
+That is the kind of work I enjoy most: taking ideas from one field and making them useful in another.` },
+      { slug: "learning-by-building", heading: "Learning by building", order: 3, body: `My path into software was not conventional.
+
+I started by building production applications with high-level visual tools, then moved progressively into JavaScript, TypeScript, React, AI systems, and more conventional application architecture.
+
+More recently, I have entered unfamiliar environments such as C++ audio software and the 0 A.D. game engine.
+
+The pattern is usually the same: understand enough of the system to form a useful mental model, use documentation and AI tools to close gaps quickly, build something real, and use failures to identify what I misunderstood.
+
+I do not treat being new to a particular tool or domain as the same thing as being unable to do the work.` },
+      { slug: "accountability-and-quality", heading: "Taking responsibility for a costly mistake", order: 4, body: `At MusicBreakr, I introduced a subtle bug that caused creators on the platform to be overpaid.
+
+Once I discovered the problem, I acknowledged my responsibility and patched it immediately.
+
+But I did not think fixing the code was a sufficient response. The mistake exposed a broader risk in how we were developing and checking software that handled real payments.
+
+I pushed for additional quality-assurance resources so reliability did not depend entirely on an individual developer catching every mistake. The company adopted that request.
+
+I also changed how I organized my own working hours. I wanted to work hard without treating exhaustion as evidence of commitment, especially when I was making decisions around payment-sensitive code.
+
+The experience changed how I think about accountability. Owning a mistake means fixing the immediate problem, but it also means examining the conditions that allowed it to happen and improving them.` },
+      { slug: "demo-day", heading: "Creating space for experimentation", order: 5, body: `As CModel grew, I noticed that ideas were increasingly spending more time in discussion than in experimentation.
+
+More structure was useful, but one side effect was that a promising idea could lose momentum while people debated it before anyone had the opportunity to make it tangible.
+
+I introduced Demo Day as a lightweight way around that problem.
+
+Team members could build something, show work in flight, or pitch an idea by putting something concrete in front of the rest of the company.
+
+Rather than arguing that we needed less process, I wanted to create a mechanism that protected experimentation inside the process we were developing.
+
+Demo Day became a regular part of how the company works and still runs today. People use it to share unfinished work and pitch ideas, and it has helped make the team more decentralized and collaborative.` },
+      { slug: "where-i-do-my-best-work", heading: "Where I do my best work", order: 6, body: `I do my best work when technical implementation is only part of the problem.
+
+I like roles that require me to learn a domain, understand the people and incentives around it, make product or research judgments, and then build something concrete.
+
+I am open to engineering roles, but I am not trying to optimize my career around a single job title. I am especially interested in creative, multidisciplinary work where technical ability, curiosity, communication, and judgment all matter.` },
+    ],
+  },
+  {
     type: "technical",
     title: "Technical Profile",
     sections: [
