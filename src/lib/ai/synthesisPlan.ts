@@ -209,14 +209,37 @@ export function buildSynthesisPlan(decision: Decision, capabilities: Capability[
   const blocking = decision.successProfile.hardConstraints.some((item) => item.severity === "blocking");
   const coreWorkIds = new Set(decision.successProfile.work.filter((item) => item.importance === "core").map((item) => item.id));
   const coreDriverIds = new Set(decision.successProfile.successDrivers.filter((item) => item.importance === "core").map((item) => item.id));
-  const centralThemes = themes.filter((theme) => theme.workIds.some((id) => coreWorkIds.has(id)) || theme.successDriverIds.some((id) => coreDriverIds.has(id)));
-  const centralGapRatio = centralThemes.length ? centralThemes.filter((theme) => theme.fit === "gap").length / centralThemes.length : 0;
-  const centralSupported = centralThemes.filter((theme) => theme.fit !== "gap");
-  const overallFit: Fit = blocking || centralGapRatio >= 0.5
-    ? "gap"
-    : centralThemes.length > 0 && centralSupported.length === centralThemes.length && centralSupported.every((theme) => theme.fit === "strong")
-      ? "strong"
-      : "relevant";
+  const coreRequirementIds = new Set(decision.extractedJob.requirements.filter((item) => item.importance === "core").map((item) => item.id));
+  // A theme is central when it touches core work, a core success
+  // driver, or carries a core-importance requirement. Gaps on
+  // peripheral preferences must not doom the overall fit; gaps on core
+  // requirements must.
+  const centralThemes = themes.filter((theme) =>
+    theme.workIds.some((id) => coreWorkIds.has(id)) ||
+    theme.successDriverIds.some((id) => coreDriverIds.has(id)) ||
+    theme.requirementIds.some((id) => coreRequirementIds.has(id)),
+  );
+  // Central support score: transferable evidence supports the central
+  // work too — it is positive evidence, not half a failure. Strong fit
+  // still demands real substance: no central gaps, every central theme
+  // supported, and either a majority of directly-strong themes or at
+  // least two of them.
+  const centralStrong = centralThemes.filter((theme) => theme.fit === "strong").length;
+  const centralGaps = centralThemes.filter((theme) => theme.fit === "gap").length;
+  const centralCount = centralThemes.length;
+  const centralSupportRatio = centralCount
+    ? (centralCount - centralGaps) / centralCount
+    : 0;
+  const strongCentralRatio = centralCount ? centralStrong / centralCount : 0;
+  const overallFit: Fit =
+    blocking || (centralCount > 0 && centralGaps / centralCount >= 0.5)
+      ? "gap"
+      : centralCount > 0 &&
+          centralGaps === 0 &&
+          centralSupportRatio === 1 &&
+          (strongCentralRatio >= 0.5 || centralStrong >= 2)
+        ? "strong"
+        : "relevant";
   return synthesisPlanSchema.parse({
     overallFit,
     roleContext: {

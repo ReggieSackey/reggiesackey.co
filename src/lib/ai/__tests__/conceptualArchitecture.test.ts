@@ -78,7 +78,10 @@ describe("profession-neutral planning", () => {
 
   it("treats a named-tool difference as transferable rather than automatically a gap", () => {
     const value = decision({ requirementFits: [{ requirementId: "req_1", fit: "transferable" }, { requirementId: "req_2", fit: "direct" }, { requirementId: "req_3", fit: "direct" }] });
-    expect(buildSynthesisPlan(value, capabilities, sources).overallFit).toBe("relevant");
+    // Central themes: strong/strong/relevant — transferable support
+    // counts as support, so the overall fit stays strong.
+    expect(buildSynthesisPlan(value, capabilities, sources).overallFit).toBe("strong");
+    expect(buildSynthesisPlan(value, capabilities, sources).themes.find((theme) => theme.requirementIds.includes("req_1"))?.fit).toBe("relevant");
   });
 
   it("does not let an unmatched preferred item turn a directly supported core work theme into a gap", () => {
@@ -213,6 +216,99 @@ describe("public prose contract", () => {
       interviewQuestions: [],
     };
     expect(proseSchemaForPlan(plan).safeParse(leaked).success).toBe(false);
+  });
+});
+
+describe("overall fit policy", () => {
+  // The base decision yields central themes mapped from req_1..req_3.
+  // We shape each case via requirementFits:
+  //   direct → theme "strong", transferable → "relevant", gap → "gap".
+  const fits = (req1: string, req2: string, req3: string) =>
+    [
+      { requirementId: "req_1", fit: req1 },
+      { requirementId: "req_2", fit: req2 },
+      { requirementId: "req_3", fit: req3 },
+    ] as NonNullable<Decision["requirementFits"]>;
+
+  it("Case A: strong/strong/relevant → strong", () => {
+    expect(buildSynthesisPlan(decision({ requirementFits: fits("direct", "direct", "transferable") }), capabilities, sources).overallFit).toBe("strong");
+  });
+
+  it("Case B: strong/strong/relevant/relevant → strong", () => {
+    const base = decision();
+    // Two disjoint core work streams, each with its own capability, so
+    // the requirements form four separate central themes: two directly
+    // strong, two transferable.
+    const plan = buildSynthesisPlan(decision({
+      successProfile: {
+        ...base.successProfile!,
+        work: [
+          { id: "work_1", activity: "Connect customer systems into working AI workflows", importance: "core" },
+          { id: "work_2", activity: "Shape how the product works end to end", importance: "core" },
+        ],
+        successDrivers: [
+          { id: "driver_1", driver: "Move from ambiguity through implementation", importance: "core" },
+          { id: "driver_2", driver: "Own product shape and interaction quality", importance: "core" },
+        ],
+      },
+      extractedJob: {
+        ...base.extractedJob,
+        requirements: [
+          ...base.extractedJob.requirements,
+          { id: "req_4", requirement: "Shape product interactions end to end", importance: "core", category: "product" },
+        ],
+      },
+      matches: [
+        { capabilityId: capabilityIds["ambiguous-problem-to-working-system"], requirementIds: ["req_1"], score: 0.95 },
+        { capabilityId: capabilityIds["integration-workflow-engineering"], requirementIds: ["req_2"], score: 0.95 },
+        { capabilityId: capabilityIds["applied-ai-systems"], requirementIds: ["req_3"], score: 0.95 },
+        { capabilityId: capabilityIds["product-interaction-judgment"], requirementIds: ["req_4"], score: 0.95 },
+      ],
+      capabilityRelevance: [
+        { capabilityId: capabilityIds["ambiguous-problem-to-working-system"], relevance: "central", workIds: ["work_1"], successDriverIds: ["driver_1"] },
+        { capabilityId: capabilityIds["integration-workflow-engineering"], relevance: "central", workIds: ["work_1"], successDriverIds: ["driver_1"] },
+        { capabilityId: capabilityIds["applied-ai-systems"], relevance: "central", workIds: ["work_2"], successDriverIds: ["driver_2"] },
+        { capabilityId: capabilityIds["product-interaction-judgment"], relevance: "central", workIds: ["work_2"], successDriverIds: ["driver_2"] },
+      ],
+      requirementFits: [...fits("direct", "direct", "transferable"), { requirementId: "req_4", fit: "transferable" as const }],
+    }), capabilities, sources);
+    expect(plan.overallFit).toBe("strong");
+  });
+
+  it("Case C: strong/relevant/relevant → relevant", () => {
+    expect(buildSynthesisPlan(decision({ requirementFits: fits("direct", "transferable", "transferable") }), capabilities, sources).overallFit).toBe("relevant");
+  });
+
+  it("Case D: strong/relevant/gap (non-blocking) → relevant", () => {
+    expect(buildSynthesisPlan(decision({ requirementFits: fits("direct", "transferable", "gap") }), capabilities, sources).overallFit).toBe("relevant");
+  });
+
+  it("Case E: strong/gap/gap → gap", () => {
+    const base = decision();
+    // Requirements without matched capabilities become true gap themes.
+    const plan = buildSynthesisPlan(decision({
+      matches: base.matches ? [base.matches[0]] : undefined,
+      requirementFits: fits("direct", "gap", "gap"),
+    }), capabilities, sources);
+    expect(plan.overallFit).toBe("gap");
+  });
+
+  it("Case F: all supported but blocking constraint → gap", () => {
+    const base = decision();
+    const plan = buildSynthesisPlan(decision({
+      successProfile: { ...base.successProfile!, hardConstraints: [{ id: "constraint_1", constraint: "Active California CPA license", severity: "blocking" }] },
+    }), capabilities, sources);
+    expect(plan.overallFit).toBe("gap");
+  });
+
+  it("non-central gaps do not block strong fit", () => {
+    const base = decision();
+    const requirements = [...base.extractedJob.requirements, { id: "req_4", requirement: "Experience with this specific internal tool", importance: "preferred" as const, category: "tooling" }];
+    const plan = buildSynthesisPlan(decision({
+      extractedJob: { ...base.extractedJob, requirements },
+      requirementFits: [...fits("direct", "direct", "direct"), { requirementId: "req_4", fit: "gap" as const }],
+    }), capabilities, sources);
+    expect(plan.overallFit).toBe("strong");
   });
 });
 

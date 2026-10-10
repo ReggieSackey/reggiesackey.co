@@ -349,22 +349,31 @@ body {
   flex-direction: column;
 }
 
+/* The writing surface and the counter occupy separate grid rows, so
+   text can never render underneath the counter. */
 .job-input-region {
-  position: relative;
   flex: 1 1 auto;
   min-height: 0;
-  display: flex;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
 }
 
-.job-input-region textarea,
-.job-input-region textarea:focus {
-  flex: 1 1 auto;
+.job-writing-surface {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+}
+
+.job-writing-surface textarea,
+.job-writing-surface textarea:focus {
+  display: block;
   width: 100%;
   height: 100%;
   min-height: 0;
-  resize: none;
-  padding: 0 0 48px;
+  box-sizing: border-box;
+  padding: 0;
   margin: 0;
+  resize: none;
   border: 0;
   border-radius: 0;
   outline: 0;
@@ -379,7 +388,7 @@ body {
   letter-spacing: 0;
 }
 
-.job-input-region textarea::placeholder {
+.job-writing-surface textarea::placeholder {
   color: transparent;
 }
 
@@ -412,13 +421,16 @@ body {
   line-height: 1.5;
 }
 
-.job-input-region > span {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+.job-counter-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 28px;
+  padding-top: 8px;
   color: var(--text-muted);
   font-family: var(--font-manrope), sans-serif;
   font-size: 0.85rem;
+  line-height: 1;
 }
 
 .input-footer {
@@ -473,7 +485,7 @@ body {
 /* As the right panel collapses toward the case-studies side, step the
    writer down before it can squeeze into a sliver. */
 @container (max-width: 560px) {
-  .job-input-region textarea,
+  .job-writing-surface textarea,
   .job-placeholder-primary {
     font-size: 16px;
     line-height: 1.6;
@@ -906,6 +918,30 @@ body {
   cursor: pointer;
 }
 
+.toolbar-button svg {
+  display: block;
+  flex: 0 0 auto;
+}
+
+/* The caret is a flex-centered inline box so it aligns with the Share
+   label by layout, not glyph metrics. */
+.toolbar-caret {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2px;
+  line-height: 0;
+  transition: transform 140ms ease;
+}
+
+.toolbar-caret svg {
+  display: block;
+}
+
+.toolbar-share-button[aria-expanded="true"] .toolbar-caret {
+  transform: rotate(180deg);
+}
+
 .toolbar-button:hover,
 .toolbar-button:focus-visible {
   background: var(--surface-hover);
@@ -933,6 +969,7 @@ body {
 .share-menu button,
 .share-menu a {
   display: flex;
+  align-items: center;
   gap: 0.65rem;
   width: 100%;
   padding: 0.7rem;
@@ -944,6 +981,12 @@ body {
   background: transparent;
   border: 0;
   cursor: pointer;
+}
+
+.share-menu button svg,
+.share-menu a svg {
+  display: block;
+  flex: 0 0 auto;
 }
 
 .share-menu button:hover,
@@ -1127,6 +1170,56 @@ body main a:hover {
     inset: auto;
   }
 
+  /* Height ownership: when an expanded view owns the shell, the home
+     content leaves the flow entirely so the card sizes to the expanded
+     content (which can be much taller). The panel that no longer owns
+     a visible surface collapses entirely. */
+  .portfolio-card:not([data-shell-mode="home"]) .home-left-content,
+  .portfolio-card:not([data-shell-mode="home"]) .home-right-content {
+    display: none;
+  }
+
+  .portfolio-card[data-shell-mode="analysis"] .shell-left-panel,
+  .portfolio-card[data-shell-mode="portfolio"] .shell-right-panel {
+    display: none;
+  }
+
+  /* The revealed surface participates in the card's height so long
+     case studies / analyses scroll naturally with the page. */
+  .mobile-expand {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: var(--surface);
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path var(--motion-split) var(--ease-shell);
+    pointer-events: none;
+  }
+
+  .mobile-expand[data-side="right"] {
+    clip-path: inset(0 0 0 100%);
+  }
+
+  /* Once revealed, the surface becomes an in-flow block sized by its
+     own content; the card grows with it. */
+  .portfolio-card[data-motion-phase="moving"][data-shell-mode="portfolio"]
+    .mobile-expand[data-side="left"],
+  .portfolio-card[data-motion-phase="revealing"][data-shell-mode="portfolio"]
+    .mobile-expand[data-side="left"],
+  .portfolio-card[data-motion-phase="settled"][data-shell-mode="portfolio"]
+    .mobile-expand[data-side="left"],
+  .portfolio-card[data-motion-phase="moving"][data-shell-mode="analysis"]
+    .mobile-expand[data-side="right"],
+  .portfolio-card[data-motion-phase="revealing"][data-shell-mode="analysis"]
+    .mobile-expand[data-side="right"],
+  .portfolio-card[data-motion-phase="settled"][data-shell-mode="analysis"]
+    .mobile-expand[data-side="right"] {
+    position: relative;
+    inset: auto;
+    clip-path: none;
+    pointer-events: auto;
+  }
+
   .portfolio-sidebar {
     width: 100%;
     height: auto;
@@ -1168,7 +1261,7 @@ body main a:hover {
     min-height: 460px;
   }
 
-  .job-input-region textarea,
+  .job-writing-surface textarea,
   .job-placeholder-primary {
     font-size: 16px;
     line-height: 1.6;
@@ -1178,32 +1271,6 @@ body main a:hover {
   .expanded-right-content {
     position: static;
     inset: auto;
-  }
-
-  /* Masked reveal: a full-card surface whose visible area sweeps open
-     from the side its panel belongs to. */
-  .mobile-expand {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    background: var(--surface);
-    clip-path: inset(0 100% 0 0);
-    transition: clip-path var(--motion-split) var(--ease-shell);
-    pointer-events: none;
-  }
-
-  .mobile-expand[data-side="right"] {
-    clip-path: inset(0 0 0 100%);
-  }
-
-  .portfolio-card[data-motion-phase="moving"][data-shell-mode="portfolio"] .mobile-expand[data-side="left"],
-  .portfolio-card[data-motion-phase="revealing"][data-shell-mode="portfolio"] .mobile-expand[data-side="left"],
-  .portfolio-card[data-motion-phase="settled"][data-shell-mode="portfolio"] .mobile-expand[data-side="left"],
-  .portfolio-card[data-motion-phase="moving"][data-shell-mode="analysis"] .mobile-expand[data-side="right"],
-  .portfolio-card[data-motion-phase="revealing"][data-shell-mode="analysis"] .mobile-expand[data-side="right"],
-  .portfolio-card[data-motion-phase="settled"][data-shell-mode="analysis"] .mobile-expand[data-side="right"] {
-    clip-path: inset(0 0 0 0);
-    pointer-events: auto;
   }
 
   /* Expanded content scrolls naturally inside the revealed surface;

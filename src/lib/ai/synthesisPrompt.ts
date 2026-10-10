@@ -34,9 +34,9 @@ Say what I know.
 
 Say what I have not done.
 
-Do not try to make me sound impressive.
-
-Do not praise me.
+Do not exaggerate or use inflated praise.
+Make the strongest clear case that the facts support.
+Do not praise me in generic terms.
 
 Do not write like a recruiter, consultant, career coach, or AI assistant.
 

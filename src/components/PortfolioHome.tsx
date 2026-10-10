@@ -140,7 +140,8 @@ function hrefForView(
     case "howIWork":
       return "/how-i-work";
     case "profile":
-      return `/profile/${opts.profileType ?? ""}`;
+      if (!opts.profileType) throw new Error("Profile navigation requires profileType");
+      return `/profile/${opts.profileType}`;
     case "downloads":
       return "/downloads";
     case "analysis":
@@ -158,6 +159,15 @@ type ShellState = {
   motionPhase: MotionPhase;
   analysisPhase: AnalysisPhase;
   error: string | null;
+};
+
+/** Explicit navigation targets — profile navigation must name its type. */
+type NavigationTarget = {
+  view: ShellView;
+  slug?: string | null;
+  profileType?: string | null;
+  analysisId?: string | null;
+  anchor?: string | null;
 };
 
 type ShellAction =
@@ -363,6 +373,39 @@ export function PortfolioHome({
     [citationRows],
   );
 
+  /* ── Document title synchronizer ─────────────────────────────────────
+   *
+   * pushState navigation does not rerun Next.js route metadata, so the
+   * mounted SPA owns document.title after first paint. One derived
+   * value, one effect — no scattered mutations. Direct loads keep the
+   * server-rendered title; this converges to the same strings.
+   */
+  const detailTitle = detail?.caseStudy.title;
+  const profileTitle = profile?.document.title;
+  const analysisTitle = analysis?.jobTitle;
+  const pageTitle = useMemo(() => {
+    switch (shell.view) {
+      case "caseStudies":
+        return `Case Studies — ${candidate.name}`;
+      case "caseStudyDetail":
+        return `${detailTitle ?? "Case Study"} — ${candidate.name}`;
+      case "howIWork":
+        return `How I Work — ${candidate.name}`;
+      case "profile":
+        return `${profileTitle ?? "Profile"} — ${candidate.name}`;
+      case "downloads":
+        return `Downloads — ${candidate.name}`;
+      case "analysis":
+        return `${analysisTitle ?? "Fit analysis"} — ${candidate.name}`;
+      default:
+        return `${candidate.name} — ${candidate.headline}`;
+    }
+  }, [shell.view, detailTitle, profileTitle, analysisTitle]);
+
+  useEffect(() => {
+    document.title = pageTitle;
+  }, [pageTitle]);
+
   /* ── Transition controller ─────────────────────────────────────────── */
 
   const wait = useCallback((ms: number) => {
@@ -393,23 +436,25 @@ export function PortfolioHome({
     });
   }, []);
 
-  const focusAfterTransition = useCallback((view: ShellView, previousView: ShellView) => {
-    if (view === "home") {
-      const navButton = document.querySelector<HTMLButtonElement>(
-        `.home-left-content [data-nav-view="${previousView}"]`,
-      );
-      const target =
-        previousView === "analysis" ? inputRef.current : (navButton ?? inputRef.current);
-      target?.focus({ preventScroll: true });
-      return;
-    }
+  const focusAfterTransition = useCallback(
+    (view: ShellView, previous: { view: ShellView; profileType?: string | null }) => {
+      if (view === "home") {
+        const navButton = document.querySelector<HTMLButtonElement>(
+          `.home-left-content [data-nav-view="${previous.view}${
+            previous.view === "profile" ? `:${previous.profileType ?? ""}` : ""
+          }"]`,
+        );
+        const target =
+          previous.view === "analysis" ? inputRef.current : (navButton ?? inputRef.current);
+        target?.focus({ preventScroll: true });
+        return;
+      }
     if (view === "analysis") {
       document.querySelector<HTMLElement>(".analysis-workspace")?.focus({ preventScroll: true });
       return;
     }
     document.getElementById("expanded-title")?.focus({ preventScroll: true });
   }, []);
-
   const transitionTo = useCallback(
     async (target: {
       view: ShellView;
@@ -420,7 +465,7 @@ export function PortfolioHome({
     }) => {
       if (busyRef.current) return false;
       busyRef.current = true;
-      const previousView = shellRef.current.view;
+      const previous = { view: shellRef.current.view, profileType: shellRef.current.profileType };
       const run = ++runIdRef.current;
       const href =
         hrefForView(target.view, {
@@ -439,7 +484,7 @@ export function PortfolioHome({
           }
           dispatch({ type: "snap", ...target });
           setAnnounce(labelForView(target.view));
-          requestAnimationFrame(() => focusAfterTransition(target.view, previousView));
+          requestAnimationFrame(() => focusAfterTransition(target.view, previous));
           return true;
         }
 
@@ -462,7 +507,7 @@ export function PortfolioHome({
         // 3. Destination content fades in — in place, never translated.
         dispatch({ type: "reveal" });
         setAnnounce(labelForView(target.view));
-        focusAfterTransition(target.view, previousView);
+        focusAfterTransition(target.view, previous);
         await wait(REVEAL_MS);
         if (!alive()) return false;
 
@@ -476,29 +521,31 @@ export function PortfolioHome({
   );
 
   const openView = useCallback(
-    (nextView: ShellView, slug?: string, anchor?: string) => {
+    (next: NavigationTarget) => {
       if (busyRef.current) return;
       const current = shellRef.current;
       const sameTarget =
-        nextView === current.view &&
-        !(nextView === "caseStudyDetail" && slug != null && slug !== current.detailSlug);
-      if (sameTarget && !anchor) return;
+        next.view === current.view &&
+        !(next.view === "caseStudyDetail" && next.slug != null && next.slug !== current.detailSlug) &&
+        !(next.view === "profile" && next.profileType != null && next.profileType !== current.profileType);
+      if (sameTarget && !next.anchor) return;
 
       // Same page, anchor-only navigation: no shell transition, just
       // update the hash and smooth-scroll.
-      if (sameTarget && anchor) {
-        window.history.pushState({}, "", `#${anchor}`);
-        setPendingAnchor(anchor);
+      if (sameTarget && next.anchor) {
+        window.history.pushState({}, "", `#${next.anchor}`);
+        setPendingAnchor(next.anchor);
         return;
       }
 
       const currentMode = shellModeForView(current.view);
-      const nextMode = shellModeForView(nextView);
-      const href = hrefForView(nextView, {
-        slug: slug ?? null,
-        profileType: current.profileType,
-        analysisId: current.analysisId,
-      }) + (anchor ? `#${anchor}` : "");
+      const nextMode = shellModeForView(next.view);
+      const href =
+        hrefForView(next.view, {
+          slug: next.slug ?? null,
+          profileType: next.profileType ?? null,
+          analysisId: next.analysisId ?? current.analysisId,
+        }) + (next.anchor ? `#${next.anchor}` : "");
 
       // Between two LEFT-owned (or two RIGHT-owned) views the boundary
       // does not move — swap the content locally with a quick fade.
@@ -509,29 +556,29 @@ export function PortfolioHome({
       ) {
         expectedHrefRef.current = href;
         window.history.pushState({}, "", href);
-        dispatch({ type: "localSwap", view: nextView, slug: slug ?? null });
-        setAnnounce(labelForView(nextView));
-        if (anchor) setPendingAnchor(anchor);
-        requestAnimationFrame(() => focusAfterTransition(nextView, current.view));
+        dispatch({
+          type: "localSwap",
+          view: next.view,
+          slug: next.slug ?? null,
+          profileType: next.profileType ?? null,
+        });
+        setAnnounce(labelForView(next.view));
+        if (next.anchor) setPendingAnchor(next.anchor);
+        requestAnimationFrame(() =>
+          focusAfterTransition(next.view, { view: current.view, profileType: current.profileType }),
+        );
         return;
       }
 
-      void transitionTo({ view: nextView, slug: slug ?? null, anchor: anchor ?? null });
+      void transitionTo({
+        view: next.view,
+        slug: next.slug ?? null,
+        profileType: next.profileType ?? null,
+        analysisId: next.analysisId ?? null,
+        anchor: next.anchor ?? null,
+      });
     },
     [focusAfterTransition, transitionTo],
-  );
-
-  /* Citation navigation: evidence links route through the SPA. */
-  const onCitationNavigate = useCallback(
-    (href: string, citation: Citation) => {
-      const isCaseStudy = citation.sourceType === "caseStudy";
-      openView(
-        isCaseStudy ? "caseStudyDetail" : "profile",
-        isCaseStudy ? citation.sourceId : undefined,
-        citation.sectionId,
-      );
-    },
-    [openView],
   );
 
   /* ── Navigation synchronization ──────────────────────────────────────
@@ -666,7 +713,7 @@ export function PortfolioHome({
     if (shellRef.current.view !== "home") {
       const view = shellRef.current.view;
       const id = window.setTimeout(
-        () => focusAfterTransition(view, "home"),
+        () => focusAfterTransition(view, { view: "home" }),
         reducedMotionRef.current ? 0 : 60,
       );
       return () => window.clearTimeout(id);
@@ -765,7 +812,11 @@ export function PortfolioHome({
         <div className="shell-left-panel">
           <div className="home-left-content" inert={!homeInteractive}>
             <aside className="portfolio-sidebar">
-              <button type="button" className="portfolio-name" onClick={() => openView("home")}>
+              <button
+                type="button"
+                className="portfolio-name"
+                onClick={() => openView({ view: "home" })}
+              >
                 {candidate.name}
               </button>
               <p className="portfolio-bio">
@@ -795,9 +846,13 @@ export function PortfolioHome({
                     detail={detail}
                     profile={profile}
                     onBack={() =>
-                      openView(shell.view === "caseStudyDetail" ? "caseStudies" : "home")
+                      openView(
+                        shell.view === "caseStudyDetail"
+                          ? { view: "caseStudies" }
+                          : { view: "home" },
+                      )
                     }
-                    onOpenDetail={(slug) => openView("caseStudyDetail", slug)}
+                    onOpenDetail={(slug) => openView({ view: "caseStudyDetail", slug })}
                   />
                 ) : null}
               </div>
@@ -811,29 +866,33 @@ export function PortfolioHome({
           <div className="home-right-content" inert={!homeInteractive}>
             <form onSubmit={submit} className="job-form">
               <div className="job-input-region">
-                <label htmlFor="job-description" className="sr-only">
-                  Job description
-                </label>
-                <textarea
-                  ref={inputRef}
-                  id="job-description"
-                  aria-label="Job description"
-                  value={value}
-                  onChange={(event) => setValue(event.target.value)}
-                  maxLength={MAX_LENGTH}
-                  placeholder=""
-                />
-                {!value ? (
-                  <div className="job-placeholder" aria-hidden="true">
-                    <span className="job-placeholder-primary">Paste a job description...</span>
-                    <span className="job-placeholder-secondary">
-                      I’ll compare it to my work and tell you where I fit.
-                    </span>
-                  </div>
-                ) : null}
-                <span>
-                  {value.length}/{MAX_LENGTH}
-                </span>
+                <div className="job-writing-surface">
+                  <label htmlFor="job-description" className="sr-only">
+                    Job description
+                  </label>
+                  <textarea
+                    ref={inputRef}
+                    id="job-description"
+                    aria-label="Job description"
+                    value={value}
+                    onChange={(event) => setValue(event.target.value)}
+                    maxLength={MAX_LENGTH}
+                    placeholder=""
+                  />
+                  {!value ? (
+                    <div className="job-placeholder" aria-hidden="true">
+                      <span className="job-placeholder-primary">Paste a job description...</span>
+                      <span className="job-placeholder-secondary">
+                        I’ll compare it to my work and tell you where I fit.
+                      </span>
+                    </div>
+                  ) : null}
+                </div>
+                <div className="job-counter-row" aria-hidden="true">
+                  <span>
+                    {value.length}/{MAX_LENGTH}
+                  </span>
+                </div>
               </div>
               <div className="input-footer">
                 {error ? (
@@ -869,7 +928,6 @@ export function PortfolioHome({
                     onBack={openAnalysisBack}
                     onRetry={retryAnalysis}
                     citationContext={citationContext}
-                    onCitationNavigate={onCitationNavigate}
                   />
                 ) : null}
               </div>
@@ -895,7 +953,6 @@ function AnalysisWorkspace({
   onBack,
   onRetry,
   citationContext,
-  onCitationNavigate,
 }: {
   analysis: DisplayAnalysis | null | undefined;
   status?: string;
@@ -904,7 +961,6 @@ function AnalysisWorkspace({
   onBack: () => void;
   onRetry: () => void;
   citationContext: CitationDisplayContext;
-  onCitationNavigate: (href: string, citation: Citation) => void;
 }) {
   return (
     <section
@@ -918,7 +974,6 @@ function AnalysisWorkspace({
           <AnalysisContent
             analysis={analysis}
             context={citationContext}
-            onCitationNavigate={onCitationNavigate}
           />
         </div>
       ) : status === "failed" || phase === "error" ? (
@@ -941,21 +996,22 @@ function AnalysisWorkspace({
   );
 }
 
-function PortfolioNav({ onNavigate }: { onNavigate: (view: ShellView, slug?: string) => void }) {
-  const items: Array<{ view: ShellView; label: string }> = [
-    { view: "home", label: "Home" },
-    { view: "caseStudies", label: "Case Studies" },
-    { view: "howIWork", label: "How I work" },
-    { view: "downloads", label: "Downloads" },
+function PortfolioNav({ onNavigate }: { onNavigate: (target: NavigationTarget) => void }) {
+  const items: Array<{ label: string; target: NavigationTarget }> = [
+    { label: "Home", target: { view: "home" } },
+    { label: "Case Studies", target: { view: "caseStudies" } },
+    { label: "How I Work", target: { view: "howIWork" } },
+    { label: "Technical Profile", target: { view: "profile", profileType: "technical" } },
+    { label: "Downloads", target: { view: "downloads" } },
   ];
   return (
     <nav className="portfolio-nav" aria-label="Primary">
       {items.map((item) => (
         <button
-          key={item.view}
+          key={item.label}
           type="button"
-          data-nav-view={item.view}
-          onClick={() => onNavigate(item.view)}
+          data-nav-view={item.target.view + (item.target.profileType ? `:${item.target.profileType}` : "")}
+          onClick={() => onNavigate(item.target)}
         >
           {item.label}
         </button>
