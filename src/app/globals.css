@@ -5,7 +5,32 @@
   - Warm off-white background, near-black type
   - No gradients, glass, blur, or large shadows anywhere on the site
   - Flat surfaces, hairline rules, small radii
+
+  Shell transition architecture
+  ------------------------------
+  One animated value drives the whole desktop transition:
+
+    @property --split  (registered, animatable)
+
+  The card is always 100% wide; each permanent panel is clipped to its
+  side of --split (left: 0 to split, right: split to 100%) and the
+  divider line sits exactly at --split. Animating --split moves the
+  visible panel boundary while every content layer stays anchored to
+  the card, so nothing inside a panel ever translates horizontally.
+
+  Motion sequence (see PortfolioHome.tsx):
+    0ms    click, old content fades out (65ms)
+    35ms   --split starts sweeping (225ms)
+    195ms  destination content fades in (90ms, in place)
+  Below 1050px there is no desktop divider; the same state timeline
+  drives clip-path reveal masks (mobile-expand) instead.
 */
+
+@property --split {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 29%;
+}
 
 :root {
   --background: #080d14;
@@ -13,14 +38,20 @@
   --surface: #0d151f;
   --surface-subtle: #101923;
   --surface-hover: #15212d;
-  --border: rgba(155, 180, 205, .14);
-  --border-strong: rgba(170, 195, 220, .22);
+  --border: rgba(155, 180, 205, 0.14);
+  --border-strong: rgba(170, 195, 220, 0.22);
   --text-primary: #eef2f5;
   --text-secondary: #b2bdc7;
   --text-muted: #778694;
   --button-bg: #d9e0e5;
   --button-text: #0b1118;
   --button-hover: #edf1f4;
+  --ease-shell: cubic-bezier(0.22, 1, 0.36, 1);
+  --split-home: 29%;
+  --split-home-max: 340px;
+  --motion-split: 300ms;
+  --motion-hide: 90ms;
+  --motion-reveal: 120ms;
 }
 
 @theme inline {
@@ -31,43 +62,16 @@
 }
 
 body {
-  background: radial-gradient(1000px 700px at 58% 12%, rgba(35, 70, 105, .26), transparent 68%), radial-gradient(800px 600px at 10% 85%, rgba(20, 42, 65, .13), transparent 72%), linear-gradient(145deg, #0b1520 0%, #08111a 52%, #09121b 100%);
+  background: radial-gradient(1000px 700px at 58% 12%, rgba(35, 70, 105, 0.26), transparent 68%),
+    radial-gradient(800px 600px at 10% 85%, rgba(20, 42, 65, 0.13), transparent 72%),
+    linear-gradient(145deg, #0b1520 0%, #08111a 52%, #09121b 100%);
   color: var(--foreground);
   font-family: var(--font-manrope), sans-serif;
 }
 
-/* Homepage writing surface */
-.portfolio-card { background: rgba(13, 21, 31, .92); border-color: var(--border); }
-.portfolio-sidebar { border-color: var(--border); }
-.portfolio-rule { background: var(--border); }
-.portfolio-takeover { padding: 56px 64px 48px; align-items: stretch; background: var(--surface); }
-.portfolio-takeover.is-active { background: var(--surface); }
-.portfolio-takeover > form.job-form { width: 100%; height: 100%; min-height: 0; margin: 0; display: flex; flex-direction: column; }
-.job-textarea-wrap { flex: 1 1 auto; min-height: 0; display: flex; position: relative; }
-.job-textarea-wrap textarea { flex: 1 1 auto; min-height: 0; height: 100%; resize: none; padding: 0; border: 0; outline: 0; box-shadow: none; background: transparent; color: var(--text-primary); caret-color: var(--text-primary); font-family: var(--font-manrope), sans-serif; font-size: 18px; line-height: 1.65; }
-.job-textarea-wrap textarea:focus { border: 0; outline: 0; box-shadow: none; }
-.job-textarea-wrap textarea::placeholder { color: transparent; }
-.rich-placeholder { position: absolute; inset: 0; pointer-events: none; display: flex; flex-direction: column; align-items: flex-start; gap: 24px; color: var(--text-secondary); }
-.rich-placeholder strong { max-width: 680px; color: var(--text-primary); font-family: var(--font-manrope), sans-serif; font-size: clamp(30px, 2.6vw, 42px); font-weight: 500; line-height: 1.15; letter-spacing: -.025em; }
-.rich-placeholder span { max-width: 660px; color: var(--text-secondary); font-family: var(--font-manrope), sans-serif; font-size: 18px; line-height: 1.6; }
-.job-textarea-wrap > span { position: absolute; right: 0; bottom: 0; color: var(--text-muted); font-family: var(--font-manrope), sans-serif; font-size: .85rem; }
-.portfolio-takeover .analyze-button { flex: 0 0 auto; height: 60px; margin-top: 30px; border-radius: 9px; background: var(--button-bg); color: var(--button-text); font-family: var(--font-manrope), sans-serif; }
-.portfolio-takeover .analyze-button:disabled { background: rgba(217, 224, 229, .45); color: rgba(11, 17, 24, .65); }
-.portfolio-takeover .form-error { flex: 0 0 auto; }
+/* Frame and card ---------------------------------------------------- */
 
-@media (max-width: 720px) {
-  .portfolio-takeover { padding: 32px 24px; }
-  .rich-placeholder strong { font-size: 30px; }
-  .rich-placeholder span { font-size: 16px; }
-}
-
-@media (max-height: 800px) and (min-width: 900px) {
-  .portfolio-takeover { padding: 42px 52px 40px; }
-  .portfolio-takeover .analyze-button { margin-top: 24px; }
-}
-
-.portfolio-frame,
-.analysis-frame {
+.portfolio-frame {
   min-height: 100vh;
   padding: 32px;
   display: flex;
@@ -75,420 +79,218 @@ body {
   justify-content: center;
 }
 
-.portfolio-card,
-.analysis-card {
+.portfolio-card {
+  position: relative;
   width: min(1320px, calc(100vw - 64px));
-  border: 1px solid #b9b8b4;
+  min-height: 700px;
+  max-height: calc(100vh - 64px);
+  border: 1px solid var(--border);
   border-radius: 16px;
-  background: #fdfcfa;
+  background: var(--surface);
+  overflow: hidden;
+  --split: var(--split-home);
+  transition: --split var(--motion-split) var(--ease-shell);
+}
+
+/* The expanded modes sweep the boundary to their edge. */
+.portfolio-card[data-shell-mode="portfolio"] {
+  --split: 100%;
+}
+
+.portfolio-card[data-shell-mode="analysis"] {
+  --split: 0%;
+}
+
+/* Permanent panels ---------------------------------------------------
+   Full-card surfaces clipped to their side of the animated boundary.
+   The clip edge IS the moving divider. */
+
+.shell-left-panel,
+.shell-right-panel {
+  position: absolute;
+  inset: 0;
+  min-width: 0;
+  background: var(--surface);
+  clip-path: inset(0 calc(100% - var(--split)) 0 0);
+}
+
+.shell-right-panel {
+  clip-path: inset(0 0 0 var(--split));
+}
+
+/* Global nav ownership: the main nav (desktop sidebar + mobile bar)
+   is HOME chrome. Leaving home: it fades with the other home content.
+   Once an expanded view owns the card it is removed from flow — the
+   collapse happens while the reveal mask fully covers the card, so no
+   layout jump is visible. Returning home restores it behind the mask. */
+.portfolio-card[data-nav="hidden"] .mobile-portfolio-nav {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.portfolio-card:not([data-shell-mode="home"])[data-motion-phase="settled"]
+  .mobile-portfolio-nav {
+  position: absolute;
+  visibility: hidden;
+  height: 0;
+  min-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-bottom: 0;
   overflow: hidden;
 }
 
-.portfolio-card { min-height: 700px; max-height: calc(100vh - 64px); display: grid; grid-template-columns: 29% 71%; position: relative; }
-.portfolio-sidebar { padding: 56px 48px; border-right: 1px solid #d7d5cf; display: flex; flex-direction: column; align-items: flex-start; }
-.portfolio-name { font: 2rem/1.1 var(--font-manrope), sans-serif; color: var(--text-primary); text-decoration: none; }
-.portfolio-bio { margin-top: 1.25rem; max-width: 280px; color: #74736e; font-size: 16px; line-height: 1.6; }
-.portfolio-rule { width: 100%; height: 1px; background: #dedbd5; margin: 36px 0 30px; }
-.portfolio-nav { display: flex; flex-direction: column; gap: 16px; font: 1.35rem/1.1 var(--font-manrope), sans-serif; }
-.portfolio-nav a { color: #71706c; text-decoration: none; }
-.portfolio-nav a:first-child, .portfolio-nav a:hover { color: #161b1c; }
-.mail-link { margin-top: 26px; font-family: sans-serif !important; font-size: 1.7rem; }
-.portfolio-takeover { min-width: 0; padding: clamp(2rem, 5vw, 6.5rem); display: flex; align-items: center; transition: transform 680ms cubic-bezier(.76,0,.24,1); }
-.portfolio-takeover.is-active { position: absolute; inset: 0; z-index: 2; background: #fdfcfa; padding: 0; justify-content: center; }
-.portfolio-form-wrap { width: min(800px, 100%); transform: translateY(-3%); }
-.portfolio-form-wrap h1 { font: clamp(2.8rem, 5vw, 4.4rem)/1.02 var(--font-manrope), sans-serif; letter-spacing: -.04em; color: var(--text-primary); }
-.portfolio-form-wrap > p { max-width: 690px; margin-top: 1.2rem; color: #777570; font-size: clamp(1.15rem, 2vw, 1.6rem); line-height: 1.35; }
-.job-form { margin-top: 2.2rem; }
-.job-textarea-wrap { position: relative; }
-.job-textarea-wrap textarea { display: block; width: 100%; min-height: 220px; resize: vertical; border: 1px solid #d3d0ca; border-radius: 10px; background: transparent; padding: 1.3rem; color: #1b2324; font: 1.05rem/1.5 sans-serif; outline: none; }
-.job-textarea-wrap textarea:focus { border-color: #273435; box-shadow: 0 0 0 1px #273435; }
-.job-textarea-wrap textarea::placeholder { color: #8a8882; }
-.job-textarea-wrap span { position: absolute; right: 1.2rem; bottom: 1rem; color: #888681; font-size: .85rem; }
-.analyze-button { width: 100%; height: 4.5rem; margin-top: 1.8rem; border: 0; border-radius: 10px; background: var(--button-bg); color: var(--button-text); font: 1.25rem var(--font-manrope), sans-serif; cursor: pointer; transition: background .2s, opacity .2s; }
-.analyze-button:hover:not(:disabled) { background: #1e2a2b; }
-.analyze-button:disabled { opacity: .55; cursor: not-allowed; }
-.form-error { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1rem; color: #7c3f35; font-size: .95rem; }
-.form-error button { text-decoration: underline; }
-.loading-state { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 700px; width: 100%; }
-.loading-state p { margin-top: 2.5rem; font: clamp(1.4rem, 2vw, 2rem) var(--font-manrope), sans-serif; color: var(--text-secondary); }
-.liquid-orb { width: clamp(170px, 17vw, 220px); aspect-ratio: 1; border-radius: 50%; position: relative; overflow: hidden; background: radial-gradient(circle at 34% 26%, #fff 0 5%, transparent 22%), radial-gradient(circle at 70% 28%, #9adcf0, transparent 38%), radial-gradient(circle at 34% 72%, #8eb9eb, transparent 45%), radial-gradient(circle at 70% 73%, #f9d0a4, transparent 42%), linear-gradient(135deg, #d7f4f5, #cab9ee 45%, #ffeed5); box-shadow: 0 0 28px rgba(174, 219, 232, .3), inset 0 0 18px rgba(255,255,255,.8); animation: orb-breathe 4s ease-in-out infinite; }
-.liquid-orb::before, .liquid-orb::after { content: ""; position: absolute; inset: -20%; border-radius: 45%; background: radial-gradient(ellipse at 30% 50%, rgba(255,255,255,.75), transparent 25%), radial-gradient(ellipse at 65% 45%, rgba(135,191,239,.65), transparent 30%), radial-gradient(ellipse at 48% 75%, rgba(221,173,240,.5), transparent 27%); animation: orb-flow 9s ease-in-out infinite alternate; mix-blend-mode: screen; }
-.liquid-orb::after { animation-duration: 12s; animation-direction: alternate-reverse; opacity: .8; }
-@keyframes orb-flow { from { transform: rotate(-12deg) translate(-4%, 2%) scale(1.08); } to { transform: rotate(18deg) translate(4%, -3%) scale(1.12); } }
-@keyframes orb-breathe { 50% { transform: scale(1.04); filter: brightness(1.04); } }
-.loading-dots { display: flex; gap: .8rem; margin-top: 1.8rem; }
-.loading-dots i { width: 10px; height: 10px; border-radius: 50%; background: #d9d8d3; animation: dot-pulse 1.4s ease-in-out infinite; }
-.loading-dots i:first-child { background: #3d4140; } .loading-dots i:nth-child(2) { animation-delay: .15s; } .loading-dots i:nth-child(3) { animation-delay: .3s; } .loading-dots i:nth-child(4) { animation-delay: .45s; }
-@keyframes dot-pulse { 50% { opacity: .35; transform: scale(.8); } }
-
-.analysis-card { padding: clamp(1rem, 3vw, 2.5rem) clamp(1.5rem, 5vw, 5.5rem) 5rem; }
-.analysis-toolbar { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid #dedbd5; margin-bottom: 2rem; }
-.toolbar-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
-.toolbar-button { display: inline-flex; align-items: center; gap: .55rem; min-height: 2.8rem; padding: .55rem .85rem; border: 1px solid #d1cec7; border-radius: 9px; background: transparent; color: #1b2324; text-decoration: none; font-size: .9rem; cursor: pointer; }
-.toolbar-button:hover, .toolbar-button:focus-visible { background: #f4f2ee; outline: none; }
-.share-wrap { position: relative; }
-.share-menu { position: absolute; right: 0; top: calc(100% + .4rem); z-index: 3; width: 220px; border: 1px solid #d1cec7; border-radius: 10px; background: #fdfcfa; padding: .35rem; }
-.share-menu button, .share-menu a { display: flex; gap: .65rem; width: 100%; padding: .7rem; border-radius: 6px; color: #272c2c; text-decoration: none; text-align: left; font-size: .9rem; background: transparent; border: 0; cursor: pointer; }
-.share-menu button:hover, .share-menu a:hover { background: #f2f0eb; }
-.analysis-title { font-family: var(--font-manrope), sans-serif; font-weight: 500; letter-spacing: -.03em; }
-
-@media (max-width: 720px) {
-  .portfolio-frame, .analysis-frame { padding: 1rem; align-items: flex-start; }
-  .portfolio-card { display: block; min-height: calc(100vh - 2rem); }
-  .portfolio-sidebar { border-right: 0; border-bottom: 1px solid #d7d5cf; padding: 2rem; }
-  .portfolio-rule { margin: 2.5rem 0 1.8rem; }
-  .portfolio-nav { gap: 1rem; font-size: 1.15rem; }
-  .portfolio-takeover { padding: 2rem; }
-  .portfolio-takeover.is-active { position: absolute; }
-  .loading-state { min-height: calc(100vh - 2rem); padding: 2rem; text-align: center; }
-  .analysis-toolbar { align-items: flex-start; flex-direction: column; }
-  .toolbar-actions { width: 100%; }
-  .toolbar-button span { font-size: .82rem; }
+.mobile-portfolio-nav {
+  transition: opacity var(--motion-hide) ease-in;
 }
 
-@media (max-height: 800px) and (min-width: 900px) {
-  .portfolio-frame, .analysis-frame { padding-top: 24px; padding-bottom: 24px; }
-  .portfolio-card { min-height: 680px; max-height: none; }
-  .portfolio-sidebar { padding: 44px 36px; }
-  .portfolio-rule { margin-top: 30px; margin-bottom: 28px; }
-  .portfolio-form-wrap h1 { font-size: clamp(2.6rem, 4.5vw, 3.8rem); }
-  .job-textarea-wrap textarea { min-height: 190px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-}
-
-/* Canonical writing-surface structure. */
-.portfolio-takeover {
-  --writer-pad-x: 56px;
-  --writer-pad-top: 48px;
-}
-.job-input-region {
-  position: relative;
-  flex: 1 1 auto;
-  min-height: 0;
-  display: flex;
-}
-.job-input-region textarea,
-.job-input-region textarea:focus {
-  flex: 1 1 auto;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  resize: none;
-  padding: var(--writer-pad-top) var(--writer-pad-x) 120px;
-  border: 0;
-  border-radius: 0;
-  outline: 0;
-  box-shadow: none;
-  background: transparent;
-  color: var(--text-primary);
-  caret-color: var(--text-primary);
-  font: 400 22px/1.45 var(--font-manrope), sans-serif;
-}
-.job-placeholder {
+/* The visible divider rides the boundary. It stays fully opaque while
+   moving and fades only after the panel has swallowed it. */
+.shell-divider {
   position: absolute;
-  top: var(--writer-pad-top);
-  left: var(--writer-pad-x);
-  right: var(--writer-pad-x);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
+  top: 0;
+  bottom: 0;
+  left: var(--split);
+  width: 2px;
+  margin-left: -1px;
+  background: var(--border-strong);
+  transition: opacity 160ms ease-in 80ms;
   pointer-events: none;
 }
-.job-placeholder-primary {
-  color: var(--text-muted);
-  font: 400 22px/1.45 var(--font-manrope), sans-serif;
-}
-.job-placeholder-secondary {
-  max-width: 520px;
-  color: var(--text-muted);
-  opacity: .72;
-  font: 400 15px/1.5 var(--font-manrope), sans-serif;
-}
-.job-input-region > span {
-  position: absolute;
-  right: var(--writer-pad-x);
-  bottom: 12px;
-  color: var(--text-muted);
-  font: 400 .85rem/1 var(--font-manrope), sans-serif;
-}
-.input-footer {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-}
-.input-footer .analyze-button { margin-top: 0; }
-@media (max-width: 1049px) {
-  .portfolio-takeover { --writer-pad-x: 28px; --writer-pad-top: 32px; }
-  .job-input-region textarea,
-  .job-input-region textarea:focus { padding-bottom: 100px; font-size: 16px; line-height: 1.6; }
-  .job-placeholder-primary { font-size: 22px; line-height: 1.45; }
-  .job-placeholder-secondary { font-size: 15px; }
-}
-@media (max-width: 767px) {
-  .portfolio-takeover { --writer-pad-x: 24px; --writer-pad-top: 30px; }
-}
-@media (max-width: 420px) {
-  .portfolio-takeover { --writer-pad-x: 20px; }
+
+.portfolio-card[data-shell-mode="portfolio"][data-motion-phase="settled"] .shell-divider,
+.portfolio-card[data-shell-mode="portfolio"][data-motion-phase="revealing"] .shell-divider,
+.portfolio-card[data-shell-mode="analysis"][data-motion-phase="settled"] .shell-divider,
+.portfolio-card[data-shell-mode="analysis"][data-motion-phase="revealing"] .shell-divider {
+  opacity: 0;
 }
 
-.portfolio-takeover { transition: transform 320ms cubic-bezier(.22, 1, .36, 1); will-change: transform; }
-.portfolio-expanded-content { animation-duration: 320ms; }
-.input-footer .analyze-button { margin-top: 0; }
+/* Content layers -----------------------------------------------------
+   Every layer is anchored to the card; only opacity ever changes.
+   Layers become their own container-query contexts so content can step
+   itself down before its panel visually gets too narrow. */
 
-@media print {
-  body { background: white; }
-  .analysis-frame { padding: 0; display: block; }
-  .analysis-card { border: 0; width: 100%; padding: 0; }
-  .analysis-toolbar { display: none; }
-  .analysis-title { font-size: 28pt; }
-  a { color: black; text-decoration: none; }
+@media (min-width: 1050px) {
+  .home-left-content,
+  .home-right-content,
+  .expanded-left-content,
+  .expanded-right-content {
+    container-type: size;
+  }
 }
 
-/* Final homepage input surface overrides: the panel is the container. */
-.portfolio-takeover {
-  padding: 56px 64px 48px;
-  align-items: stretch;
-  background: var(--surface);
-}
-.portfolio-takeover.is-active {
-  background: var(--surface);
-  padding: 0;
-}
-.portfolio-takeover > form.job-form {
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-}
-.job-textarea-wrap {
-  flex: 1 1 auto;
-  min-height: 0;
-  display: flex;
-  position: relative;
-}
-.job-textarea-wrap textarea,
-.job-textarea-wrap textarea:focus {
-  flex: 1 1 auto;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  resize: none;
-  padding: 0;
-  border:  0;
-  border-radius: 0;
-  outline: 0;
-  box-shadow: none;
-  background: transparent;
-  color: var(--text-primary);
-  caret-color: var(--text-primary);
-  font-family: var(--font-manrope), sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 1.65;
-}
-.job-textarea-wrap textarea::placeholder { color: transparent; }
-.rich-placeholder {
+.home-left-content,
+.home-right-content,
+.expanded-left-content,
+.expanded-right-content {
   position: absolute;
   inset: 0;
+  min-width: 0;
+}
+
+.home-left-content,
+.home-right-content {
+  opacity: 1;
+  transition: opacity var(--motion-hide) ease-in;
+}
+
+/* Leaving home: fade out before the panels get narrow. */
+.portfolio-card[data-motion-phase="hiding"] .home-left-content,
+.portfolio-card[data-motion-phase="hiding"] .home-right-content,
+.portfolio-card[data-motion-phase="moving"] .home-left-content,
+.portfolio-card[data-motion-phase="moving"] .home-right-content,
+.portfolio-card:not([data-shell-mode="home"]) .home-left-content,
+.portfolio-card:not([data-shell-mode="home"]) .home-right-content {
+  opacity: 0;
   pointer-events: none;
+}
+
+.expanded-left-content,
+.expanded-right-content {
+  opacity: 0;
+  transition: opacity var(--motion-reveal) ease-out;
+}
+
+/* Destination content appears in place once the boundary has mostly
+   travelled. Visible only when its mode owns the card AND the reveal
+   has begun — otherwise the layer is fully transparent, so freshly
+   mounted content can never flash through a half-faded layer. */
+.portfolio-card[data-shell-mode="portfolio"][data-motion-phase="revealing"] .expanded-left-content,
+.portfolio-card[data-shell-mode="portfolio"][data-motion-phase="settled"] .expanded-left-content,
+.portfolio-card[data-shell-mode="analysis"][data-motion-phase="revealing"] .expanded-right-content,
+.portfolio-card[data-shell-mode="analysis"][data-motion-phase="settled"] .expanded-right-content {
+  opacity: 1;
+}
+
+/* Quick local crossfade for swaps inside an already-expanded panel
+   (work index to case-study detail, analysis loading to results).
+   Opacity only, never a horizontal translation. */
+@keyframes content-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.content-enter {
+  animation: content-enter 120ms ease-out both;
+}
+
+/* Sidebar (home left content) ---------------------------------------- */
+
+.portfolio-sidebar {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 56px 48px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 16px;
-  background: transparent;
+  overflow-y: auto;
 }
-.rich-placeholder strong {
-  max-width: 680px;
-  color: rgba(238, 242, 245, .72);
+
+.portfolio-name {
   font-family: var(--font-manrope), sans-serif;
-  font-size: clamp(22px, 2vw, 30px);
+  font-size: 30px;
   font-weight: 500;
-  line-height: 1.25;
-  letter-spacing: -.02em;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--text-primary);
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
 }
-.rich-placeholder span {
-  max-width: 560px;
-  color: rgba(178, 189, 199, .58);
+
+.portfolio-bio {
+  margin-top: 1.25rem;
+  max-width: 280px;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.portfolio-rule {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  margin: 36px 0 30px;
+  flex: 0 0 auto;
+}
+
+.portfolio-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   font-family: var(--font-manrope), sans-serif;
   font-size: 16px;
-  font-weight: 400;
-  line-height: 1.5;
-}
-.job-textarea-wrap > span {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  color: var(--text-muted);
-  font-family: var(--font-manrope), sans-serif;
-  font-size: .85rem;
-}
-.portfolio-takeover .analyze-button {
-  flex: 0 0 auto;
-  height: 60px;
-  margin-top: 30px;
-  border-radius: 9px;
-  background: var(--button-bg);
-  color: var(--button-text);
-  font-family: var(--font-manrope), sans-serif;
-}
-.portfolio-takeover .analyze-button:disabled {
-  background: rgba(217, 224, 229, .45);
-  color: rgba(11, 17, 24, .65);
-}
-@media (max-width: 720px) {
-  .portfolio-takeover { padding: 32px 24px; }
-  .rich-placeholder strong { font-size: 24px; }
-  .rich-placeholder span { font-size: 16px; }
-}
-@media (max-height: 800px) and (min-width: 900px) {
-  .portfolio-takeover { padding: 42px 52px 40px; }
-  .portfolio-takeover .analyze-button { margin-top: 24px; }
+  font-weight: 500;
+  line-height: 1.1;
 }
 
-/* The dominant textarea on the homepage gets a flat, editorial treatment. */
-textarea.job-input {
-  resize: vertical;
-}
-
-textarea.job-input::placeholder {
-  color: #a3a3a3;
-}
-
-textarea.job-input:focus {
-  outline: 2px solid #1a1a1a;
-  outline-offset: -1px;
-}
-
-/* Dark editorial system */
-.portfolio-card,
-.analysis-card {
-  background: rgba(18, 21, 21, .94);
-  border-color: var(--border);
-}
-.portfolio-sidebar { border-color: var(--border); }
-.portfolio-name { font-family: var(--font-manrope), sans-serif; font-size: 30px; font-weight: 500; letter-spacing: -.02em; color: var(--text-primary); }
-.portfolio-bio, .portfolio-form-wrap > p { color: var(--text-secondary); }
-.portfolio-rule, .analysis-toolbar { border-color: var(--border); }
-.portfolio-rule { background: var(--border); }
-.portfolio-nav { font-family: var(--font-manrope), sans-serif; font-size: 16px; font-weight: 500; }
-.portfolio-nav a, .toolbar-button, .share-menu a, .share-menu button { color: var(--text-secondary); }
-.portfolio-nav a:first-child, .portfolio-nav a:hover, .toolbar-button:hover, .toolbar-button:focus-visible { color: var(--text-primary); }
-.portfolio-form-wrap h1, .loading-state p, .analysis-title { font-family: var(--font-manrope), sans-serif; font-weight: 500; }
-.portfolio-form-wrap h1 { font-size: clamp(52px, 4vw, 68px); line-height: 1.02; color: var(--text-primary); }
-.portfolio-form-wrap > p { font-family: var(--font-manrope), sans-serif; font-size: 20px; line-height: 1.5; }
-.job-textarea-wrap textarea { background: #0f1111; border-color: var(--border-strong); color: var(--text-primary); font-family: var(--font-manrope), sans-serif; }
-.job-textarea-wrap textarea:focus { border-color: rgba(255,255,255,.28); box-shadow: 0 0 0 2px rgba(255,255,255,.08); }
-.job-textarea-wrap textarea::placeholder, .job-textarea-wrap span { color: var(--text-muted); }
-.analyze-button { background: var(--button-bg); color: var(--button-text); font-family: var(--font-manrope), sans-serif; font-weight: 600; }
-.analyze-button:hover:not(:disabled) { background: var(--button-hover); }
-.portfolio-takeover.is-active { background: var(--surface); }
-.loading-state p { color: var(--text-secondary); }
-.loading-dots i { background: var(--text-muted); }
-.loading-dots i:first-child { background: var(--text-secondary); }
-.analysis-card { color: var(--text-secondary); }
-.analysis-toolbar { border-bottom-color: var(--border); }
-.toolbar-button { border-color: var(--border); background: transparent; font-family: var(--font-manrope), sans-serif; }
-.toolbar-button:hover, .toolbar-button:focus-visible { background: var(--surface-hover); border-color: var(--border-strong); }
-.share-menu { border-color: var(--border-strong); background: var(--surface-subtle); }
-.share-menu button:hover, .share-menu a:hover { background: var(--surface-hover); }
-.analysis-card .text-neutral-900, .analysis-card h1, .analysis-card h2, .analysis-card h3 { color: var(--text-primary); }
-.analysis-card .text-neutral-600, .analysis-card .text-neutral-700 { color: var(--text-secondary); }
-.analysis-card .text-neutral-500, .analysis-card .text-neutral-400 { color: var(--text-muted); }
-.analysis-card .border-neutral-200, .analysis-card .divide-neutral-200 > :not([hidden]) ~ :not([hidden]) { border-color: var(--border); }
-.analysis-card a { color: var(--text-muted); }
-.analysis-card a:hover { color: var(--text-primary); }
-
-body > * { color-scheme: dark; }
-::selection { background: rgba(240, 241, 238, .22); color: var(--text-primary); }
-
-/* Public editorial pages retain their existing information architecture. */
-body .border-neutral-200 { border-color: var(--border); }
-body .text-neutral-900 { color: var(--text-primary); }
-body .text-neutral-700, body .text-neutral-600 { color: var(--text-secondary); }
-body .text-neutral-500, body .text-neutral-400 { color: var(--text-muted); }
-body main h1, body main h2 { color: var(--text-primary); }
-body main > h1 { font-family: var(--font-manrope), sans-serif; font-weight: 500; letter-spacing: -.025em; }
-body main p, body main li { font-family: var(--font-manrope), sans-serif; }
-body main a { color: var(--text-secondary); }
-body main a:hover { color: var(--text-primary); }
-
-@media (max-height: 800px) and (min-width: 900px) {
-  .portfolio-form-wrap h1 { font-size: clamp(48px, 4vw, 60px); }
-}
-
-/* Final homepage canvas treatment. Keep this after legacy rules so no inset field can reappear. */
-.portfolio-card { background: rgba(13, 21, 31, .92); border-color: var(--border); }
-.portfolio-takeover { padding: 56px 64px 48px; align-items: stretch; background: var(--surface); }
-.portfolio-takeover.is-active { background: var(--surface); padding: 0; }
-.portfolio-takeover > form.job-form { width: 100%; height: 100%; min-height: 0; margin: 0; display: flex; flex-direction: column; }
-.job-textarea-wrap { flex: 1 1 auto; min-height: 0; display: flex; position: relative; }
-.job-textarea-wrap textarea,
-.job-textarea-wrap textarea:focus { flex: 1 1 auto; width: 100%; height: 100%; min-height: 0; resize: none; padding: 0; border: 0; border-radius: 0; outline: 0; box-shadow: none; background: transparent; color: var(--text-primary); caret-color: var(--text-primary); font-family: var(--font-manrope), sans-serif; font-size: 22px; font-weight: 400; line-height: 1.45; letter-spacing: 0; }
-.job-textarea-wrap textarea::placeholder { color: transparent; }
-.rich-placeholder { position: absolute; inset: 0; pointer-events: none; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; background: transparent; }
-.rich-placeholder strong { max-width: 680px; color: rgba(238, 242, 245, .72); font-family: var(--font-manrope), sans-serif; font-size: 22px; font-weight: 400; line-height: 1.45; letter-spacing: 0; }
-.rich-placeholder span { max-width: 560px; color: rgba(178, 189, 199, .58); font-family: var(--font-manrope), sans-serif; font-size: 16px; font-weight: 400; line-height: 1.5; }
-.job-textarea-wrap > span { position: absolute; right: 0; bottom: 0; color: var(--text-muted); font-family: var(--font-manrope), sans-serif; font-size: .85rem; }
-.portfolio-takeover .analyze-button { flex: 0 0 auto; height: 60px; margin-top: 30px; border-radius: 9px; background: var(--button-bg); color: var(--button-text); font-family: var(--font-manrope), sans-serif; }
-.portfolio-takeover .analyze-button:disabled { background: rgba(217, 224, 229, .45); color: rgba(11, 17, 24, .65); }
-@media (max-width: 720px) { .portfolio-takeover { padding: 32px 24px; } .rich-placeholder strong { font-size: 22px; } .rich-placeholder span { font-size: 16px; } }
-@media (max-height: 800px) and (min-width: 900px) { .portfolio-takeover { padding: 42px 52px 40px; } .portfolio-takeover .analyze-button { margin-top: 24px; } }
-
-/* Responsive public layouts */
-@media (max-width: 820px) {
-  .portfolio-frame { padding: 12px; align-items: flex-start; }
-  .portfolio-card { width: 100%; max-height: none; min-height: 0; display: block; border-radius: 12px; }
-  .portfolio-sidebar { padding: 28px 24px 24px; border-right: 0; border-bottom: 1px solid var(--border); }
-  .portfolio-name { font-size: 26px; }
-  .portfolio-bio { max-width: none; margin-top: 14px; font-size: 15px; line-height: 1.6; }
-  .portfolio-rule { margin: 28px 0 24px; }
-  .portfolio-nav { gap: 14px; font-size: 15px; }
-  .mail-link { margin-top: 16px; }
-  .portfolio-takeover,
-  .portfolio-takeover.is-active { position: relative; inset: auto; min-height: 480px; padding: 30px 24px 24px; }
-  .portfolio-takeover.is-active { position: absolute; inset: 0; min-height: 0; }
-  .portfolio-takeover > form.job-form { min-height: 420px; }
-  .job-textarea-wrap textarea,
-  .job-textarea-wrap textarea:focus { font-size: 16px; line-height: 1.6; }
-  .rich-placeholder { gap: 10px; }
-  .rich-placeholder strong { font-size: 22px; line-height: 1.45; }
-  .rich-placeholder span { max-width: 520px; font-size: 15px; line-height: 1.55; }
-  .portfolio-takeover .analyze-button { min-height: 54px; height: 54px; margin-top: 24px; }
-  .loading-state { min-height: 480px; padding: 24px; }
-  .liquid-orb { width: clamp(140px, 42vw, 190px); }
-  .loading-state p { max-width: 280px; text-align: center; font-size: 1.3rem; line-height: 1.35; }
-
-  .analysis-frame { padding: 12px; align-items: flex-start; }
-  .analysis-card { width: 100%; padding: 18px 20px 40px; border-radius: 12px; }
-  .analysis-toolbar { align-items: flex-start; flex-wrap: wrap; }
-  .toolbar-actions { width: 100%; }
-  .toolbar-button { min-height: 44px; }
-  .share-menu { right: 0; max-width: calc(100vw - 32px); }
-
-  .site-header > div { flex-wrap: wrap; gap: 16px; }
-  .site-header nav { flex-wrap: wrap; row-gap: 10px; }
-  body main { max-width: 100%; }
-  body main > h1 { font-size: clamp(2rem, 8vw, 3rem); line-height: 1.05; }
-  body main p, body main li { max-width: 100%; }
-}
-
-@media (max-width: 420px) {
-  .portfolio-frame, .analysis-frame { padding: 8px; }
-  .portfolio-sidebar { padding: 24px 20px 22px; }
-  .portfolio-takeover,
-  .portfolio-takeover.is-active { padding-left: 20px; padding-right: 20px; }
-  .analysis-card { padding-left: 16px; padding-right: 16px; }
-  .toolbar-actions { gap: 6px; }
-  .toolbar-button { padding-left: 10px; padding-right: 10px; }
-}
-
-/* Focused shell polish: normalize every navigation item, regardless of element type. */
 .portfolio-nav > *,
 .portfolio-nav > a,
 .portfolio-nav > button {
@@ -505,180 +307,1113 @@ body main a:hover { color: var(--text-primary); }
   cursor: pointer;
   text-decoration: none;
 }
+
 .portfolio-nav > *:hover,
-.portfolio-nav > *:focus-visible { color: var(--text-primary); }
-.portfolio-nav .mail-link { margin-top: 26px; }
-
-/* Decisive spatial transitions for the shell and its content. */
-.portfolio-takeover { transition: transform 340ms cubic-bezier(.22, 1, .36, 1); }
-.portfolio-expanded-content { animation-duration: 340ms; animation-delay: 110ms; }
-.portfolio-expanded-content .expanded-toolbar,
-.portfolio-expanded-content .case-study-grid,
-.portfolio-expanded-content .expanded-sections,
-.portfolio-expanded-content .expanded-copy { animation: expanded-content-reveal 220ms cubic-bezier(.22, 1, .36, 1) 120ms both; }
-@keyframes expanded-content-reveal { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
-@media (prefers-reduced-motion: reduce) {
-  .portfolio-takeover { transition-duration: 1ms; }
-  .portfolio-expanded-content { animation-duration: 1ms; animation-delay: 0ms; }
-  .portfolio-expanded-content .expanded-toolbar,
-  .portfolio-expanded-content .case-study-grid,
-  .portfolio-expanded-content .expanded-sections,
-  .portfolio-expanded-content .expanded-copy { animation-duration: 1ms; animation-delay: 0ms; }
+.portfolio-nav > *:focus-visible {
+  color: var(--text-primary);
 }
 
-.portfolio-view-expanded { position: relative; overflow: hidden; }
-.portfolio-expanded-content { position: absolute; inset: 0; z-index: 5; overflow-y: auto; padding: 48px 56px 64px; background: var(--surface); animation: portfolio-content-enter 650ms cubic-bezier(.76,0,.24,1) both; }
-@keyframes portfolio-content-enter { from { transform: translateX(-100%); } to { transform: translateX(0); } }
-.expanded-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
-.expanded-toolbar h1 { margin: 0; color: var(--text-primary); font-family: var(--font-manrope), sans-serif; font-size: clamp(28px, 3vw, 42px); font-weight: 500; letter-spacing: -.03em; }
-.expanded-toolbar button { color: var(--text-secondary); font: 500 15px var(--font-manrope), sans-serif; }
-.expanded-toolbar button:hover { color: var(--text-primary); }
-.case-study-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding-top: 28px; }
-.case-study-card { min-height: 190px; padding: 22px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-subtle); color: var(--text-secondary); text-align: left; cursor: pointer; }
-.case-study-card:hover { border-color: var(--border-strong); background: var(--surface-hover); }
-.case-study-card h2 { color: var(--text-primary); font: 500 20px/1.2 var(--font-manrope), sans-serif; }
-.case-study-card span, .expanded-meta { display: block; margin-top: 8px; color: var(--text-muted); font-size: 13px; }
-.case-study-card p, .expanded-summary { margin-top: 14px; color: var(--text-secondary); font: 400 15px/1.6 var(--font-manrope), sans-serif; }
-.expanded-sections { width: min(100%, 760px); padding-top: 28px; }
-.expanded-sections article { padding: 28px 0; border-top: 1px solid var(--border); }
-.expanded-sections article:first-child { border-top: 0; padding-top: 0; }
-.expanded-sections article h2 { color: var(--text-primary); font: 500 22px/1.25 var(--font-manrope), sans-serif; }
-.expanded-copy { padding-top: 28px; color: var(--text-secondary); }
-.analysis-workspace { padding: 28px 56px 64px; }
-.analysis-content { max-width: 980px; padding-top: 30px; color: var(--text-secondary); }
-.analysis-title { margin: 0; color: var(--text-primary); font-size: clamp(30px, 4vw, 58px); line-height: 1.05; }
-.analysis-company { margin-top: 8px; color: var(--text-muted); font-size: 14px; }
-.analysis-section { width: min(100%, 980px); margin-top: 42px; border-top: 1px solid var(--border); padding-top: 24px; }
-.analysis-section h2 { color: var(--text-primary); font-size: 25px; font-weight: 500; letter-spacing: -.02em; }
-.analysis-fit-label { margin-top: 12px; color: var(--text-primary); font-size: 18px; font-weight: 600; }
-.analysis-body { max-width: 72ch; margin-top: 14px; color: var(--text-secondary); font-size: 16px; line-height: 1.7; }
-.analysis-theme-list { margin-top: 4px; }
-.analysis-theme { border-top: 1px solid var(--border); padding: 26px 0; }
-.analysis-theme:first-child { border-top: 0; }
-.analysis-theme h3 { color: var(--text-primary); font-size: 19px; font-weight: 600; }
-.analysis-citations { display: grid; gap: 10px; margin-top: 16px; }
-.analysis-citations .text-neutral-500 { color: var(--text-muted); }
-.analysis-citations a { color: var(--text-muted); }
-.analysis-citations a:hover { color: var(--text-primary); }
-.analysis-state { padding-top: 48px; }
-.analysis-state h1 { color: var(--text-primary); font-size: 28px; font-weight: 500; }
-.analysis-state p { margin-top: 12px; color: var(--text-secondary); }
-.analysis-state button { margin-top: 24px; color: var(--text-primary); text-decoration: underline; }
-.analysis-loading-shell { min-height: 100%; display: grid; place-items: center; }
-@media (max-width: 767px) { .analysis-workspace { padding: 24px; } .analysis-content { padding-top: 24px; } }
-@media (max-width: 1049px) {
-  .portfolio-expanded-content { padding: 32px 28px 48px; }
-  .case-study-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 767px) {
-  .portfolio-expanded-content { padding: 26px 24px 40px; }
-  .expanded-toolbar { align-items: flex-start; flex-direction: column; }
-  .case-study-grid { grid-template-columns: 1fr; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .portfolio-expanded-content { animation-duration: 1ms; }
+.portfolio-nav .mail-link {
+  margin-top: 26px;
+  font-family: sans-serif;
+  font-size: 1.7rem;
 }
 
-/* Tablet/mobile hierarchy: navigation, then profile, then writing canvas. */
-.mobile-portfolio-nav { display: none; }
-@media (min-width: 1050px) {
-  .portfolio-card { grid-template-columns: minmax(340px, 29%) minmax(0, 1fr); }
-  .desktop-portfolio-nav { display: block; }
-}
-@media (max-width: 1049px) {
-  .portfolio-frame { padding: 12px; align-items: flex-start; }
-  .portfolio-card { width: 100%; max-height: none; min-height: 0; display: flex; flex-direction: column; border-radius: 12px; }
-  .mobile-portfolio-nav { display: block; order: 0; padding: 24px 28px 20px; border-bottom: 1px solid var(--border); }
-  .mobile-portfolio-nav .portfolio-nav { flex-direction: row; flex-wrap: wrap; gap: 12px 20px; font-size: 15px; line-height: 1.35; }
-  .mobile-portfolio-nav .mail-link { margin-top: 0; }
-  .desktop-portfolio-nav { display: none; }
-  .portfolio-sidebar { order: 1; width: 100%; padding: 24px 28px 28px; border-right: 0; border-bottom: 1px solid var(--border); }
-  .portfolio-name { font-size: clamp(26px, 7vw, 34px); white-space: normal; word-break: normal; overflow-wrap: normal; }
-  .portfolio-bio { width: 100%; max-width: none; font-size: 15px; line-height: 1.6; }
-  .portfolio-rule { display: none; }
-  .portfolio-takeover,
-  .portfolio-takeover.is-active { order: 2; position: relative; inset: auto; width: 100%; min-height: 520px; padding: 32px 28px 28px; }
-  .portfolio-takeover.is-active { position: absolute; inset: 0; min-height: 0; }
-  .portfolio-takeover > form.job-form { min-height: 460px; }
-}
-@media (max-width: 767px) {
-  .mobile-portfolio-nav { padding: 22px 24px 18px; }
-  .portfolio-sidebar { padding: 24px; }
-  .portfolio-takeover,
-  .portfolio-takeover.is-active { min-height: 480px; padding: 30px 24px 24px; }
-  .portfolio-takeover > form.job-form { min-height: 420px; }
-}
-@media (max-width: 420px) {
-  .portfolio-frame { padding: 8px; }
-  .mobile-portfolio-nav { padding-left: 20px; padding-right: 20px; }
-  .mobile-portfolio-nav .portfolio-nav { column-gap: 16px; }
-  .portfolio-sidebar { padding-left: 20px; padding-right: 20px; }
-  .portfolio-takeover,
-  .portfolio-takeover.is-active { padding-left: 20px; padding-right: 20px; }
+/* While the left panel collapses toward the analysis side, hide the
+   narrow-gutter chrome so the sidebar never squeezes. */
+@container (max-width: 300px) {
+  .portfolio-bio,
+  .portfolio-rule {
+    display: none;
+  }
 }
 
-/* Shared content edges and transform-only full-shell transitions. */
-.portfolio-card { overflow: hidden; }
-.portfolio-takeover {
-  --writer-pad-x: 0px;
-  --writer-pad-top: 0px;
+/* Job input (home right content) ------------------------------------- */
+
+.home-right-content {
+  /* The panel is full-card-width, clipped at --split. Anchor the
+     content box to the boundary so it always sits inside the visible
+     region; it rides the same eased motion as the divider. */
+  left: var(--split);
+  right: 0;
+  transition: left var(--motion-split) var(--ease-shell), opacity var(--motion-hide) ease-in;
   padding: 48px 56px 40px;
-  min-width: 0;
-  transition: none;
+  display: flex;
 }
-.portfolio-takeover .job-input-region { width: 100%; min-width: 0; }
-.portfolio-takeover .job-input-region textarea,
-.portfolio-takeover .job-input-region textarea:focus { display: block; box-sizing: border-box; padding: 0 0 48px; margin: 0; }
-.portfolio-takeover .job-placeholder { inset: 0 0 auto 0; width: 100%; }
-.portfolio-takeover .job-input-region > span { right: 0; }
-.portfolio-takeover .input-footer,
-.portfolio-takeover .analyze-button { width: 100%; }
-.portfolio-expanded-content { animation: none !important; }
-.portfolio-expanded-content { transform: none !important; }
-.portfolio-card > .portfolio-expanded-content { z-index: 5; }
-.shell-transition-layer {
+
+.job-form {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.job-input-region {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+}
+
+.job-input-region textarea,
+.job-input-region textarea:focus {
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  resize: none;
+  padding: 0 0 48px;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  box-shadow: none;
+  background: transparent;
+  color: var(--text-primary);
+  caret-color: var(--text-primary);
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+.job-input-region textarea::placeholder {
+  color: transparent;
+}
+
+.job-placeholder {
   position: absolute;
-  inset: 0;
-  z-index: 20;
-  overflow: hidden;
+  inset: 0 0 auto 0;
+  width: 100%;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.job-placeholder-primary {
+  color: rgba(238, 242, 245, 0.72);
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+.job-placeholder-secondary {
+  max-width: 560px;
+  color: rgba(178, 189, 199, 0.58);
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.job-input-region > span {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: var(--text-muted);
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 0.85rem;
+}
+
+.input-footer {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.analyze-button {
+  width: 100%;
+  flex: 0 0 auto;
+  height: 60px;
+  margin-top: 30px;
+  border: 0;
+  border-radius: 9px;
+  background: var(--button-bg);
+  color: var(--button-text);
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.analyze-button:hover:not(:disabled) {
+  background: var(--button-hover);
+}
+
+.analyze-button:disabled {
+  background: rgba(217, 224, 229, 0.45);
+  color: rgba(11, 17, 24, 0.65);
+  cursor: not-allowed;
+}
+
+.form-error {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.form-error button {
+  color: var(--text-primary);
+  text-decoration: underline;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+/* As the right panel collapses toward the case-studies side, step the
+   writer down before it can squeeze into a sliver. */
+@container (max-width: 560px) {
+  .job-input-region textarea,
+  .job-placeholder-primary {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .job-placeholder-secondary {
+    font-size: 14px;
+  }
+}
+
+/* Expanded panel content (portfolio + analysis) ---------------------- */
+
+.portfolio-expanded-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  padding: 48px 56px 64px;
   background: var(--surface);
-  transform: translate3d(-100%, 0, 0);
-  opacity: 0;
-  transition: transform 220ms cubic-bezier(.22, 1, .36, 1), opacity 140ms ease-out;
-  will-change: transform;
-  backface-visibility: hidden;
 }
-.shell-transition-layer.from-right { transform: translate3d(100%, 0, 0); }
-.shell-transition-layer.is-active { transform: translate3d(0, 0, 0); opacity: 1; }
-.shell-transition-layer.is-leaving.from-left { transform: translate3d(-100%, 0, 0); }
-.shell-transition-layer.is-leaving.from-right { transform: translate3d(100%, 0, 0); }
-.shell-transition-layer .portfolio-expanded-content { z-index: 0; }
-.shell-transition-layer .loading-state { min-height: 100%; }
-/* The shell owns the navigation motion. Prevent the legacy child reveal from
-   adding a second slide on mount and again when the overlay is committed. */
-.shell-transition-layer .portfolio-expanded-content,
-.shell-transition-layer .expanded-toolbar,
-.shell-transition-layer .case-study-grid,
-.shell-transition-layer .expanded-sections,
-.shell-transition-layer .expanded-copy { animation: none !important; }
-.portfolio-expanded-content,
-.portfolio-expanded-content .expanded-toolbar,
-.portfolio-expanded-content .case-study-grid,
-.portfolio-expanded-content .expanded-sections,
-.portfolio-expanded-content .expanded-copy { animation: none !important; }
-.shell-transition-layer .portfolio-expanded-content { transform: none !important; }
+
+/* Section anchors land below the toolbar, not under it. */
+.portfolio-expanded-content article[id] {
+  scroll-margin-top: 32px;
+}
+
+.portfolio-expanded-content:focus {
+  outline: none;
+}
+
+.expanded-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  min-width: 0;
+}
+
+.expanded-toolbar h1 {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-manrope), sans-serif;
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  outline: none;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+.expanded-toolbar button {
+  color: var(--text-secondary);
+  font: 500 15px var(--font-manrope), sans-serif;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.expanded-toolbar button:hover {
+  color: var(--text-primary);
+}
+
+.case-study-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  padding-top: 28px;
+}
+
+@container (max-width: 1080px) {
+  .case-study-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container (max-width: 700px) {
+  .case-study-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.case-study-card {
+  min-height: 190px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.case-study-card:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
+}
+
+.case-study-card h2 {
+  color: var(--text-primary);
+  font: 500 20px/1.2 var(--font-manrope), sans-serif;
+}
+
+.case-study-card span,
+.expanded-meta {
+  display: block;
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.case-study-card p,
+.expanded-summary {
+  margin-top: 14px;
+  color: var(--text-secondary);
+  font: 400 15px/1.6 var(--font-manrope), sans-serif;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.expanded-meta {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.expanded-sections {
+  width: min(100%, 760px);
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-top: 28px;
+}
+
+.expanded-sections article {
+  padding: 28px 0;
+  border-top: 1px solid var(--border);
+}
+
+.expanded-sections article:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.expanded-sections article h2 {
+  color: var(--text-primary);
+  font: 500 22px/1.25 var(--font-manrope), sans-serif;
+}
+
+.expanded-copy {
+  padding-top: 28px;
+  color: var(--text-secondary);
+}
+
+/* Analysis workspace lives in the expanded right panel. */
+.analysis-workspace {
+  padding: 28px 56px 64px;
+  min-width: 0;
+}
+
+.analysis-content {
+  max-width: 980px;
+  padding-top: 30px;
+  color: var(--text-secondary);
+  min-width: 0;
+}
+
+.analysis-title {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 500;
+  font-size: clamp(30px, 4vw, 58px);
+  line-height: 1.05;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.analysis-company {
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.analysis-section {
+  width: min(100%, 980px);
+  max-width: 100%;
+  min-width: 0;
+  margin-top: 42px;
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+}
+
+.analysis-section h2 {
+  color: var(--text-primary);
+  font-size: 25px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.analysis-fit-label {
+  margin-top: 12px;
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.analysis-body {
+  max-width: 72ch;
+  max-width: min(72ch, 100%);
+  margin-top: 14px;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-wrap: break-word;
+}
+
+.analysis-theme-list {
+  margin-top: 4px;
+}
+
+.analysis-theme {
+  border-top: 1px solid var(--border);
+  padding: 26px 0;
+}
+
+.analysis-theme:first-child {
+  border-top: 0;
+}
+
+.analysis-theme h3 {
+  color: var(--text-primary);
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.analysis-citations {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.analysis-citations .text-neutral-500 {
+  color: var(--text-muted);
+}
+
+.analysis-citations a {
+  color: var(--text-muted);
+}
+
+.analysis-citations a:hover {
+  color: var(--text-primary);
+}
+
+.analysis-state {
+  padding-top: 48px;
+}
+
+.analysis-state h1 {
+  color: var(--text-primary);
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.analysis-state p {
+  margin-top: 12px;
+  color: var(--text-secondary);
+}
+
+.analysis-state button {
+  margin-top: 24px;
+  color: var(--text-primary);
+  text-decoration: underline;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.analysis-loading-shell {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+/* Loading orb --------------------------------------------------------- */
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  width: 100%;
+}
+
+.loading-state p {
+  margin-top: 2.5rem;
+  font: clamp(1.4rem, 2vw, 2rem) var(--font-manrope), sans-serif;
+  color: var(--text-secondary);
+}
+
+.liquid-orb {
+  width: clamp(170px, 17vw, 220px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 34% 26%, #fff 0 5%, transparent 22%),
+    radial-gradient(circle at 70% 28%, #9adcf0, transparent 38%),
+    radial-gradient(circle at 34% 72%, #8eb9eb, transparent 45%),
+    radial-gradient(circle at 70% 73%, #f9d0a4, transparent 42%),
+    linear-gradient(135deg, #d7f4f5, #cab9ee 45%, #ffeed5);
+  box-shadow: 0 0 28px rgba(174, 219, 232, 0.3), inset 0 0 18px rgba(255, 255, 255, 0.8);
+  animation: orb-breathe 4s ease-in-out infinite;
+}
+
+.liquid-orb::before,
+.liquid-orb::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  border-radius: 45%;
+  background: radial-gradient(ellipse at 30% 50%, rgba(255, 255, 255, 0.75), transparent 25%),
+    radial-gradient(ellipse at 65% 45%, rgba(135, 191, 239, 0.65), transparent 30%),
+    radial-gradient(ellipse at 48% 75%, rgba(221, 173, 240, 0.5), transparent 27%);
+  animation: orb-flow 9s ease-in-out infinite alternate;
+  mix-blend-mode: screen;
+}
+
+.liquid-orb::after {
+  animation-duration: 12s;
+  animation-direction: alternate-reverse;
+  opacity: 0.8;
+}
+
+@keyframes orb-flow {
+  from {
+    transform: rotate(-12deg) translate(-4%, 2%) scale(1.08);
+  }
+  to {
+    transform: rotate(18deg) translate(4%, -3%) scale(1.12);
+  }
+}
+
+@keyframes orb-breathe {
+  50% {
+    transform: scale(1.04);
+    filter: brightness(1.04);
+  }
+}
+
+.loading-dots {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1.8rem;
+}
+
+.loading-dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  animation: dot-pulse 1.4s ease-in-out infinite;
+}
+
+.loading-dots i:first-child {
+  background: var(--text-secondary);
+}
+
+.loading-dots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.loading-dots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.loading-dots i:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+@keyframes dot-pulse {
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+
+/* Analysis toolbar ---------------------------------------------------- */
+
+.analysis-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+  min-width: 0;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.toolbar-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.8rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.toolbar-button:hover,
+.toolbar-button:focus-visible {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+  outline: none;
+}
+
+.share-wrap {
+  position: relative;
+}
+
+.share-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.4rem);
+  z-index: 3;
+  width: 220px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--surface-subtle);
+  padding: 0.35rem;
+}
+
+.share-menu button,
+.share-menu a {
+  display: flex;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  text-align: left;
+  font-size: 0.9rem;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.share-menu button:hover,
+.share-menu a:hover {
+  background: var(--surface-hover);
+}
+
+/* Screen-reader helper and selection ---------------------------------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+body > * {
+  color-scheme: dark;
+}
+
+::selection {
+  background: rgba(240, 241, 238, 0.22);
+  color: var(--text-primary);
+}
+
+/* Public editorial pages (SiteHeader etc.) ---------------------------- */
+
+body .border-neutral-200 {
+  border-color: var(--border);
+}
+
+body .text-neutral-900 {
+  color: var(--text-primary);
+}
+
+body .text-neutral-700,
+body .text-neutral-600 {
+  color: var(--text-secondary);
+}
+
+body .text-neutral-500,
+body .text-neutral-400 {
+  color: var(--text-muted);
+}
+
+body main h1,
+body main h2 {
+  color: var(--text-primary);
+}
+
+body main > h1 {
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+body main p,
+body main li {
+  font-family: var(--font-manrope), sans-serif;
+}
+
+body main a {
+  color: var(--text-secondary);
+}
+
+body main a:hover {
+  color: var(--text-primary);
+}
+
+/* Desktop width refinements ------------------------------------------ */
+
+@media (min-width: 1050px) {
+  .desktop-portfolio-nav {
+    display: block;
+  }
+}
+
+@media (max-height: 800px) and (min-width: 900px) {
+  .portfolio-frame {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+
+  .portfolio-card {
+    min-height: 680px;
+    max-height: none;
+  }
+
+  .portfolio-sidebar {
+    padding: 44px 36px;
+  }
+
+  .portfolio-rule {
+    margin-top: 30px;
+    margin-bottom: 28px;
+  }
+
+  .home-right-content {
+    padding: 42px 52px 36px;
+  }
+
+  .analyze-button {
+    margin-top: 24px;
+  }
+}
+
+/* Tablet / mobile shell (below 1050px) ---------------------------------
+   Stacked: navigation, then profile, then writing canvas. No desktop
+   divider. Home to expanded views reveal the destination through a
+   clip-path mask whose edge sweeps on the same timeline; the content
+   itself never translates and the card grows to fit it. */
+
+.mobile-portfolio-nav {
+  display: none;
+}
+
 @media (max-width: 1049px) {
-  .portfolio-takeover,
-  .portfolio-takeover.is-active { padding: 32px 28px 28px; }
+  .portfolio-frame {
+    padding: 12px;
+    align-items: flex-start;
+  }
+
+  .portfolio-card {
+    width: 100%;
+    max-height: none;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: none;
+  }
+
+  .mobile-portfolio-nav {
+    display: block;
+    order: 0;
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    z-index: 2;
+    background: var(--surface);
+  }
+
+  .mobile-portfolio-nav .portfolio-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  .mobile-portfolio-nav .mail-link {
+    margin-top: 0;
+  }
+
+  /* Panels flow in the stacked document; no side clips. */
+  .shell-left-panel,
+  .shell-right-panel {
+    position: static;
+    inset: auto;
+    order: 1;
+    clip-path: none;
+  }
+
+  .shell-right-panel {
+    order: 2;
+  }
+
+  .shell-divider {
+    display: none;
+  }
+
+  .home-left-content,
+  .home-right-content {
+    position: static;
+    inset: auto;
+  }
+
+  .portfolio-sidebar {
+    width: 100%;
+    height: auto;
+    padding: 24px 28px 28px;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+    overflow-y: visible;
+  }
+
+  .portfolio-name {
+    font-size: clamp(26px, 7vw, 34px);
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+
+  .portfolio-bio {
+    width: 100%;
+    max-width: none;
+    margin-top: 14px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .portfolio-rule {
+    display: none;
+  }
+
+  .desktop-portfolio-nav {
+    display: none;
+  }
+
+  .home-right-content {
+    min-height: 520px;
+    padding: 32px 28px 28px;
+  }
+
+  .job-form {
+    min-height: 460px;
+  }
+
+  .job-input-region textarea,
+  .job-placeholder-primary {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .expanded-left-content,
+  .expanded-right-content {
+    position: static;
+    inset: auto;
+  }
+
+  /* Masked reveal: a full-card surface whose visible area sweeps open
+     from the side its panel belongs to. */
+  .mobile-expand {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: var(--surface);
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path var(--motion-split) var(--ease-shell);
+    pointer-events: none;
+  }
+
+  .mobile-expand[data-side="right"] {
+    clip-path: inset(0 0 0 100%);
+  }
+
+  .portfolio-card[data-motion-phase="moving"][data-shell-mode="portfolio"] .mobile-expand[data-side="left"],
+  .portfolio-card[data-motion-phase="revealing"][data-shell-mode="portfolio"] .mobile-expand[data-side="left"],
+  .portfolio-card[data-motion-phase="settled"][data-shell-mode="portfolio"] .mobile-expand[data-side="left"],
+  .portfolio-card[data-motion-phase="moving"][data-shell-mode="analysis"] .mobile-expand[data-side="right"],
+  .portfolio-card[data-motion-phase="revealing"][data-shell-mode="analysis"] .mobile-expand[data-side="right"],
+  .portfolio-card[data-motion-phase="settled"][data-shell-mode="analysis"] .mobile-expand[data-side="right"] {
+    clip-path: inset(0 0 0 0);
+    pointer-events: auto;
+  }
+
+  /* Expanded content scrolls naturally inside the revealed surface;
+     the card grows to fit it. */
+  .portfolio-expanded-content {
+    height: auto;
+    overflow-y: visible;
+    padding: 26px 24px 40px;
+  }
+
+  .expanded-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .case-study-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analysis-workspace {
+    padding: 24px;
+  }
+
+  .analysis-content {
+    padding-top: 24px;
+  }
+
+  .loading-state {
+    min-height: 480px;
+    padding: 24px;
+  }
+
+  .liquid-orb {
+    width: clamp(140px, 42vw, 190px);
+  }
+
+  .loading-state p {
+    max-width: 280px;
+    text-align: center;
+    font-size: 1.3rem;
+    line-height: 1.35;
+  }
+
+  .analysis-toolbar {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-actions {
+    width: 100%;
+  }
+
+  .toolbar-button {
+    min-height: 44px;
+  }
+
+  .toolbar-button span {
+    font-size: 0.82rem;
+  }
+
+  .share-menu {
+    right: 0;
+    max-width: calc(100vw - 32px);
+  }
+
+  .site-header > div {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .site-header nav {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+
+  body main {
+    max-width: 100%;
+  }
+
+  body main > h1 {
+    font-size: clamp(2rem, 8vw, 3rem);
+    line-height: 1.05;
+  }
+
+  body main p,
+  body main li {
+    max-width: 100%;
+  }
 }
+
 @media (max-width: 767px) {
-  .portfolio-takeover,
-  .portfolio-takeover.is-active { padding: 30px 24px 24px; }
+  .mobile-portfolio-nav {
+    padding: 22px 24px 18px;
+  }
+
+  .portfolio-sidebar {
+    padding: 24px;
+  }
+
+  .home-right-content {
+    min-height: 480px;
+    padding: 30px 24px 24px;
+  }
+
+  .job-form {
+    min-height: 420px;
+  }
 }
+
 @media (max-width: 420px) {
-  .portfolio-takeover,
-  .portfolio-takeover.is-active { padding-left: 20px; padding-right: 20px; }
+  .portfolio-frame {
+    padding: 8px;
+  }
+
+  .mobile-portfolio-nav {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .mobile-portfolio-nav .portfolio-nav {
+    column-gap: 16px;
+  }
+
+  .portfolio-sidebar {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .home-right-content {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
+
+/* Print --------------------------------------------------------------- */
+
+@media print {
+  body {
+    background: white;
+  }
+
+  .portfolio-frame {
+    padding: 0;
+    min-height: auto;
+    display: block;
+  }
+
+  .portfolio-card {
+    border: 0;
+    border-radius: 0;
+    width: 100%;
+    max-height: none;
+    min-height: 0;
+    display: block;
+    overflow: visible;
+    transition: none;
+  }
+
+  .mobile-portfolio-nav,
+  .home-left-content,
+  .home-right-content,
+  .shell-divider {
+    display: none;
+  }
+
+  .shell-left-panel,
+  .shell-right-panel {
+    position: static;
+    clip-path: none;
+  }
+
+  .mobile-expand {
+    position: static;
+    clip-path: none;
+    transition: none;
+  }
+
+  .expanded-left-content,
+  .expanded-right-content {
+    position: static;
+    opacity: 1;
+  }
+
+  .portfolio-expanded-content {
+    overflow: visible;
+    height: auto;
+  }
+
+  .analysis-toolbar {
+    display: none;
+  }
+
+  .analysis-title {
+    font-size: 28pt;
+  }
+
+  a {
+    color: black;
+    text-decoration: none;
+  }
+}
+
+/* Reduced motion ------------------------------------------------------ */
+
 @media (prefers-reduced-motion: reduce) {
-  .shell-transition-layer { transition-duration: 1ms; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

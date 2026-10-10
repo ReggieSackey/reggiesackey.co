@@ -14,6 +14,7 @@ import type * as analysisGuards from "../analysisGuards.js";
 import type * as canonicalCapabilities from "../canonicalCapabilities.js";
 import type * as capabilities from "../capabilities.js";
 import type * as caseStudies from "../caseStudies.js";
+import type * as citations from "../citations.js";
 import type * as evidence from "../evidence.js";
 import type * as jobAnalyses from "../jobAnalyses.js";
 import type * as portfolioCaseStudy from "../portfolioCaseStudy.js";
@@ -36,6 +37,7 @@ declare const fullApi: ApiFromModules<{
   canonicalCapabilities: typeof canonicalCapabilities;
   capabilities: typeof capabilities;
   caseStudies: typeof caseStudies;
+  citations: typeof citations;
   evidence: typeof evidence;
   jobAnalyses: typeof jobAnalyses;
   portfolioCaseStudy: typeof portfolioCaseStudy;

@@ -1,13 +1,11 @@
-import { fetchQuery } from "convex/nextjs";
-import { api } from "@convex/_generated/api";
 import type { Citation } from "./analysis";
 
 /**
- * Server-side hydration of citation IDs into trusted titles/headings.
+ * Hydration of citation IDs into trusted titles/headings.
  *
- * Mirrors what the future pipeline's "validate citations" step will do:
- * every citation must resolve to real, published canonical content, and
- * the renderer — not the model — owns display data and URLs.
+ * The renderer — not the model — owns display data and URLs. The maps
+ * can be built server-side (fetchQuery) or client-side (useQuery +
+ * buildCitationContextFromRows) from the canonical Convex query.
  */
 
 export interface CitationDisplayContext {
@@ -15,6 +13,14 @@ export interface CitationDisplayContext {
   sourceTitles: Map<string, string>;
   /** key: `${sourceType}:${sourceId}:${sectionId}` */
   sectionHeadings: Map<string, string>;
+}
+
+export interface CitationSourceRow {
+  sourceType: string;
+  sourceId: string;
+  sectionId: string;
+  sourceTitle: string;
+  sectionHeading: string | null;
 }
 
 function sourceKey(sourceType: string, sourceId: string) {
@@ -25,43 +31,37 @@ function sectionKey(c: Citation) {
   return `${c.sourceType}:${c.sourceId}:${c.sectionId}`;
 }
 
-export async function buildCitationContext(
-  citations: Citation[],
-): Promise<CitationDisplayContext> {
+/** Client-side hydration from the getCitationSources query result. */
+export function buildCitationContextFromRows(
+  rows: CitationSourceRow[],
+): CitationDisplayContext {
   const sourceTitles = new Map<string, string>();
   const sectionHeadings = new Map<string, string>();
-
-  const seen = new Set<string>();
-  for (const c of citations) {
-    seen.add(sourceKey(c.sourceType, c.sourceId));
-  }
-
-  for (const key of seen) {
-    const [sourceType, sourceId] = key.split(":");
-    if (sourceType === "caseStudy") {
-      const data = await fetchQuery(
-        api.caseStudies.getCaseStudyWithSections,
-        { slug: sourceId },
+  for (const row of rows) {
+    sourceTitles.set(sourceKey(row.sourceType, row.sourceId), row.sourceTitle);
+    if (row.sectionHeading) {
+      sectionHeadings.set(
+        `${row.sourceType}:${row.sourceId}:${row.sectionId}`,
+        row.sectionHeading,
       );
-      if (!data) continue;
-      sourceTitles.set(key, data.caseStudy.title);
-      for (const s of data.sections) {
-        sectionHeadings.set(`${key}:${s.slug}`, s.heading);
-      }
-    } else if (sourceType === "profile") {
-      const data = await fetchQuery(
-        api.profileDocuments.getProfileDocumentWithSections,
-        { type: sourceId },
-      );
-      if (!data) continue;
-      sourceTitles.set(key, data.document.title);
-      for (const s of data.sections) {
-        sectionHeadings.set(`${key}:${s.slug}`, s.heading);
-      }
     }
   }
-
   return { sourceTitles, sectionHeadings };
+}
+
+/** Collect the deduplicated citation refs used by an analysis. */
+export function collectCitationRefs(
+  citations: Citation[],
+): Array<{ sourceType: string; sourceId: string; sectionId: string }> {
+  const seen = new Set<string>();
+  const refs: Array<{ sourceType: string; sourceId: string; sectionId: string }> = [];
+  for (const c of citations) {
+    const key = `${c.sourceType}:${c.sourceId}:${c.sectionId}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    refs.push({ sourceType: c.sourceType, sourceId: c.sourceId, sectionId: c.sectionId });
+  }
+  return refs;
 }
 
 export { sourceKey, sectionKey };

@@ -37,5 +37,10 @@ export default async function ProfileDocumentPage({
     notFound();
   }
 
-  return type === "how-i-work" ? <PortfolioHome initialView="howIWork" /> : <PortfolioHome />;
+  return (
+    <PortfolioHome
+      initialProfileType={type}
+      initialProfile={data}
+    />
+  );
 }

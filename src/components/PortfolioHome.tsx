@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { candidate } from "@/config/candidate";
 import { MAX_JD_LENGTH } from "@/lib/ai/jd";
 import { usePathname } from "next/navigation";
@@ -10,10 +9,30 @@ import { api } from "@convex/_generated/api";
 import { SectionBody } from "@/components/SectionBody";
 import { AnalysisToolbar } from "@/components/AnalysisToolbar";
 import { AnalysisContent, type DisplayAnalysis } from "@/components/AnalysisContent";
+import {
+  buildCitationContextFromRows,
+  collectCitationRefs,
+  type CitationDisplayContext,
+} from "@/lib/citationContext";
+import type { Citation } from "@/lib/analysis";
 import type { Id } from "@convex/_generated/dataModel";
 
 const MAX_LENGTH = MAX_JD_LENGTH;
-const SHELL_TRANSITION_MS = 220;
+
+/*
+ * Shell transition timing.
+ *   0ms    click — old content fades out
+ *   HIDE_MS divider (the animated --split value) starts moving
+ *   ~MOVE_MS - REVEAL_LEAD_MS  destination content fades in
+ */
+const HIDE_MS = 45;
+const MOVE_MS = 300;
+const REVEAL_LEAD_MS = 45;
+const REVEAL_MS = 120;
+const TRANSITION_FALLBACK_MS = MOVE_MS * 2 + 150;
+const ANCHOR_RETRY_MS = 80;
+const ANCHOR_MAX_TRIES = 40;
+
 const loadingMessages = [
   "Contacting language model…",
   "Interpreting requirements…",
@@ -22,159 +41,652 @@ const loadingMessages = [
   "Preparing analysis…",
 ];
 
-type Phase = "idle" | "expanding" | "loading" | "error";
-type ShellView = "home" | "caseStudies" | "caseStudyDetail" | "howIWork" | "downloads" | "analysis";
+/* ── Navigation state model ────────────────────────────────────────────
+ *
+ * One authoritative view (derived shell mode) and one authoritative
+ * motion phase. The URL is the single source of truth; the transition
+ * controller drives how we got there.
+ *
+ * Shell ownership: portfolio/profile views own the LEFT panel; analysis
+ * owns the RIGHT panel; home splits 29/71.
+ */
 
-export function PortfolioHome({ initialView = "home", initialSlug, initialProfile, initialAnalysisId }: { initialView?: ShellView; initialSlug?: string; initialProfile?: ProfileData; initialAnalysisId?: string }) {
+type ShellView =
+  | "home"
+  | "caseStudies"
+  | "caseStudyDetail"
+  | "howIWork"
+  | "profile"
+  | "downloads"
+  | "analysis";
+type ShellMode = "home" | "portfolio" | "analysis";
+type MotionPhase = "settled" | "hiding" | "moving" | "revealing";
+type AnalysisPhase = "idle" | "submitting" | "loading" | "error";
+
+const shellModeForView = (view: ShellView): ShellMode =>
+  view === "analysis" ? "analysis" : view === "home" ? "home" : "portfolio";
+
+const labelForView = (view: ShellView): string =>
+  view === "caseStudies"
+    ? "Case studies"
+    : view === "caseStudyDetail"
+      ? "Case study"
+      : view === "howIWork"
+        ? "How I work"
+        : view === "profile"
+          ? "Profile"
+          : view === "downloads"
+            ? "Downloads"
+            : view === "analysis"
+              ? "Analysis"
+              : "Home";
+
+/* ── Route parser (single source of truth for path → view) ──────────── */
+
+type ParsedShellRoute = {
+  view: ShellView;
+  slug: string | null;
+  profileType: string | null;
+  analysisId: string | null;
+  hash: string | null;
+};
+
+function parseShellRoute(pathname: string, hash = ""): ParsedShellRoute {
+  const clean = pathname.split("#")[0];
+  const anchor = hash.startsWith("#") ? hash.slice(1) : hash.split("#")[1] || null;
+  if (clean.startsWith("/analysis/")) {
+    const id = clean.split("/").pop() ?? "";
+    return {
+      view: "analysis",
+      slug: null,
+      profileType: null,
+      analysisId: /^[a-z0-9]{22,32}$/i.test(id) ? id : null,
+      hash: anchor,
+    };
+  }
+  if (clean.startsWith("/work/")) {
+    return {
+      view: "caseStudyDetail",
+      slug: clean.split("/").pop() ?? null,
+      profileType: null,
+      analysisId: null,
+      hash: anchor,
+    };
+  }
+  if (clean === "/work") return { view: "caseStudies", slug: null, profileType: null, analysisId: null, hash: anchor };
+  if (clean === "/how-i-work") return { view: "howIWork", slug: null, profileType: null, analysisId: null, hash: anchor };
+  if (clean.startsWith("/profile/")) {
+    return {
+      view: "profile",
+      slug: null,
+      profileType: clean.split("/").pop() ?? null,
+      analysisId: null,
+      hash: anchor,
+    };
+  }
+  if (clean === "/downloads") return { view: "downloads", slug: null, profileType: null, analysisId: null, hash: anchor };
+  return { view: "home", slug: null, profileType: null, analysisId: null, hash: anchor };
+}
+
+function hrefForView(
+  view: ShellView,
+  opts: { slug?: string | null; analysisId?: string | null; profileType?: string | null } = {},
+): string {
+  switch (view) {
+    case "caseStudies":
+      return "/work";
+    case "caseStudyDetail":
+      return `/work/${opts.slug ?? ""}`;
+    case "howIWork":
+      return "/how-i-work";
+    case "profile":
+      return `/profile/${opts.profileType ?? ""}`;
+    case "downloads":
+      return "/downloads";
+    case "analysis":
+      return opts.analysisId ? `/analysis/${opts.analysisId}` : window.location.pathname;
+    default:
+      return "/";
+  }
+}
+
+type ShellState = {
+  view: ShellView;
+  detailSlug: string | null;
+  profileType: string | null;
+  analysisId: string | null;
+  motionPhase: MotionPhase;
+  analysisPhase: AnalysisPhase;
+  error: string | null;
+};
+
+type ShellAction =
+  | { type: "hide" }
+  | {
+      type: "move";
+      view: ShellView;
+      slug?: string | null;
+      analysisId?: string | null;
+      profileType?: string | null;
+    }
+  | { type: "reveal" }
+  | { type: "settle" }
+  | {
+      type: "localSwap";
+      view: ShellView;
+      slug?: string | null;
+      profileType?: string | null;
+    }
+  | { type: "attachAnalysis"; analysisId: string }
+  | { type: "analysisPhase"; phase: AnalysisPhase }
+  | { type: "analysisError"; message: string | null }
+  | {
+      type: "snap";
+      view: ShellView;
+      slug?: string | null;
+      analysisId?: string | null;
+      profileType?: string | null;
+    };
+
+function shellReducer(state: ShellState, action: ShellAction): ShellState {
+  switch (action.type) {
+    case "hide":
+      return state.motionPhase === "settled" ? { ...state, motionPhase: "hiding" } : state;
+    case "move": {
+      const movingToAnalysis = action.view === "analysis";
+      return {
+        view: action.view,
+        detailSlug: action.view === "caseStudyDetail" ? (action.slug ?? null) : null,
+        profileType: action.view === "profile" ? (action.profileType ?? null) : null,
+        analysisId: movingToAnalysis ? (action.analysisId ?? null) : null,
+        motionPhase: "moving",
+        analysisPhase: movingToAnalysis ? state.analysisPhase : "idle",
+        error: movingToAnalysis ? state.error : null,
+      };
+    }
+    case "reveal":
+      return { ...state, motionPhase: "revealing" };
+    case "settle":
+      return { ...state, motionPhase: "settled" };
+    // Same expanded panel side (work index ↔ detail ↔ profile): swap
+    // content in place, the boundary stays where it is.
+    case "localSwap":
+      return {
+        ...state,
+        view: action.view,
+        detailSlug:
+          action.view === "caseStudyDetail" ? (action.slug ?? state.detailSlug) : null,
+        profileType: action.view === "profile" ? (action.profileType ?? state.profileType) : null,
+        motionPhase: "settled",
+      };
+    case "attachAnalysis":
+      return state.view === "analysis" ? { ...state, analysisId: action.analysisId } : state;
+    case "analysisPhase":
+      return { ...state, analysisPhase: action.phase };
+    case "analysisError":
+      return {
+        ...state,
+        error: action.message,
+        ...(action.message ? { analysisPhase: "error" as const } : {}),
+      };
+    // External navigation (popstate / direct URL): land immediately.
+    case "snap":
+      return {
+        view: action.view,
+        detailSlug: action.view === "caseStudyDetail" ? (action.slug ?? null) : null,
+        profileType: action.view === "profile" ? (action.profileType ?? null) : null,
+        analysisId: action.view === "analysis" ? (action.analysisId ?? null) : null,
+        motionPhase: "settled",
+        analysisPhase: action.view === "home" ? "idle" : state.analysisPhase,
+        error: action.view === "home" ? null : state.error,
+      };
+  }
+}
+
+function scrollToSection(sectionId: string, behavior: ScrollBehavior): boolean {
+  const element = document.getElementById(sectionId);
+  if (!element) return false;
+  element.scrollIntoView({ behavior, block: "start" });
+  return true;
+}
+
+/**
+ * The shell derives its view from the URL (usePathname). The initial*
+ * props seed server-fetched data for direct visits; all navigation
+ * afterwards is client-side.
+ */
+export function PortfolioHome({
+  initialProfile,
+  initialProfileType,
+}: {
+  initialView?: string;
+  initialSlug?: string;
+  initialAnalysisId?: string;
+  initialProfileType?: string;
+  initialProfile?: ProfileData;
+}) {
   const pathname = usePathname();
+  const route = useMemo(
+    () =>
+      parseShellRoute(
+        pathname,
+        typeof window === "undefined" ? "" : window.location.hash,
+      ),
+     
+    [pathname],
+  );
+
+  const [shell, dispatch] = useReducer(shellReducer, undefined, () => ({
+    view: route.view,
+    detailSlug: route.slug,
+    profileType: route.profileType,
+    analysisId: route.analysisId,
+    motionPhase: "settled" as MotionPhase,
+    analysisPhase: "idle" as AnalysisPhase,
+    error: null as string | null,
+  }));
+  const shellMode = shellModeForView(shell.view);
+  const { analysisPhase, error } = shell;
+
   const [value, setValue] = useState("");
-  const [phase, setPhase] = useState<Phase>("idle");
-  const [error, setError] = useState<string | null>(null);
   const [messageIndex, setMessageIndex] = useState(0);
+  const [announce, setAnnounce] = useState("");
+  // Cold-load anchor: seeded into pendingAnchor at mount so the retry
+  // effect handles it — no state-setting effect needed.
+  // Cold-load anchor: seeded into pendingAnchor at mount so the retry
+  // effect handles it — no state-setting effect needed.
+  const [pendingAnchor, setPendingAnchor] = useState<string | null>(route.hash);  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const shellRef = useRef(shell);
+  const runIdRef = useRef(0);
+  const busyRef = useRef(false);
+  const expectedHrefRef = useRef<string | null>(null);
+  const pendingTimersRef = useRef<number[]>([]);
   const requestRef = useRef<AbortController | null>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-  const routeView: ShellView = pathname.startsWith("/analysis/") ? "analysis" : pathname === "/work" ? "caseStudies" : pathname.startsWith("/work/") ? "caseStudyDetail" : pathname === "/how-i-work" ? "howIWork" : pathname === "/downloads" ? "downloads" : initialView;
-  const [view, setView] = useState<ShellView>(routeView);
-  const detailSlug = pathname.startsWith("/work/") ? pathname.split("/").pop() : initialSlug;
+  const reducedMotionRef = useRef(false);
+  const anchorRetryRef = useRef(0);
+
+  useEffect(() => {
+    shellRef.current = shell;
+  }, [shell]);
+
+  /* Convex data — keyed to the current shell view. */
   const caseStudies = useQuery(api.caseStudies.getPublishedCaseStudies);
-  const detail = useQuery(api.caseStudies.getCaseStudyWithSections, detailSlug ? { slug: detailSlug } : "skip");
-  const publishedProfile = useQuery(api.profileDocuments.getProfileDocumentWithSections, view === "howIWork" ? { type: "how-i-work" } : "skip");
-  const profile = publishedProfile ?? initialProfile;
-  const routeAnalysisId = pathname.startsWith("/analysis/") ? pathname.split("/").pop() : initialAnalysisId;
-  const [analysisId, setAnalysisId] = useState<string | null>(routeAnalysisId ?? null);
-  const validAnalysisId = analysisId && /^[a-z0-9]{22,32}$/i.test(analysisId) ? analysisId : null;
-  const analysis = useQuery(api.jobAnalyses.getCompletedAnalysis, validAnalysisId ? { id: validAnalysisId as Id<"jobAnalyses"> } : "skip");
-  const analysisStatus = useQuery(api.jobAnalyses.getAnalysisStatus, validAnalysisId ? { id: validAnalysisId as Id<"jobAnalyses"> } : "skip");
-  const [overlayView, setOverlayView] = useState<ShellView | null>(routeView === "home" ? null : routeView);
-  const [overlayDirection, setOverlayDirection] = useState<"left" | "right">("left");
-  const [overlayActive, setOverlayActive] = useState(routeView !== "home");
-  const [isLeaving, setIsLeaving] = useState(false);
-  const transitionTimer = useRef<number | null>(null);
-  const historyIndexRef = useRef(0);
-  const currentViewRef = useRef(view);
+  const detailSlug = shell.view === "caseStudyDetail" ? shell.detailSlug : null;
+  const detail = useQuery(
+    api.caseStudies.getCaseStudyWithSections,
+    detailSlug ? { slug: detailSlug } : "skip",
+  );
+  const activeProfileType =
+    shell.view === "howIWork"
+      ? "how-i-work"
+      : shell.view === "profile"
+        ? shell.profileType
+        : null;
+  const publishedProfile = useQuery(
+    api.profileDocuments.getProfileDocumentWithSections,
+    activeProfileType ? { type: activeProfileType } : "skip",
+  );
+  const profile =
+    publishedProfile ??
+    (initialProfile && (!initialProfileType || initialProfileType === activeProfileType)
+      ? initialProfile
+      : undefined);
+  const validAnalysisId =
+    shell.analysisId && /^[a-z0-9]{22,32}$/i.test(shell.analysisId) ? shell.analysisId : null;
+  const analysis = useQuery(
+    api.jobAnalyses.getCompletedAnalysis,
+    validAnalysisId ? { id: validAnalysisId as Id<"jobAnalyses"> } : "skip",
+  );
+  const analysisStatus = useQuery(
+    api.jobAnalyses.getAnalysisStatus,
+    validAnalysisId ? { id: validAnalysisId as Id<"jobAnalyses"> } : "skip",
+  );
+
+  /* Citation context: resolve every citation in the completed analysis
+   * to canonical source titles + section headings. */
+  const citationRefs = useMemo(() => {
+    if (!analysis) return [];
+    const all: Citation[] = [
+      ...analysis.themes.flatMap((t) => t.citations),
+      ...analysis.materialGaps.flatMap((g) => g.citations),
+    ];
+    return collectCitationRefs(all);
+  }, [analysis]);
+
+  const citationRows = useQuery(
+    api.citations.getCitationSources,
+    citationRefs.length ? { citations: citationRefs } : "skip",
+  );
+  const citationContext: CitationDisplayContext = useMemo(
+    () => (citationRows ? buildCitationContextFromRows(citationRows) : { sourceTitles: new Map(), sectionHeadings: new Map() }),
+    [citationRows],
+  );
+
+  /* ── Transition controller ─────────────────────────────────────────── */
+
+  const wait = useCallback((ms: number) => {
+    return new Promise<void>((resolve) => {
+      const id = window.setTimeout(() => {
+        pendingTimersRef.current = pendingTimersRef.current.filter((t) => t !== id);
+        resolve();
+      }, ms);
+      pendingTimersRef.current.push(id);
+    });
+  }, []);
+
+  const waitForSplitTransition = useCallback((card: HTMLElement) => {
+    return new Promise<void>((resolve) => {
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        card.removeEventListener("transitionend", handleEnd);
+        window.clearTimeout(fallback);
+        resolve();
+      };
+      const handleEnd = (event: TransitionEvent) => {
+        if (event.target === card && event.propertyName === "--split") finish();
+      };
+      const fallback = window.setTimeout(finish, TRANSITION_FALLBACK_MS);
+      card.addEventListener("transitionend", handleEnd);
+    });
+  }, []);
+
+  const focusAfterTransition = useCallback((view: ShellView, previousView: ShellView) => {
+    if (view === "home") {
+      const navButton = document.querySelector<HTMLButtonElement>(
+        `.home-left-content [data-nav-view="${previousView}"]`,
+      );
+      const target =
+        previousView === "analysis" ? inputRef.current : (navButton ?? inputRef.current);
+      target?.focus({ preventScroll: true });
+      return;
+    }
+    if (view === "analysis") {
+      document.querySelector<HTMLElement>(".analysis-workspace")?.focus({ preventScroll: true });
+      return;
+    }
+    document.getElementById("expanded-title")?.focus({ preventScroll: true });
+  }, []);
+
+  const transitionTo = useCallback(
+    async (target: {
+      view: ShellView;
+      slug?: string | null;
+      analysisId?: string | null;
+      profileType?: string | null;
+      anchor?: string | null;
+    }) => {
+      if (busyRef.current) return false;
+      busyRef.current = true;
+      const previousView = shellRef.current.view;
+      const run = ++runIdRef.current;
+      const href =
+        hrefForView(target.view, {
+          slug: target.slug ?? null,
+          analysisId: target.analysisId ?? null,
+          profileType: target.profileType ?? null,
+        }) + (target.anchor ? `#${target.anchor}` : "");
+      const alive = () => runIdRef.current === run;
+      try {
+        if (target.anchor) setPendingAnchor(target.anchor);
+
+        if (reducedMotionRef.current) {
+          if (href !== window.location.pathname + window.location.hash) {
+            expectedHrefRef.current = href;
+            window.history.pushState({}, "", href);
+          }
+          dispatch({ type: "snap", ...target });
+          setAnnounce(labelForView(target.view));
+          requestAnimationFrame(() => focusAfterTransition(target.view, previousView));
+          return true;
+        }
+
+        // 1. Old content fades out; commit the starting styles first.
+        dispatch({ type: "hide" });
+        if (href !== window.location.pathname + window.location.hash) {
+          expectedHrefRef.current = href;
+          window.history.pushState({}, "", href);
+        }
+        await wait(HIDE_MS);
+        if (!alive()) return false;
+
+        // 2. The panel boundary (the --split value) sweeps to its target.
+        dispatch({ type: "move", ...target });
+        const card = cardRef.current;
+        const splitDone = card ? waitForSplitTransition(card) : Promise.resolve();
+        await Promise.race([splitDone, wait(MOVE_MS - REVEAL_LEAD_MS)]);
+        if (!alive()) return false;
+
+        // 3. Destination content fades in — in place, never translated.
+        dispatch({ type: "reveal" });
+        setAnnounce(labelForView(target.view));
+        focusAfterTransition(target.view, previousView);
+        await wait(REVEAL_MS);
+        if (!alive()) return false;
+
+        dispatch({ type: "settle" });
+        return true;
+      } finally {
+        if (alive()) busyRef.current = false;
+      }
+    },
+    [focusAfterTransition, waitForSplitTransition, wait],
+  );
+
+  const openView = useCallback(
+    (nextView: ShellView, slug?: string, anchor?: string) => {
+      if (busyRef.current) return;
+      const current = shellRef.current;
+      const sameTarget =
+        nextView === current.view &&
+        !(nextView === "caseStudyDetail" && slug != null && slug !== current.detailSlug);
+      if (sameTarget && !anchor) return;
+
+      // Same page, anchor-only navigation: no shell transition, just
+      // update the hash and smooth-scroll.
+      if (sameTarget && anchor) {
+        window.history.pushState({}, "", `#${anchor}`);
+        setPendingAnchor(anchor);
+        return;
+      }
+
+      const currentMode = shellModeForView(current.view);
+      const nextMode = shellModeForView(nextView);
+      const href = hrefForView(nextView, {
+        slug: slug ?? null,
+        profileType: current.profileType,
+        analysisId: current.analysisId,
+      }) + (anchor ? `#${anchor}` : "");
+
+      // Between two LEFT-owned (or two RIGHT-owned) views the boundary
+      // does not move — swap the content locally with a quick fade.
+      if (
+        currentMode === nextMode &&
+        currentMode !== "home" &&
+        current.motionPhase === "settled"
+      ) {
+        expectedHrefRef.current = href;
+        window.history.pushState({}, "", href);
+        dispatch({ type: "localSwap", view: nextView, slug: slug ?? null });
+        setAnnounce(labelForView(nextView));
+        if (anchor) setPendingAnchor(anchor);
+        requestAnimationFrame(() => focusAfterTransition(nextView, current.view));
+        return;
+      }
+
+      void transitionTo({ view: nextView, slug: slug ?? null, anchor: anchor ?? null });
+    },
+    [focusAfterTransition, transitionTo],
+  );
+
+  /* Citation navigation: evidence links route through the SPA. */
+  const onCitationNavigate = useCallback(
+    (href: string, citation: Citation) => {
+      const isCaseStudy = citation.sourceType === "caseStudy";
+      openView(
+        isCaseStudy ? "caseStudyDetail" : "profile",
+        isCaseStudy ? citation.sourceId : undefined,
+        citation.sectionId,
+      );
+    },
+    [openView],
+  );
+
+  /* ── Navigation synchronization ──────────────────────────────────────
+   *
+   * One mechanism: window.history.pushState (Next-integrated) for
+   * internal navigation, popstate for back/forward. Any popstate
+   * interrupts an in-flight transition and snaps to the URL's state.
+   */
 
   useEffect(() => {
-    currentViewRef.current = view;
-  }, [view]);
+    const syncFromLocation = () => {
+      const next = parseShellRoute(window.location.pathname, window.location.hash);
+      const current = shellRef.current;
+      const inSync =
+        next.view === current.view &&
+        (next.view !== "caseStudyDetail" || next.slug === current.detailSlug) &&
+        (next.view !== "profile" || next.profileType === current.profileType);
+      if (inSync && !busyRef.current && !next.hash) return;
+
+      // Anchor-only change on the same view: just scroll.
+      if (inSync && next.hash) {
+        setPendingAnchor(next.hash);
+        return;
+      }
+
+      runIdRef.current += 1;
+      busyRef.current = false;
+      expectedHrefRef.current = null;
+      dispatch({
+        type: "snap",
+        view: next.view,
+        slug: next.slug,
+        analysisId: next.analysisId,
+        profileType: next.profileType,
+      });
+      if (next.hash) setPendingAnchor(next.hash);
+    };
+    window.addEventListener("popstate", syncFromLocation);
+    return () => window.removeEventListener("popstate", syncFromLocation);
+     
+  }, []);
+
+  // The router's usePathname catches up asynchronously after our own
+  // pushState; consume that sync instead of treating it as external.
+  useEffect(() => {
+    const href = hrefForView(route.view, {
+      slug: route.slug,
+      analysisId: route.analysisId,
+      profileType: route.profileType,
+    }) + (route.hash ? `#${route.hash}` : "");
+    if (expectedHrefRef.current === href) {
+      expectedHrefRef.current = null;
+      return;
+    }
+    const current = shellRef.current;
+    const inSync =
+      route.view === current.view &&
+      (route.view !== "caseStudyDetail" || route.slug === current.detailSlug) &&
+      (route.view !== "profile" || route.profileType === current.profileType);
+    if (inSync && !busyRef.current) return;
+
+    runIdRef.current += 1;
+    busyRef.current = false;
+    dispatch({
+      type: "snap",
+      view: route.view,
+      slug: route.slug,
+      analysisId: route.analysisId,
+      profileType: route.profileType,
+    });
+  }, [route]);
+
+  /* ── Pending-anchor resolution: scroll only once the destination
+   * content is actually mounted (bounded retry, no fixed delays). ──── */
 
   useEffect(() => {
-    if (phase !== "loading" && phase !== "expanding") return;
+    if (!pendingAnchor) return;
+    const behavior: ScrollBehavior = reducedMotionRef.current ? "auto" : "smooth";
+    if (scrollToSection(pendingAnchor, behavior)) {
+      setPendingAnchor(null);
+      anchorRetryRef.current = 0;
+      return;
+    }
+    if (anchorRetryRef.current >= ANCHOR_MAX_TRIES) {
+      setPendingAnchor(null);
+      anchorRetryRef.current = 0;
+      return;
+    }
+    anchorRetryRef.current += 1;
+    const retry = window.setTimeout(() => {
+      pendingTimersRef.current = pendingTimersRef.current.filter((t) => t !== retry);
+      // Re-attempt by nudging state through a fresh render cycle.
+      setPendingAnchor((current) => (current === pendingAnchor ? current : current));
+    }, ANCHOR_RETRY_MS);
+    pendingTimersRef.current.push(retry);
+    return () => window.clearTimeout(retry);
+  }, [pendingAnchor, shell, detail, profile, citationRows]);
+
+  /* ── Side effects ──────────────────────────────────────────────────── */
+
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    reducedMotionRef.current = query.matches;
+    const onChange = (event: MediaQueryListEvent) => {
+      reducedMotionRef.current = event.matches;
+    };
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    if (analysisPhase !== "submitting" && analysisPhase !== "loading") return;
     const timer = window.setInterval(
       () => setMessageIndex((current) => (current + 1) % loadingMessages.length),
       2600,
     );
     return () => window.clearInterval(timer);
-  }, [phase]);
+  }, [analysisPhase]);
 
-  useEffect(() => () => requestRef.current?.abort(), []);
+  useEffect(
+    () => () => {
+      requestRef.current?.abort();
+      runIdRef.current += 1;
+      for (const timer of pendingTimersRef.current) window.clearTimeout(timer);
+    },
+    [],
+  );
 
+  // Initial focus: the textarea on the homepage, the view heading on a
+  // direct subpage visit (which starts expanded, with no entrance animation).
   useEffect(() => {
-    const initialState = window.history.state as { portfolioShellIndex?: number } | null;
-    historyIndexRef.current = initialState?.portfolioShellIndex ?? 0;
-    window.history.replaceState({ ...initialState, portfolioShellIndex: historyIndexRef.current }, "", window.location.href);
-    const syncHistoryNavigation = () => {
-      const previous = currentViewRef.current;
-      const path = window.location.pathname;
-      const destination: ShellView = path.startsWith("/analysis/") ? "analysis" : path === "/work" ? "caseStudies" : path.startsWith("/work/") ? "caseStudyDetail" : path === "/how-i-work" ? "howIWork" : path === "/downloads" ? "downloads" : "home";
-      if (previous === destination) return;
-      const state = window.history.state as { portfolioShellIndex?: number } | null;
-      const nextIndex = state?.portfolioShellIndex ?? historyIndexRef.current;
-      const movingForward = nextIndex > historyIndexRef.current;
-      historyIndexRef.current = nextIndex;
-      setView(destination);
-      if (destination === "analysis") setAnalysisId(path.split("/").pop() ?? null);
-      setOverlayView(movingForward ? destination : previous);
-      setOverlayDirection(previous === "analysis" || destination === "analysis" ? "right" : "left");
-      setIsLeaving(false);
-      setOverlayActive(!movingForward);
-      requestAnimationFrame(() => {
-        if (movingForward) setOverlayActive(true);
-        else setIsLeaving(true);
-      });
-      if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
-      if (!movingForward) {
-        transitionTimer.current = window.setTimeout(() => {
-          setOverlayView(null);
-          setOverlayActive(false);
-          setIsLeaving(false);
-        }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : SHELL_TRANSITION_MS);
-      }
-    };
-    window.addEventListener("popstate", syncHistoryNavigation);
-    return () => window.removeEventListener("popstate", syncHistoryNavigation);
-  }, []);
-
-  useEffect(() => {
-    if (window.matchMedia("(min-width: 821px)").matches) inputRef.current?.focus();
-  }, []);
-
-  function openView(nextView: ShellView, slug?: string, direction: "left" | "right" = "left") {
-    if (isLeaving) return;
-    setOverlayDirection(direction);
-    if (nextView === "home" || nextView === "caseStudies" && view === "caseStudyDetail") {
-      if (view === "home") return;
-      const target: ShellView = nextView === "home" ? "home" : "caseStudies";
-      const href = target === "home" ? "/" : "/work";
-      setOverlayView(view);
-      setOverlayActive(true);
-      setIsLeaving(false);
-      setView(target);
-      historyIndexRef.current += 1;
-      window.history.pushState({ portfolioShellIndex: historyIndexRef.current }, "", href);
-      requestAnimationFrame(() => setIsLeaving(true));
-      if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
-      transitionTimer.current = window.setTimeout(() => {
-        setOverlayView(null);
-        setIsLeaving(false);
-      }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : SHELL_TRANSITION_MS);
-      return;
+    if (shellRef.current.view !== "home") {
+      const view = shellRef.current.view;
+      const id = window.setTimeout(
+        () => focusAfterTransition(view, "home"),
+        reducedMotionRef.current ? 0 : 60,
+      );
+      return () => window.clearTimeout(id);
     }
-    const href = nextView === "caseStudies" ? "/work" : nextView === "caseStudyDetail" ? `/work/${slug}` : nextView === "howIWork" ? "/how-i-work" : "/downloads";
-    setOverlayView(nextView);
-    setOverlayActive(false);
-    setView(nextView);
-    historyIndexRef.current += 1;
-    window.history.pushState({ portfolioShellIndex: historyIndexRef.current }, "", href);
-    requestAnimationFrame(() => setOverlayActive(true));
-    if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
-  }
+    if (window.matchMedia("(min-width: 1050px)").matches) inputRef.current?.focus();
+  }, [focusAfterTransition]);
 
-  function openAnalysisBack() {
-    if (isLeaving || view !== "analysis") return;
-    setOverlayDirection("right");
-    setOverlayActive(true);
-    setIsLeaving(false);
-    setView("home");
-    historyIndexRef.current += 1;
-    window.history.pushState({ portfolioShellIndex: historyIndexRef.current }, "", "/");
-    requestAnimationFrame(() => setIsLeaving(true));
-    transitionTimer.current = window.setTimeout(() => {
-      setOverlayView(null);
-      setOverlayActive(false);
-      setIsLeaving(false);
-      setAnalysisId(null);
-      setPhase("idle");
-    }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : SHELL_TRANSITION_MS);
-  }
-
-  useEffect(() => () => { if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current); }, []);
+  /* ── Analysis flow ─────────────────────────────────────────────────── */
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
-    if (!value.trim() || phase !== "idle") return;
-    setError(null);
+    if (!value.trim() || analysisPhase !== "idle" || busyRef.current) return;
+    dispatch({ type: "analysisError", message: null });
     setMessageIndex(0);
-    setPhase("expanding");
-    setView("analysis");
-    setOverlayView("analysis");
-    setOverlayDirection("right");
-    setOverlayActive(false);
-    setIsLeaving(false);
-    requestAnimationFrame(() => setOverlayActive(true));
+    dispatch({ type: "analysisPhase", phase: "submitting" });
+    setAnnounce("Analyzing fit…");
+
     const controller = new AbortController();
     requestRef.current = controller;
-
-    try {
+    const request = (async () => {
       const response = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -183,92 +695,371 @@ export function PortfolioHome({ initialView = "home", initialSlug, initialProfil
       });
       const data = (await response.json()) as { id?: string; error?: string };
       if ((!response.ok && response.status !== 202) || !data.id) {
-        setError(data.error ?? "Analysis failed. Please try again.");
-        setPhase("error");
+        dispatch({
+          type: "analysisError",
+          message: data.error ?? "Analysis failed. Please try again.",
+        });
+        setAnnounce("Analysis failed");
         return;
       }
-      setAnalysisId(data.id);
-      setPhase("loading");
-    } catch (caught) {
+      dispatch({ type: "analysisPhase", phase: "loading" });
+      dispatch({ type: "attachAnalysis", analysisId: data.id });
+      const href = `/analysis/${data.id}`;
+      expectedHrefRef.current = href;
+      window.history.pushState({}, "", href);
+    })().catch((caught: unknown) => {
       if ((caught as Error).name === "AbortError") return;
-      setError("Something went wrong. Check your connection and try again.");
-      setPhase("error");
-    }
+      dispatch({
+        type: "analysisError",
+        message: "Something went wrong. Check your connection and try again.",
+      });
+      setAnnounce("Analysis failed");
+    });
+
+    await Promise.all([request, transitionTo({ view: "analysis" })]);
   }
 
-  useEffect(() => {
-    if (!analysis || !analysisId || pathname.startsWith("/analysis/")) return;
-    historyIndexRef.current += 1;
-    window.history.pushState({ portfolioShellIndex: historyIndexRef.current }, "", `/analysis/${analysisId}`);
-  }, [analysis, analysisId, pathname, view]);
+  function openAnalysisBack() {
+    if (shellRef.current.view !== "analysis" || busyRef.current) return;
+    dispatch({ type: "analysisPhase", phase: "idle" });
+    dispatch({ type: "analysisError", message: null });
+    requestRef.current?.abort();
+    void transitionTo({ view: "home" });
+  }
+
+  function retryAnalysis() {
+    if (busyRef.current) return;
+    dispatch({ type: "analysisPhase", phase: "idle" });
+    dispatch({ type: "analysisError", message: null });
+    void transitionTo({ view: "home" });
+  }
+
+  /* ── Render ──────────────────────────────────────────────────────────
+   *
+   * Two permanent panel containers. The sidebar and job form always stay
+   * mounted; expanded content mounts only for the active mode. The main
+   * nav (sidebar + mobile bar) is HOME chrome only.
+   */
+
+  const sideInteractive = (side: ShellMode) =>
+    (shell.motionPhase === "settled" || shell.motionPhase === "revealing") && shellMode === side;
+  const homeInteractive =
+    shellMode === "home" && (shell.motionPhase === "settled" || shell.motionPhase === "revealing");
+  // Global nav is home-only chrome: hidden whenever another view owns
+  // the shell (or home is mid-transition).
+  const showHomeNavigation = shellMode === "home" && shell.motionPhase === "settled";
 
   return (
     <main className="portfolio-frame">
-      <div className="portfolio-card">
-        <div className="mobile-portfolio-nav"><PortfolioNav onNavigate={openView} /></div>
-        <aside className="portfolio-sidebar">
-          <Link href="/" className="portfolio-name">{candidate.name}</Link>
-          <p className="portfolio-bio">
-            I&apos;m a self-taught product engineer and multidisciplinary builder. I&apos;ve spent most of my career at startups, turning loose ideas into real products and figuring out whatever I need to learn along the way.
-            <br /><br />
-            My interests have taken me across AI, open-source development, game design, audio software, and design, with a liberal arts background that shapes how I think about all of it.
-          </p>
-          <div className="portfolio-rule" />
-          <div className="desktop-portfolio-nav"><PortfolioNav onNavigate={openView} /></div>
-        </aside>
+      <div
+        className="portfolio-card"
+        ref={cardRef}
+        data-shell-mode={shellMode}
+        data-motion-phase={shell.motionPhase}
+        data-nav={showHomeNavigation ? "visible" : "hidden"}
+      >
+        <div className="mobile-portfolio-nav" inert={!showHomeNavigation}>
+          <PortfolioNav onNavigate={openView} />
+        </div>
 
-        <section className="portfolio-takeover" aria-live="polite">
+        <div className="shell-left-panel">
+          <div className="home-left-content" inert={!homeInteractive}>
+            <aside className="portfolio-sidebar">
+              <button type="button" className="portfolio-name" onClick={() => openView("home")}>
+                {candidate.name}
+              </button>
+              <p className="portfolio-bio">
+                I&apos;m a self-taught product engineer and multidisciplinary builder. I&apos;ve
+                spent most of my career at startups, turning loose ideas into real products and
+                figuring out whatever I need to learn along the way.
+                <br />
+                <br />
+                My interests have taken me across AI, open-source development, game design, audio
+                software, and design, with a liberal arts background that shapes how I think about
+                all of it.
+              </p>
+              <div className="portfolio-rule" />
+              <div className="desktop-portfolio-nav" inert={!showHomeNavigation}>
+                <PortfolioNav onNavigate={openView} />
+              </div>
+            </aside>
+          </div>
+          <div className="mobile-expand" data-side="left" data-open={shellMode === "portfolio"}>
+            <div className="mobile-expand-clip">
+              <div className="expanded-left-content" inert={!sideInteractive("portfolio")}>
+                {shellMode === "portfolio" ? (
+                  <ExpandedView
+                    key={shell.view + (shell.detailSlug ?? "") + (shell.profileType ?? "")}
+                    view={shell.view}
+                    caseStudies={caseStudies}
+                    detail={detail}
+                    profile={profile}
+                    onBack={() =>
+                      openView(shell.view === "caseStudyDetail" ? "caseStudies" : "home")
+                    }
+                    onOpenDetail={(slug) => openView("caseStudyDetail", slug)}
+                  />
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="shell-divider" aria-hidden="true" />
+
+        <div className="shell-right-panel">
+          <div className="home-right-content" inert={!homeInteractive}>
             <form onSubmit={submit} className="job-form">
               <div className="job-input-region">
-                <label htmlFor="job-description" className="sr-only">Job description</label>
-                <textarea ref={inputRef} id="job-description" aria-label="Job description" value={value} onChange={(event) => setValue(event.target.value)} maxLength={MAX_LENGTH} placeholder="" />
-                {!value ? <div className="job-placeholder" aria-hidden="true"><span className="job-placeholder-primary">Paste a job description...</span><span className="job-placeholder-secondary">I’ll compare it to my work and tell you where I fit.</span></div> : null}
-                <span>{value.length}/{MAX_LENGTH}</span>
+                <label htmlFor="job-description" className="sr-only">
+                  Job description
+                </label>
+                <textarea
+                  ref={inputRef}
+                  id="job-description"
+                  aria-label="Job description"
+                  value={value}
+                  onChange={(event) => setValue(event.target.value)}
+                  maxLength={MAX_LENGTH}
+                  placeholder=""
+                />
+                {!value ? (
+                  <div className="job-placeholder" aria-hidden="true">
+                    <span className="job-placeholder-primary">Paste a job description...</span>
+                    <span className="job-placeholder-secondary">
+                      I’ll compare it to my work and tell you where I fit.
+                    </span>
+                  </div>
+                ) : null}
+                <span>
+                  {value.length}/{MAX_LENGTH}
+                </span>
               </div>
               <div className="input-footer">
-                {error ? <div className="form-error" role="alert"><span>{error}</span><button type="button" onClick={() => setPhase("idle")}>Try again</button></div> : null}
-                <button className="analyze-button" type="submit" disabled={!value.trim() || phase !== "idle"}>Analyze Fit</button>
+                {error ? (
+                  <div className="form-error" role="alert">
+                    <span>{error}</span>
+                    <button
+                      type="button"
+                      onClick={() => dispatch({ type: "analysisPhase", phase: "idle" })}
+                    >
+                      Try again
+                    </button>
+                  </div>
+                ) : null}
+                <button
+                  className="analyze-button"
+                  type="submit"
+                  disabled={!value.trim() || analysisPhase !== "idle"}
+                >
+                  Analyze Fit
+                </button>
               </div>
             </form>
-        </section>
-        {overlayView ? <div className={`shell-transition-layer from-${overlayDirection} ${overlayActive ? "is-active" : ""} ${isLeaving ? "is-leaving" : ""}`}>
-          {overlayView === "analysis" ? <AnalysisWorkspace analysis={analysis} status={analysisStatus?.status} phase={phase} message={loadingMessages[messageIndex]} onBack={openAnalysisBack} onRetry={() => { setPhase("idle"); setAnalysisId(null); setOverlayView(null); setOverlayActive(false); setView("home"); }} /> : <ExpandedView view={overlayView} caseStudies={caseStudies} detail={detail} profile={profile} onBack={() => openView(overlayView === "caseStudyDetail" ? "caseStudies" : "home")} onOpenDetail={(slug) => openView("caseStudyDetail", slug)} />}
-        </div> : null}
+          </div>
+          <div className="mobile-expand" data-side="right" data-open={shellMode === "analysis"}>
+            <div className="mobile-expand-clip">
+              <div className="expanded-right-content" inert={!sideInteractive("analysis")}>
+                {shellMode === "analysis" ? (
+                  <AnalysisWorkspace
+                    analysis={analysis}
+                    status={analysisStatus?.status}
+                    phase={analysisPhase}
+                    message={loadingMessages[messageIndex]}
+                    onBack={openAnalysisBack}
+                    onRetry={retryAnalysis}
+                    citationContext={citationContext}
+                    onCitationNavigate={onCitationNavigate}
+                  />
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p className="sr-only" role="status" aria-live="polite">
+          {shell.view === "analysis" && analysis && analysisPhase !== "error"
+            ? "Analysis ready"
+            : announce}
+        </p>
       </div>
     </main>
   );
 }
 
-function AnalysisWorkspace({ analysis, status, phase, message, onBack, onRetry }: { analysis: DisplayAnalysis | null | undefined; status?: string; phase: Phase; message: string; onBack: () => void; onRetry: () => void }) {
-  return <section className="portfolio-expanded-content analysis-workspace">
-    {analysis ? <><AnalysisToolbar onBack={onBack} /><AnalysisContent analysis={analysis} /></> : status === "failed" || phase === "error" ? <><AnalysisToolbar onBack={onBack} /><div className="analysis-state"><h1>Analysis failed</h1><p>Something went wrong while analyzing this job description.</p><button type="button" onClick={onRetry}>Try again</button></div></> : <div className="analysis-loading-shell"><LoadingState message={message} /></div>}
-  </section>;
+function AnalysisWorkspace({
+  analysis,
+  status,
+  phase,
+  message,
+  onBack,
+  onRetry,
+  citationContext,
+  onCitationNavigate,
+}: {
+  analysis: DisplayAnalysis | null | undefined;
+  status?: string;
+  phase: AnalysisPhase;
+  message: string;
+  onBack: () => void;
+  onRetry: () => void;
+  citationContext: CitationDisplayContext;
+  onCitationNavigate: (href: string, citation: Citation) => void;
+}) {
+  return (
+    <section
+      className="portfolio-expanded-content analysis-workspace"
+      tabIndex={-1}
+      aria-label="Analysis"
+    >
+      {analysis ? (
+        <div className="content-enter" key="results">
+          <AnalysisToolbar onBack={onBack} />
+          <AnalysisContent
+            analysis={analysis}
+            context={citationContext}
+            onCitationNavigate={onCitationNavigate}
+          />
+        </div>
+      ) : status === "failed" || phase === "error" ? (
+        <div className="content-enter" key="error">
+          <AnalysisToolbar onBack={onBack} />
+          <div className="analysis-state">
+            <h1>Analysis failed</h1>
+            <p>Something went wrong while analyzing this job description.</p>
+            <button type="button" onClick={onRetry}>
+              Try again
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="analysis-loading-shell content-enter" key="loading">
+          <LoadingState message={message} />
+        </div>
+      )}
+    </section>
+  );
 }
 
 function PortfolioNav({ onNavigate }: { onNavigate: (view: ShellView, slug?: string) => void }) {
+  const items: Array<{ view: ShellView; label: string }> = [
+    { view: "home", label: "Home" },
+    { view: "caseStudies", label: "Case Studies" },
+    { view: "howIWork", label: "How I work" },
+    { view: "downloads", label: "Downloads" },
+  ];
   return (
     <nav className="portfolio-nav" aria-label="Primary">
-      <button type="button" onClick={() => onNavigate("home")}>Home</button>
-      <button type="button" onClick={() => onNavigate("caseStudies")}>Case Studies</button>
-      <button type="button" onClick={() => onNavigate("howIWork")}>How I work</button>
-      <a href="https://github.com/ReggieSackey" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <button type="button" onClick={() => onNavigate("downloads")}>Downloads</button>
-      {candidate.contactEmail ? <a className="mail-link" href={`mailto:${candidate.contactEmail}`} aria-label="Email Reg"><span aria-hidden="true">✉</span></a> : null}
+      {items.map((item) => (
+        <button
+          key={item.view}
+          type="button"
+          data-nav-view={item.view}
+          onClick={() => onNavigate(item.view)}
+        >
+          {item.label}
+        </button>
+      ))}
+      <a href="https://github.com/ReggieSackey" target="_blank" rel="noopener noreferrer">
+        GitHub
+      </a>
+      {candidate.contactEmail ? (
+        <a className="mail-link" href={`mailto:${candidate.contactEmail}`} aria-label="Email Reg">
+          <span aria-hidden="true">✉</span>
+        </a>
+      ) : null}
     </nav>
   );
 }
 
-type PublishedStudy = { _id: string; slug: string; title: string; companyOrProject: string; summary: string };
-type DetailData = { caseStudy: { title: string; companyOrProject: string; summary: string }; sections: Array<{ _id: string; slug: string; heading: string; body: string }> } | null | undefined;
-type ProfileData = { document: { title: string }; sections: Array<{ _id: string; slug: string; heading: string; body: string }> } | null | undefined;
+type PublishedStudy = {
+  _id: string;
+  slug: string;
+  title: string;
+  companyOrProject: string;
+  summary: string;
+};
+type DetailData = {
+  caseStudy: { title: string; companyOrProject: string; summary: string };
+  sections: Array<{ _id: string; slug: string; heading: string; body: string }>;
+} | null | undefined;
+type ProfileData = {
+  document: { title: string };
+  sections: Array<{ _id: string; slug: string; heading: string; body: string }>;
+} | null | undefined;
 
-function ExpandedView({ view, caseStudies, detail, profile, onBack, onOpenDetail }: { view: ShellView; caseStudies: PublishedStudy[] | undefined; detail: DetailData; profile: ProfileData; onBack: () => void; onOpenDetail: (slug: string) => void }) {
-  const title = view === "caseStudyDetail" ? detail?.caseStudy.title ?? "Case study" : view === "howIWork" ? profile?.document.title ?? "How I Work" : view === "downloads" ? "Downloads" : "Case Studies";
-  const sections = view === "caseStudyDetail" ? detail?.sections : view === "howIWork" ? profile?.sections : null;
-  return <section className="portfolio-expanded-content" aria-labelledby="expanded-title">
-    <div className="expanded-toolbar"><h1 id="expanded-title">{title}</h1><button type="button" onClick={onBack}>← Back</button></div>
-    {view === "caseStudies" ? <div className="case-study-grid">{caseStudies?.map((study) => <button type="button" key={study._id} className="case-study-card" onClick={() => onOpenDetail(study.slug)}><h2>{study.title}</h2><span>{study.companyOrProject}</span><p>{study.summary}</p></button>)}</div> : view === "downloads" ? <div className="expanded-copy"><p>Downloadable materials will be available here.</p></div> : <div className="expanded-sections">{detail?.caseStudy ? <><p className="expanded-meta">{detail.caseStudy.companyOrProject}</p><p className="expanded-summary">{detail.caseStudy.summary}</p></> : null}{sections?.map((section) => <article key={section._id} id={section.slug}><h2>{section.heading}</h2><SectionBody body={section.body} /></article>)}</div>}
-  </section>;
+function ExpandedView({
+  view,
+  caseStudies,
+  detail,
+  profile,
+  onBack,
+  onOpenDetail,
+}: {
+  view: ShellView;
+  caseStudies: PublishedStudy[] | undefined;
+  detail: DetailData;
+  profile: ProfileData;
+  onBack: () => void;
+  onOpenDetail: (slug: string) => void;
+}) {
+  const isProfileView = view === "howIWork" || view === "profile";
+  const title =
+    view === "caseStudyDetail"
+      ? (detail?.caseStudy.title ?? "Case study")
+      : isProfileView
+        ? (profile?.document.title ?? "Profile")
+        : view === "downloads"
+          ? "Downloads"
+          : "Case Studies";
+  const sections = view === "caseStudyDetail" ? detail?.sections : isProfileView ? profile?.sections : null;
+  return (
+    <section className="portfolio-expanded-content content-enter" aria-labelledby="expanded-title">
+      <div className="expanded-toolbar">
+        <h1 id="expanded-title" tabIndex={-1}>
+          {title}
+        </h1>
+        <button type="button" onClick={onBack}>
+          ← Back
+        </button>
+      </div>
+      {view === "caseStudies" ? (
+        <div className="case-study-grid">
+          {caseStudies?.map((study) => (
+            <button
+              type="button"
+              key={study._id}
+              className="case-study-card"
+              onClick={() => onOpenDetail(study.slug)}
+            >
+              <h2>{study.title}</h2>
+              <span>{study.companyOrProject}</span>
+              <p>{study.summary}</p>
+            </button>
+          ))}
+        </div>
+      ) : view === "downloads" ? (
+        <div className="expanded-copy">
+          <p>Downloadable materials will be available here.</p>
+        </div>
+      ) : (
+        <div className="expanded-sections">
+          {detail?.caseStudy ? (
+            <>
+              <p className="expanded-meta">{detail.caseStudy.companyOrProject}</p>
+              <p className="expanded-summary">{detail.caseStudy.summary}</p>
+            </>
+          ) : null}
+          {sections?.map((section) => (
+            <article key={section._id} id={section.slug}>
+              <h2>{section.heading}</h2>
+              <SectionBody body={section.body} />
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+  );
 }
 
 function LoadingState({ message }: { message: string }) {
@@ -276,7 +1067,12 @@ function LoadingState({ message }: { message: string }) {
     <div className="loading-state">
       <div className="liquid-orb" aria-hidden="true" />
       <p>{message}</p>
-      <div className="loading-dots" aria-hidden="true"><i /><i /><i /><i /></div>
+      <div className="loading-dots" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+        <i />
+      </div>
       <span className="sr-only">Analysis in progress</span>
     </div>
   );
