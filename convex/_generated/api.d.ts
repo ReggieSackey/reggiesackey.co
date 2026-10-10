@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as additionalCaseStudies from "../additionalCaseStudies.js";
 import type * as admin from "../admin.js";
 import type * as analysisGuards from "../analysisGuards.js";
 import type * as canonicalCapabilities from "../canonicalCapabilities.js";
@@ -29,6 +30,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  additionalCaseStudies: typeof additionalCaseStudies;
   admin: typeof admin;
   analysisGuards: typeof analysisGuards;
   canonicalCapabilities: typeof canonicalCapabilities;
