@@ -3,6 +3,15 @@ import { SiteHeader } from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
   title: "About",
+  description:
+    "Background, experience, and working style for product engineer and AI product builder Reggie Sackey-Addo.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About — Reggie Sackey-Addo",
+    description:
+      "Background, experience, and working style for product engineer and AI product builder Reggie Sackey-Addo.",
+    url: "/about",
+  },
 };
 
 export default function AboutPage() {

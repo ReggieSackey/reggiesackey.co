@@ -4,6 +4,15 @@ import { howIWorkFallback } from "@/lib/howIWorkFallback";
 
 export const metadata: Metadata = {
   title: "Work",
+  description:
+    "Selected product engineering, AI product, marketplace, and software-integration work by Reggie Sackey-Addo.",
+  alternates: { canonical: "/work" },
+  openGraph: {
+    title: "Work — Reggie Sackey-Addo",
+    description:
+      "Selected product engineering, AI product, marketplace, and software-integration work by Reggie Sackey-Addo.",
+    url: "/work",
+  },
 };
 
 // Content is canonical in Convex; reflect publish state immediately
