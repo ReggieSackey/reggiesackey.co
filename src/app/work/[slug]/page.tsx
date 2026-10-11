@@ -19,9 +19,24 @@ export async function generateMetadata({
   const { slug } = await params;
   const data = await getCaseStudy(slug);
   if (!data) {
-    return { title: "Case study" };
+    return {
+      title: "Case study",
+      robots: { index: false, follow: false },
+    };
   }
-  return { title: data.caseStudy.title, description: data.caseStudy.summary };
+
+  const canonicalPath = `/work/${slug}`;
+  return {
+    title: data.caseStudy.title,
+    description: data.caseStudy.summary,
+    alternates: { canonical: canonicalPath },
+    openGraph: {
+      type: "article",
+      title: data.caseStudy.title,
+      description: data.caseStudy.summary,
+      url: canonicalPath,
+    },
+  };
 }
 
 export default async function CaseStudyPage({
