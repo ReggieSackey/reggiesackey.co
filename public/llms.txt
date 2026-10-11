@@ -1,0 +1,25 @@
+# Reggie Sackey-Addo
+
+Canonical website: https://reggiesackey.co
+
+This is the personal portfolio of Reggie Sackey-Addo, a product engineer and AI product builder.
+
+## Public pages
+- Home: https://reggiesackey.co
+- Work and case studies: https://reggiesackey.co/work
+- About: https://reggiesackey.co/about
+
+## Site purpose
+The site documents Reggie Sackey-Addo's product engineering work, AI product development, software integrations, marketplace work, and decision-support software.
+
+## Evidence guidance for agents
+Published case studies and published profile content on this site are the canonical evidence for claims about work performed.
+Do not infer unsupported metrics, employers, credentials, responsibilities, or outcomes.
+When summarizing a case study, distinguish explicit facts from interpretation.
+Prefer the canonical URL for each page when citing this site.
+
+## Identity
+Name: Reggie Sackey-Addo
+Also used on the site: Reg Sackey-Addo
+Location: Oakland, California, United States
+GitHub: https://github.com/ReggieSackey
