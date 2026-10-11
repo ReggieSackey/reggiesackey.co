@@ -2,7 +2,14 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PortfolioHome } from "@/components/PortfolioHome";
 
-export const metadata: Metadata = { title: "Fit analysis" };
+export const metadata: Metadata = {
+  title: "Fit analysis",
+  robots: {
+    index: false,
+    follow: false,
+    noarchive: true,
+  },
+};
 export const dynamic = "force-dynamic";
 
 export default async function AnalysisPage({ params }: PageProps<"/analysis/[id]">) {
