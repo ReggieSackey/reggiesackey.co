@@ -8,14 +8,32 @@ import { requireAdmin } from "./admin";
  * unpublished content.
  */
 
+const CASE_STUDY_DISPLAY_ORDER = [
+  "cmodel-strategic-assistant",
+  "musicbreakr",
+  "reaccord",
+  "audio-plugin-development",
+  "nation-rts",
+  "reggiesackey-co",
+] as const;
+
+const CASE_STUDY_DISPLAY_RANK = new Map(
+  CASE_STUDY_DISPLAY_ORDER.map((slug, index) => [slug, index]),
+);
+
 export const getPublishedCaseStudies = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db
+    const studies = await ctx.db
       .query("caseStudies")
       .withIndex("by_published", (q) => q.eq("published", true))
-      .order("desc")
       .take(50);
+
+    return studies.sort((a, b) => {
+      const rankA = CASE_STUDY_DISPLAY_RANK.get(a.slug) ?? CASE_STUDY_DISPLAY_ORDER.length;
+      const rankB = CASE_STUDY_DISPLAY_RANK.get(b.slug) ?? CASE_STUDY_DISPLAY_ORDER.length;
+      return rankA - rankB || b.createdAt - a.createdAt;
+    });
   },
 });
 
