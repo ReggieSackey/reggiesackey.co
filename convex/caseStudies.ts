@@ -17,7 +17,7 @@ const CASE_STUDY_DISPLAY_ORDER = [
   "reggiesackey-co",
 ] as const;
 
-const CASE_STUDY_DISPLAY_RANK = new Map(
+const CASE_STUDY_DISPLAY_RANK = new Map<string, number>(
   CASE_STUDY_DISPLAY_ORDER.map((slug, index) => [slug, index]),
 );
 
