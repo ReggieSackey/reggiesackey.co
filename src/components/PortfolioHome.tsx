@@ -1069,6 +1069,19 @@ function ExpandedView({
           ? "Downloads"
           : "Case Studies";
   const sections = view === "caseStudyDetail" ? detail?.sections : isProfileView ? profile?.sections : null;
+  const displayOrder = new Map<string, number>([
+    ["cmodel-strategic-assistant", 0],
+    ["musicbreakr", 1],
+    ["reaccord", 2],
+    ["audio-plugin-development", 3],
+    ["nation-rts", 4],
+    ["reggiesackey-co", 5],
+  ]);
+  const orderedCaseStudies = caseStudies?.slice().sort((a, b) => {
+    const rankA = displayOrder.get(a.slug) ?? displayOrder.size;
+    const rankB = displayOrder.get(b.slug) ?? displayOrder.size;
+    return rankA - rankB;
+  });
   return (
     <section className="portfolio-expanded-content content-enter" aria-labelledby="expanded-title">
       <div className="expanded-toolbar">
@@ -1081,7 +1094,7 @@ function ExpandedView({
       </div>
       {view === "caseStudies" ? (
         <div className="case-study-grid">
-          {caseStudies?.map((study) => (
+          {orderedCaseStudies?.map((study) => (
             <button
               type="button"
               key={study._id}
