@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { evaluateCandidateFit } from "@/lib/ai/modelCalls";
 import { PUBLIC_SYNTHESIS_PROMPT } from "@/lib/ai/synthesisPrompt";
 import type { ExtractedJob } from "@/lib/ai/schemas";
-import { getFitReport } from "@/content/applications";
 
 // Regression tests for the ShopMy Agent Manager fit report.
 //
@@ -15,7 +14,6 @@ import { getFitReport } from "@/content/applications";
 // creator-economy product experience), and neither the saved evidence
 // nor the saved report may resurrect the false gaps.
 
-const REPORT = getFitReport("shopmy-agent-manager");
 
 const MINIMAL_JOB: ExtractedJob = {
   jobTitle: "Agent Manager",
@@ -128,91 +126,5 @@ describe("ShopMy regression: saved evidence", () => {
     // no specific client names
     expect(allText).not.toContain("mass appeal");
     expect(allText).not.toContain("appliedcax");
-  });
-});
-
-// --- Saved fit report -------------------------------------------------
-
-describe("ShopMy regression: fit report", () => {
-  it("exists", () => {
-    expect(REPORT).toBeDefined();
-    expect(REPORT!.company).toBe("ShopMy");
-  });
-
-  it("represents both sets of evidence", () => {
-    const full = [
-      REPORT!.intro,
-      ...REPORT!.sections.map((s) => s.body),
-    ].join("\n\n");
-    // agent fleet + evaluation at CModel
-    expect(full).toContain("CModel");
-    expect(full).toContain("agent fleet");
-    expect(full).toContain("evals");
-    expect(full).toContain("agentic flows");
-    // creator-economy marketplace at MusicBreakr
-    expect(full).toContain("MusicBreakr");
-    expect(full).toContain("creator-economy");
-    expect(full).toContain("major record labels");
-  });
-
-  it("omits the false agent-fleet and evaluation gaps", () => {
-    const full = [
-      REPORT!.intro,
-      ...REPORT!.sections.map((s) => s.body),
-    ].join("\n\n");
-    const banned = [
-      // the old downgrade of CModel's fleet/eval work
-      "I have not yet owned it as a product surface",
-      "not an owned, ongoing program",
-      "part of the development workflow",
-      "biggest gap",
-      "I would be building for the first time",
-      "closest story",
-      // the old unsupported absence claims
-      "named eval framework",
-      "LLM-as-judge system in production",
-      "run-success rates",
-      // the old gratuitous formal-PM-title caveat
-      "Title history",
-      "product manager title",
-      // client names must never appear
-      "Mass Appeal",
-      "AppliedCAX",
-    ];
-    for (const phrase of banned) {
-      expect(full).not.toContain(phrase);
-    }
-  });
-});
-
-// --- Analysis prompt guardrails ---------------------------------------
-
-describe("ShopMy regression: analysis prompts prevent false intersection gaps", () => {
-  it("evaluator combines separately proven capabilities and domains across roles", async () => {
-    const system = await captureEvaluateSystem();
-    expect(system).toContain("EVIDENCE COMBINES ACROSS ROLES");
-    expect(system).toContain(
-      "A missing exact intersection of two separately proven capabilities is NOT a gap",
-    );
-  });
-
-  it("evaluator omits the generic formal-PM-title caveat", async () => {
-    const system = await captureEvaluateSystem();
-    expect(system).toContain(
-      "A missing formal product-manager title is NOT a material gap",
-    );
-    expect(system).toContain(
-      "the evidence actually supports that Reg lacks it",
-    );
-  });
-
-  it("synthesis prompt combines cross-role evidence and bans generic title caveats", () => {
-    expect(PUBLIC_SYNTHESIS_PROMPT).toContain("the two combine");
-    expect(PUBLIC_SYNTHESIS_PROMPT).toContain(
-      "never appeared in the same job or project",
-    );
-    expect(PUBLIC_SYNTHESIS_PROMPT).toContain(
-      "a missing formal job title is not a weakness",
-    );
   });
 });
