@@ -1108,7 +1108,7 @@ describe("seed content integrity", () => {
       "tool calling",
       "schema-constrained generation",
       "oauth",
-      "agentic development process",
+      "managed fleet of coding agents",
     ]) {
       expect(lower).toContain(detail);
     }
@@ -1275,7 +1275,8 @@ describe("seed content integrity", () => {
     const overviewLower = overview.body.toLowerCase();
     expect(overviewLower).toContain("thousands of users");
     expect(overviewLower).toContain("hundreds of thousands of dollars");
-    expect(overview.body).toContain("Mass Appeal");
+    expect(overview.body).toContain("major record labels");
+    expect(overview.body).not.toContain("Mass Appeal");
     const attribution = mb.sections.find((s) => s.slug === "social-attribution")!;
     for (const platform of ["Instagram", "TikTok", "YouTube", "Twitter/X"]) {
       expect(attribution.body).toContain(platform);

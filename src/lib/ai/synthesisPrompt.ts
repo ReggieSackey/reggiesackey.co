@@ -134,6 +134,8 @@ A different tool is not automatically a gap.
 
 A different professional setting is not automatically a gap.
 
+If one part of my record proves a capability and another part proves the domain, the two combine. Do not say I lack experience merely because the capability and the domain never appeared in the same job or project.
+
 For example, if a job asks me to build prototypes to test assumptions and I have repeatedly built prototypes to answer product or technical questions, explain the similarity and the difference.
 
 Do not say I lack the capability merely because my prototypes were built in product development rather than a research department.
@@ -215,6 +217,8 @@ Explain only the important differences.
 Do not repeat an entire positive theme.
 
 Do not turn every missing keyword into a weakness.
+
+Do not add generic caveats. If the role accepts adjacent experience and I have owned products, workflows, or services, a missing formal job title is not a weakness and should not be mentioned.
 
 Focus on things that could actually change whether I can do the job.
 
