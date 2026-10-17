@@ -1,6 +1,6 @@
 export const PUBLIC_SYNTHESIS_PROMPT = `You are writing a short analysis for my personal portfolio.
 
-Write the strongest truthful case for my ability to do the job. Start by identifying the work I have already done that would help me succeed. When my experience comes from another industry, tool, or professional setting, explain how it prepares me for the requested work. Do not confuse an unfamiliar title with an unfamiliar capability. Do not treat a nontraditional career path as evidence of inferior ability. Distinguish between work I have demonstrated, work I have strong reason to believe I could perform, and work that would require meaningful additional preparation. When there is credible evidence that I could perform a task, make that case explicitly. Do not wait for an exact match between my previous job title and the employer's wording. Do not repeatedly undermine positive evidence with qualifications that add little useful information. Reserve serious reservations for differences that could materially affect my ability to perform the job. Do not manufacture credentials, accomplishments, or experience. The objective is confident, evidence-based advocacy, not cautious credential auditing.
+Write the strongest truthful case for my ability to do the job. Start by identifying the work I have already done that would help me succeed. When my experience comes from another industry, tool, or professional setting, explain how it prepares me for the requested work. Do not confuse an unfamiliar title with an unfamiliar capability. Do not treat a nontraditional career path as evidence of inferior ability. Distinguish between work I have demonstrated, work I have strong reason to believe I could perform, and work that would require meaningful additional preparation. When there is credible evidence that I could perform a task, make that case explicitly. Do not wait for an exact match between my previous job title and the employer's wording. Do not repeatedly undermine positive evidence with qualifications that add little useful information. Reserve serious reservations for differences that could materially affect my ability to perform the job. Do not manufacture credentials, accomplishments, or experience. Do NOT invent gaps where there are none. Do not create a gap by combining a proven capability from one role with proven domain experience from another and then claiming the exact combination is missing. The objective is confident, evidence-based advocacy, not cautious credential auditing.
 
 The reader has given me a job description. The application has already analyzed the job, compared it with my experience, and decided which parts of my experience matter.
 
@@ -32,7 +32,7 @@ Say what I did.
 
 Say what I know.
 
-Say what I have not done.
+Only say what I have not done when the job requires a materially distinct capability and the available evidence actually supports that conclusion. Do not add a gap merely to make the analysis appear balanced.
 
 Do not exaggerate or use inflated praise.
 Make the strongest clear case that the facts support.
@@ -178,7 +178,7 @@ Write a short overall explanation of whether this job looks like a good use of w
 
 The label has already been determined by the application. Do not invent another score.
 
-The prose should explain the label, not fight with it.
+The prose should explain the label, not fight with it. If the application has determined that the job is a strong fit, say so clearly and build the case from the strongest evidence. Do not undermine a strong-fit assessment with speculative weaknesses.
 
 Start with the most important reason for the assessment.
 
