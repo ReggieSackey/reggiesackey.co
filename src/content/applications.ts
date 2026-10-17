@@ -45,7 +45,7 @@ const shopmyAgentManager: FitReport = {
     "Evidence-based fit report for the ShopMy Agent Manager role (Product Manager for AI agents): managed agent fleets and evaluation, creator-economy product background, and likely interview stories.",
   intro: `ShopMy is hiring an Agent Manager: a Product Manager for its growing fleet of AI agents that do real work for internal teams and external clients — brands and creators. This report is my evidence-based read on how my shipped work maps onto that role, written the way this whole portfolio works: conservative about facts, generous about interpretation, and explicit about what I have actually done and what remains to verify.
 
-The short version: the two things this role most needs are things I have already done, not things I have studied. At CModel I managed agents as direct responsibility — the strategic assistant's agentic flows in production, with evals where deterministic tests were insufficient, and the company-wide fleet of coding agents whose tasking, context, review, and quality bar I ran. At MusicBreakr I ran product inside the creator economy itself: a two-sided marketplace connecting artists and music companies with creators, serving thousands of users, with major record labels among its customers. What remains to verify is scale and pace, not capability.`,
+The short version: this job is a strong fit for me. I have not formally held the title Product Manager, but my startup work has required me to own product features and outcomes from customer need through production. At CModel I managed the strategic assistant's agentic flows and evals in production, and I ran a company-wide fleet of coding agents with responsibility for tasking, context, review, and quality. At MusicBreakr I owned product inside the creator economy: a two-sided marketplace connecting artists and music companies with creators, serving thousands of users, with major record labels among its customers.`,
   sections: [
     {
       heading: "The role, in ShopMy's own terms",
@@ -72,16 +72,6 @@ Systems thinking about how customer work actually flows. At CModel I owned an em
 Creator-economy domain overlap. MusicBreakr was a creator-economy two-sided marketplace where artists and music companies hired creators to promote music on social platforms. It served thousands of users, processed hundreds of thousands of dollars in transactions, and supported customers including major record labels. I owned social attribution across Instagram, TikTok, YouTube, and Twitter/X: ingesting four platforms' heterogeneous data, normalizing it onto internal creator, promotion, and campaign models, and answering the underlying client question — did the contracted promotion happen, and how did it perform over time. That is evidence-driven measurement of creator promotional work, which is structurally the same problem ShopMy's performance-driven creator programs and agents operate on. I also implemented delegated account access for managers and labels, and Stripe Connect for marketplace payments.
 
 Shipping to real users, owning outcomes. I have published Bubble plugins that earn subscription revenue — products shipped to paying external users, maintained against their expectations. I have also recruited and managed contractors: defining the work, selecting people, and coordinating delivery against outcomes. Both are small but direct evidence for the ownership and coordination this role requires.`,
-    },
-    {
-      heading: "Gaps and risks, stated plainly",
-      body: `Two assumptions a reader might bring to this report are both false, so I would rather clear them up than pad out a gap list.
-
-Managing agents and their evaluation is not a side process I once touched. At CModel I initiated and ran the agentic development model: I decided which work went to agents, specified and tasked it, designed their shared context, and held output to engineer review, automated testing, evals, and CI/CD controls. I also owned the strategic assistant in production, including its agentic flows and the evals I ran where deterministic tests were insufficient. Tasking agents, holding their output to a quality bar, and fixing recurring failure patterns is work I have already done, not a discipline I would be learning from zero.
-
-Creator economy is not adjacent experience for me either. MusicBreakr was a creator-economy marketplace, its customers included major record labels, and I owned the attribution system that proved whether contracted creator promotions actually ran and how they performed over time.
-
-What is genuinely worth verifying: my production experience is small-team scale, and ShopMy is a high-growth company that recently raised at a $1.5B valuation. Operating independently in a role and agent system that are both still being built fits how I work; doing it inside that pace and visibility is a reasonable thing to confirm in references and interviews.`,
     },
     {
       heading: "Likely interview stories",
