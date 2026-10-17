@@ -84,7 +84,7 @@ export const CASE_STUDIES: CaseStudySeed[] = [
     title: "CModel — AI application engineering and decision intelligence",
     companyOrProject: "CModel",
     summary:
-      "CModel builds decision-intelligence software for economic development organizations. I have worked across the product from its early prototypes through production, with primary responsibility for AI features, external integrations, and workflows spanning application logic, data, and third-party systems. My recent work includes a standalone AI assistant built with Next.js and the Vercel AI SDK, an email-to-decision-intelligence pipeline, integrations across Microsoft 365 and other business systems, and an agentic development process designed to let a small team build and review software effectively with coding agents.",
+      "CModel builds decision-intelligence software for economic development organizations. I have worked across the product from its early prototypes through production, with primary responsibility for AI features, external integrations, and workflows spanning application logic, data, and third-party systems. My recent work includes a standalone AI assistant built with Next.js and the Vercel AI SDK, an email-to-decision-intelligence pipeline, integrations across Microsoft 365 and other business systems, and an agentic development model I initiated and ran, in which a fleet of coding agents builds software across the company under engineer review, automated testing, evaluation, and CI/CD controls.",
     sections: [
       {
         slug: "overview",
@@ -92,7 +92,7 @@ export const CASE_STUDIES: CaseStudySeed[] = [
         order: 1,
         body: `CModel builds decision-intelligence software for economic development organizations. I have worked across the product from its early prototypes through production, with primary responsibility for AI features, external integrations, and workflows spanning application logic, data, and third-party systems.
 
-My recent work includes a standalone AI assistant built with Next.js and the Vercel AI SDK, an email-to-decision-intelligence pipeline, integrations across Microsoft 365 and other business systems, and an agentic development process designed to let a small team build and review software effectively with coding agents.`,
+My recent work includes a standalone AI assistant built with Next.js and the Vercel AI SDK, an email-to-decision-intelligence pipeline, integrations across Microsoft 365 and other business systems, and an agentic development model I initiated and ran, in which a fleet of coding agents builds software across the company under engineer review, automated testing, evaluation, and CI/CD controls.`,
         summary:
           "Decision-intelligence product; worked from early prototypes through production with primary responsibility for AI features, integrations, and cross-system workflows.",
         tags: ["cmodel", "decision-intelligence", "product-engineering", "ai"],
@@ -109,6 +109,8 @@ My recent work includes a standalone AI assistant built with Next.js and the Ver
 
 - Implemented schema-constrained generation for model output consumed as application state.
 
+- Owned the strategic assistant in production: its agentic flows, context and tool behavior, output validation, and evals for AI behavior where deterministic tests were insufficient.
+
 - Built validation and failure handling around non-conforming model output.
 
 - Owned an email-to-decision-intelligence workflow from product definition through production.
@@ -117,9 +119,9 @@ My recent work includes a standalone AI assistant built with Next.js and the Ver
 
 - Worked across successive application architectures as the product moved from Bubble prototypes to a conventional TypeScript/Supabase stack.
 
-- Initiated an agentic development process combining shared technical context, team-wide AI-assisted feature development, engineer review, automated testing, and CI/CD controls.`,
+- Initiated and ran an agentic development model across the company: a managed fleet of coding agents with shared technical context, team-wide agent-assisted feature development, engineer review, automated testing, evaluation, and CI/CD controls.`,
         summary:
-          "Standalone Next.js assistant on the Vercel AI SDK; tool calling, context design, schema-constrained generation, email pipeline ownership, OAuth integrations, agentic development process.",
+          "Standalone Next.js assistant on the Vercel AI SDK; tool calling, context design, schema-constrained generation, email pipeline ownership, OAuth integrations, managed agent fleet with evals.",
         tags: [
           "ownership",
           "ai",
@@ -143,9 +145,11 @@ Its runtime context has two main sources:
 - Provided context: organization and page state relevant to the current interaction.
 - Tool calls: application data or external information retrieved when needed.
 
-This keeps immediately relevant state in context while allowing the model to retrieve additional data selectively. Web search is available for questions requiring information outside CModel.`,
+This keeps immediately relevant state in context while allowing the model to retrieve additional data selectively. Web search is available for questions requiring information outside CModel.
+
+I owned the assistant in production: its agentic flows, context and tool choices, output validation, and evals for AI behavior where deterministic tests were insufficient.`,
         summary:
-          "Standalone Next.js assistant with provided organization/page context and selective tool calls rather than prompt-stuffing application state.",
+          "Standalone Next.js assistant with provided organization/page context and selective tool calls; owned in production, including its agentic flows and evals.",
         tags: ["strategic-assistant", "tool-calling", "context", "ai", "vercel-ai-sdk"],
       },
       {
@@ -229,13 +233,13 @@ The strategic assistant followed the same pattern of choosing an implementation 
         slug: "agentic-engineering",
         heading: "Agentic engineering and development process",
         order: 8,
-        body: `I helped move CModel toward an agentic development model in which implementation was no longer restricted to engineers writing code directly.
+        body: `I initiated and ran CModel's agentic development model, in which implementation was no longer restricted to engineers writing code directly.
 
-I initiated a process of documenting product behavior, architecture, conventions, and technical decisions in shared technical documents. These reduce context loss between people and provide coding agents with persistent context about the systems they modify.
+I established the practice of documenting product behavior, architecture, conventions, and technical decisions in shared technical documents. These reduce context loss between people and provide coding agents with persistent context about the systems they modify.
 
-I also helped establish a workflow in which people across the company can contribute to feature development using coding agents, with engineers responsible for technical review and production quality. Product knowledge and feature ideas can originate anywhere on the team; implementation can be explored with agents; engineers control architecture, validation, and release.
+I also ran the workflow in which people across the company can contribute to feature development using coding agents, with engineers responsible for technical review and production quality. Managing this agent fleet was my direct responsibility: deciding which work goes to agents, specifying and tasking it, and holding agent output to a defined quality bar. Product knowledge and feature ideas can originate anywhere on the team; implementation can be explored with agents; engineers control architecture, validation, and release.
 
-Supporting this model required stronger engineering controls. I contributed to:
+Keeping this model safe required stronger engineering controls, which I built and ran:
 
 - CI/CD pipelines and automated validation;
 - code-review practices for human- and agent-generated changes;
@@ -243,13 +247,13 @@ Supporting this model required stronger engineering controls. I contributed to:
 - technical documentation designed for both human and agent consumption;
 - task decomposition, prompting, and context design for coding agents;
 - model and reasoning-effort selection based on task complexity and cost;
-- evals for AI behavior where deterministic tests are insufficient.
+- evaluation of AI behavior where deterministic tests are insufficient.
 
 The objective is not to remove engineers from development. It is to move more engineering effort toward specification, architecture, review, and verification while allowing more of the organization to participate in implementation.
 
 In my own development workflow, I use the same model: define the problem and constraints, provide the necessary context, make acceptance criteria executable where possible, inspect failures, and adjust the task, context, or model rather than treating repeated generation as progress.`,
         summary:
-          "Initiated agentic development: shared technical context, team-wide agent-assisted implementation, engineer-controlled review, testing, CI/CD, and evals.",
+          "Initiated and ran agentic development: shared technical context, team-wide agent-assisted implementation through a managed coding-agent fleet, engineer-controlled review, testing, CI/CD, and evals.",
         tags: [
           "agentic-development",
           "coding-agents",
@@ -299,9 +303,9 @@ In my own development workflow, I use the same model: define the problem and con
 
 - Helped move the product from rapid Bubble prototypes to a conventional application architecture as its technical requirements matured.
 
-- Helped expand software development beyond the engineering team while strengthening the documentation, review, testing, and delivery controls around AI-generated changes.`,
+- Expanded software development beyond the engineering team through a managed coding-agent fleet while owning the documentation, review, testing, evaluation, and delivery controls around AI-generated changes.`,
         summary:
-          "Assistant shipped to production; email pipeline shipped; nine-system integration surface; agentic development model with strengthened controls.",
+          "Assistant shipped to production; email pipeline shipped; nine-system integration surface; managed agent fleet with strengthened controls.",
         tags: ["impact", "production", "ai", "integrations", "process"],
       },
     ],
@@ -314,18 +318,19 @@ In my own development workflow, I use the same model: define the problem and con
     title: "MusicBreakr — Marketplace and social attribution systems",
     companyOrProject: "MusicBreakr",
     summary:
-      "MusicBreakr was a two-sided marketplace where artists and music companies hired creators to promote music on social platforms. I worked across the production application, with primary responsibility for social attribution, payments, permissions, external integrations, and backend workflows. The product served thousands of users, processed hundreds of thousands of dollars in marketplace transactions, and was used by customers including Mass Appeal.",
+      "MusicBreakr was a creator-economy two-sided marketplace where artists and music companies hired creators to promote music on social platforms. I worked across the production application, with primary responsibility for social attribution, payments, permissions, external integrations, and backend workflows. The product served thousands of users, processed hundreds of thousands of dollars in marketplace transactions, and was used by customers including major record labels.",
     sections: [
       {
         slug: "overview",
         heading: "Context: a two-sided music marketplace",
         order: 1,
-        body: `MusicBreakr was a two-sided marketplace where artists and music companies hired creators to promote music on social platforms. I worked across the production application, with primary responsibility for social attribution, payments, permissions, external integrations, and backend workflows.
+        body: `MusicBreakr was a creator-economy two-sided marketplace where artists and music companies hired creators to promote music on social platforms. I worked across the production application, with primary responsibility for social attribution, payments, permissions, external integrations, and backend workflows.
 
-The product served thousands of users, processed hundreds of thousands of dollars in marketplace transactions, and was used by customers including Mass Appeal.`,
+The product served thousands of users, processed hundreds of thousands of dollars in marketplace transactions, and was used by customers including major record labels.`,
         summary:
-          "Two-sided marketplace, thousands of users, hundreds of thousands of dollars in transactions, customers including Mass Appeal; primary responsibility for attribution, payments, permissions, integrations, and backend workflows.",
+          "Creator-economy two-sided marketplace, thousands of users, hundreds of thousands of dollars in transactions, customers including major record labels; primary responsibility for attribution, payments, permissions, integrations, and backend workflows.",
         tags: [
+          "creator-economy",
           "marketplace",
           "product-engineering",
           "production",
@@ -474,13 +479,13 @@ I worked on these systems while they were serving active customers, so changes h
 
 - Processed hundreds of thousands of dollars in transactions.
 
-- Supported customers including Mass Appeal.
+- Supported customers including major record labels.
 
 - Provided recurring campaign attribution across four social platforms.
 
 - Operated marketplace payments, delegated access, and social-data ingestion in production.`,
         summary:
-          "Thousands of users, hundreds of thousands of dollars in transactions, customers including Mass Appeal, recurring attribution across four platforms.",
+          "Thousands of users, hundreds of thousands of dollars in transactions, creator-economy customers including major record labels, recurring attribution across four platforms.",
         tags: ["marketplace", "production", "users", "transactions", "customers"],
       },
     ],

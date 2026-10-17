@@ -70,7 +70,7 @@ export const CANONICAL_CAPABILITIES: CanonicalCapability[] = [
     slug: "ai-enabled-process-design", title: "AI-enabled process design",
     description: "Designs ways for people and AI agents to accomplish work together using persistent context, task specification, model selection, review, testing, evaluation, and verification. Broader than personally using coding assistants; it redesigns work while retaining human control.",
     tags: ["agents", "process", "evaluation", "human-review"],
-    evidence: [cs("cmodel-strategic-assistant", "agentic-engineering", "Designed a team process around coding agents, review, testing, and CI/CD."), cs("cmodel-strategic-assistant", "structured-generation", "Applied validation and controlled failure handling to model work."), cs("reaccord", "personalized-context", "Designed persistent context for AI-assisted work."), profile("ai-application-engineering", "Documents AI-assisted engineering with retained validation responsibility.")],
+    evidence: [cs("cmodel-strategic-assistant", "agentic-engineering", "Initiated and ran a company-wide coding-agent fleet with review, testing, evaluation, and CI/CD controls."), cs("cmodel-strategic-assistant", "structured-generation", "Applied validation and controlled failure handling to model work."), cs("reaccord", "personalized-context", "Designed persistent context for AI-assisted work."), profile("ai-application-engineering", "Documents AI-assisted engineering with retained validation responsibility.")],
   },
   {
     slug: "cross-boundary-execution", title: "Cross-boundary execution",
@@ -88,7 +88,7 @@ export const CANONICAL_CAPABILITIES: CanonicalCapability[] = [
     slug: "organizational-initiative", title: "Organizational initiative",
     description: "Notices when a team process is preventing useful work and creates a practical mechanism that helps people act. Relevant to experimentation, collaboration, internal innovation, change management, facilitation, and environments where progress depends on more than individual technical execution.",
     tags: ["initiative", "collaboration", "experimentation", "organizational-design", "leadership"],
-    evidence: [how("demo-day", "Created CModel Demo Day to turn prolonged discussion into concrete experiments and pitches; the practice remains in use and made the team more decentralized and collaborative."), cs("cmodel-strategic-assistant", "agentic-engineering", "Helped redesign how a broader team can participate in implementation using coding agents while engineers retain review and quality controls.")],
+    evidence: [how("demo-day", "Created CModel Demo Day to turn prolonged discussion into concrete experiments and pitches; the practice remains in use and made the team more decentralized and collaborative."), cs("cmodel-strategic-assistant", "agentic-engineering", "Initiated and ran the model in which a broader team participates in implementation using coding agents while engineers retain review and quality controls.")],
   },
   {
     slug: "accountability-process-improvement", title: "Accountability & process improvement",
